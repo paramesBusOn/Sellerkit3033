@@ -30,7 +30,7 @@ class ShowSearchDialogState extends State<Upgraderdialogbox> {
       context.read<ConfigurationContoller>().showVersion();
       String? storeversion = await context
           .read<ConfigurationContoller>()
-          .getStoreVersion('com.busondigitalservice.sellerkit');
+          .getStoreVersion('com.busondigitalservice.sellerkit3033');
       if (ConstantValues.appversion == storeversion) {
         Navigator.pop(context);
         Navigator.pushAndRemoveUntil(
@@ -101,7 +101,7 @@ class ShowSearchDialogState extends State<Upgraderdialogbox> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
+                SizedBox(
                   width: Screens.width(context) * 0.25,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -114,8 +114,8 @@ class ShowSearchDialogState extends State<Upgraderdialogbox> {
                           //     : 'com.busondigitalservice.sellerkit';
                           final url = Uri.parse(
                             Platform.isAndroid
-                                ? "https://play.google.com/store/apps/details?id=com.busondigitalservice.sellerkit"
-                                : "https://apps.apple.com/app/id6468899888",
+                                ? "https://play.google.com/store/apps/details?id=com.busondigitalservice.sellerkit3033"
+                                : "https://apps.apple.com/app/id6502172748",
                           );
                           launchUrl(
                             url,

@@ -53,7 +53,7 @@ android {
         applicationId "com.busondigitalservice.sellerkit3033"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 10
+        versionCode 12
         versionName "1.0.7"
         multiDexEnabled true
     }
