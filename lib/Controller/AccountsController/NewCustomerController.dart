@@ -2722,10 +2722,13 @@ callAlertDialog(BuildContext context, String mesg) {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 10),
-                      Text(allProductDetails[i].itemCode.toString(),
-                          style: theme.textTheme.bodyText1
-                              ?.copyWith(color: theme.primaryColor)),
+                      SizedBox(height: 10),
+                      Container(
+                        // width: Screens.width(context)*0.8,
+                        child: Text(allProductDetails[i].itemCode.toString(),
+                            style: theme.textTheme.bodyText1
+                                ?.copyWith(color: theme.primaryColor)),
+                      ),
                       Container(
                         // width: Screens.width(context)*0.7,
                         // color: Colors.red,

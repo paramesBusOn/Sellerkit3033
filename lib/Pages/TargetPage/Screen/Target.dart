@@ -33,731 +33,626 @@ class _TargetState extends State<Target> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return ChangeNotifierProvider<TargetTabController>(
-        create: (context) => TargetTabController(),
-        builder: (context, child) {
-          return Consumer<TargetTabController>(
-              builder: (BuildContext context, prdFUP, Widget? child) {
-            return Scaffold(
-                drawerEnableOpenDragGesture: false,
-                key: scaffoldKey,
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () async {
-                    //
-                    context.read<TargetTabController>().clearTargetFilterData();
-                    await context
+    // return ChangeNotifierProvider<TargetTabController>(
+    //     create: (context) => TargetTabController(),
+    //     builder: (context, child) {
+    //       return Consumer<TargetTabController>(
+    //           builder: (BuildContext context, prdFUP, Widget? child) {
+    return WillPopScope(
+      onWillPop: context.watch<TargetTabController>().onbackpress,
+      child: Scaffold(
+          drawerEnableOpenDragGesture: false,
+          key: scaffoldKey,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              //
+              // context.read<TargetTabController>().clearTargetFilterData();
+              await context
+                  .read<TargetTabController>()
+                  .callTargetUsersApi(context);
+              setState(() {
+                log("vvvv::" +
+                    context
                         .read<TargetTabController>()
-                        .callTargetUsersApi(context);
-                    setState(() {
-                      log("vvvv::" +
-                          context
-                              .read<TargetTabController>()
-                              .targetUserList
-                              .length
-                              .toString());
-                      context
-                          .read<TargetTabController>()
-                          .showbottombtn(context);
-                    });
-                  },
-                  child: Icon(Icons.filter_alt),
-                ),
-                drawer: drawer3(context),
-                appBar: appbar("Target", scaffoldKey, theme, context),
-                body: GestureDetector(
-                    child: SafeArea(
-                        child: SingleChildScrollView(
-                  child: Container(
+                        .targetUserList
+                        .length
+                        .toString());
+                context.read<TargetTabController>().showbottombtn(context);
+              });
+            },
+            child: Icon(Icons.filter_alt),
+          ),
+          drawer: drawer3(context),
+          appBar: appbar("Target", scaffoldKey, theme, context),
+          body: GestureDetector(
+              child: SafeArea(
+                  child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(
+                  top: Screens.padingHeight(context) * 0.025,
+                  bottom: Screens.padingHeight(context) * 0.03),
+              // padding: paddings.padding2(context),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
                     padding: EdgeInsets.only(
-                        top: Screens.padingHeight(context) * 0.025,
-                        bottom: Screens.padingHeight(context) * 0.03),
-                    // padding: paddings.padding2(context),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.only(
-                            bottom: Screens.padingHeight(context) * 0.01,
-                            left: Screens.width(context) * 0.04,
-                            right: Screens.width(context) * 0.01,
-                          ),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Text(
-                            context
-                                    .watch<TargetTabController>()
-                                    .salesPerName
-                                    .isEmpty
-                                ? ConstantValues.firstName.toString()
-                                : context
-                                    .watch<TargetTabController>()
-                                    .salesPerName,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: theme.primaryColor,
-                            ),
-                          ),
-                        ),
-                        context.read<TargetTabController>().isloading ==
-                                    false &&
-                                context
-                                    .read<TargetTabController>()
-                                    .noTargetInit
-                                    .isNotEmpty
-                            ? Container(
-                                height: Screens.padingHeight(context),
-                                child: Center(
-                                    child: Text(context
-                                        .watch<TargetTabController>()
-                                        .noTargetInit)))
-                            : context.read<TargetTabController>().isloading ==
-                                        true &&
-                                    // context
-                                    //     .read<TargetTabController>()
-                                    //     .settelGetListCash
-                                    //     .isEmpty &&
-                                    context
-                                            .read<TargetTabController>()
-                                            .targetCheckDataExcep ==
-                                        ''
-                                ? Container(
-                                    height: Screens.padingHeight(context),
-                                    child: Center(
-                                        child: CircularProgressIndicator()))
-                                : (context
-                                                .read<TargetTabController>()
-                                                .isloading ==
-                                            false &&
-                                        // context
-                                        //     .read<TargetTabController>()
-                                        //     .settelGetListCash
-                                        //     .isEmpty &&
-                                        context
-                                                .read<TargetTabController>()
-                                                .targetCheckDataExcep !=
-                                            '')
-                                    ? Container(
-                                        height: Screens.padingHeight(context),
-                                        child: Center(
-                                            child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            context
-                                                    .watch<
-                                                        TargetTabController>()
-                                                    .lottie
-                                                    .isEmpty
-                                                ? Container()
-                                                : context
-                                                            .watch<
-                                                                TargetTabController>()
-                                                            .lottie
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .watch<
-                                                                TargetTabController>()
-                                                            .lottie
-                                                            .contains(".png")
-                                                    ? InkWell(
-                                                        onTap: () {},
-                                                        child: Image.asset(
-                                                            '${context.watch<TargetTabController>().lottie}',
-                                                            height: Screens
-                                                                    .padingHeight(
-                                                                        context) *
-                                                                0.2,
-                                                            width: Screens.width(
-                                                                    context) *
-                                                                0.5),
-                                                      )
-                                                    : InkWell(
-                                                        onTap: () {},
-                                                        child: Lottie.asset(
-                                                            '${context.watch<TargetTabController>().lottie}',
-                                                            animate: true,
-                                                            repeat: true,
-                                                            // height: Screens.padingHeight(context) * 0.3,
-                                                            width: Screens.width(
-                                                                    context) *
-                                                                0.4),
-                                                      ),
-                                            Text(
-                                              '${context.watch<TargetTabController>().targetCheckDataExcep}',
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
-                                        )),
-                                      )
-                                    : Container(
-                                            padding: EdgeInsets.only(
-                                                top: Screens.bodyheight(
-                                                        context) *
-                                                    0.015),
-                                            child: Center(
-                                              child:
-                                                  CupertinoSlidingSegmentedControl<
-                                                      int>(
-                                                backgroundColor: Colors.grey,
-                                                padding: EdgeInsets.all(0),
-                                                thumbColor: theme.primaryColor,
-                                                groupValue: context
-                                                    .watch<
-                                                        TargetTabController>()
-                                                    .groupValueSelected,
-                                                children: {
-                                                  0: Container(
-                                                    alignment: Alignment.center,
-                                                    width:
-                                                        Screens.width(context) *
-                                                            0.425,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 7,
-                                                            horizontal: 5),
-                                                    // height: Screens.bodyheight(context) * 0.05,
-                                                    child: Text(
-                                                      'Today',
-                                                      style: theme
-                                                          .textTheme.bodyLarge
-                                                          ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              color:
-                                                                  Colors.white),
-                                                    ),
-                                                  ),
-                                                  1: Container(
-                                                    alignment: Alignment.center,
-                                                    width:
-                                                        Screens.width(context) *
-                                                            0.42,
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 7,
-                                                            horizontal: 5),
-                                                    // height: Screens.bodyheight(context) * 0.05,
-                                                    child: Text(
-                                                      'MTD',
-                                                      style: theme
-                                                          .textTheme.bodyLarge
-                                                          ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              color:
-                                                                  Colors.white),
-                                                    ),
-                                                  ),
-                                                },
-                                                onValueChanged: (v) {
-                                                  setState(() {
-                                                    context
-                                                        .read<
-                                                            TargetTabController>()
-                                                        .groupSelectvalue(v!);
-                                                    print(v);
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                        SizedBox(
-                          height: Screens.bodyheight(context) * 0.005,
-                        ),
-                        context
-                                .watch<TargetTabController>()
-                                .targetTodayMasterData22
-                                .isNotEmpty
-                            ? Container(
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                            left: Screens.bodyheight(context) *
-                                                0.01,
-                                          ),
-                                          child: Card(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    topRight:
-                                                        Radius.circular(8))),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: theme.primaryColor
-                                                      .withOpacity(0.05)),
-                                              height:
-                                                  Screens.bodyheight(context) *
-                                                      0.14,
-                                              width:
-                                                  Screens.width(context) * 0.45,
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                      alignment: Alignment
-                                                          .center,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 5,
-                                                              horizontal: 5),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          8),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          8)),
-                                                          color: theme
-                                                              .primaryColor,
-                                                          border: Border.all(
-                                                              color: theme
-                                                                  .primaryColor)
-                                                          // borderRadius: BorderRadius.circular(10)),
-                                                          ),
-                                                      child: Text(
-                                                        context
-                                                                    .read<
-                                                                        TargetTabController>()
-                                                                    .groupValueSelected ==
-                                                                0
-                                                            ? 'Today Target'
-                                                            // '${   context.watch<TargetTabController>() .targetTodayMasterData22[0].targetValue}'
-                                                            : 'MTD Target',
-                                                        // '${   context.watch<TargetTabController>() .targetMonthMasterData22[0].targetQty}',
-                                                        style: theme
-                                                            .textTheme.bodyLarge
-                                                            ?.copyWith(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                      )),
-                                                  SizedBox(
-                                                    height: Screens.bodyheight(
-                                                            context) *
-                                                        0.01,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      Text(
-                                                          context
-                                                                      .read<
-                                                                          TargetTabController>()
-                                                                      .groupValueSelected ==
-                                                                  0
-                                                              ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].targetValue}'
-                                                              : '${context.watch<TargetTabController>().targetMonthMasterData22[0].targetValue}',
-                                                          style: theme.textTheme
-                                                              .subtitle1
-                                                              // headline6
-                                                              ?.copyWith(
-                                                                  // fontSize: 17,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500)),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: Screens.bodyheight(
-                                                            context) *
-                                                        0.01,
-                                                  ),
-                                                  Text(
-                                                      context
-                                                                  .watch<
-                                                                      TargetTabController>()
-                                                                  .groupValueSelected ==
-                                                              0
-                                                          ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].targetQty}'
-                                                          : '${context.watch<TargetTabController>().targetMonthMasterData22[0].targetQty}',
-                                                      style: theme
-                                                          .textTheme.bodyText1
-                                                          ?.copyWith(
-                                                              color: Colors
-                                                                  .grey[600]))
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                            right: Screens.bodyheight(context) *
-                                                0.01,
-                                          ),
-                                          child: Card(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    topRight:
-                                                        Radius.circular(8))),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: theme.primaryColor
-                                                      .withOpacity(0.05)),
-                                              height:
-                                                  Screens.bodyheight(context) *
-                                                      0.14,
-                                              width:
-                                                  Screens.width(context) * 0.45,
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                      alignment: Alignment
-                                                          .center,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 5,
-                                                              horizontal: 5),
-                                                      // height: Screens.bodyheight(context) * 0.05,
-                                                      // width: Screens.width(context) * 0.4,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          8),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          8)),
-                                                          color: theme
-                                                              .primaryColor,
-                                                          border: Border.all(
-                                                              color: theme
-                                                                  .primaryColor)),
-                                                      child: Text(
-                                                        context
-                                                                    .watch<
-                                                                        TargetTabController>()
-                                                                    .groupValueSelected ==
-                                                                0
-                                                            ? 'Today Achievement'
-                                                            : 'MTD Achievement',
-                                                        // ? '${   context.watch<TargetTabController>() .targetTodayMasterData22[0].kPI2Title}'
-                                                        // : '${   context.watch<TargetTabController>() .targetMonthMasterData22[0].kPI2Title}',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: theme
-                                                            .textTheme.bodyLarge
-                                                            ?.copyWith(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                      )),
-                                                  SizedBox(
-                                                    height: Screens.bodyheight(
-                                                            context) *
-                                                        0.01,
-                                                  ),
-                                                  Text(
-                                                      context
-                                                                  .watch<
-                                                                      TargetTabController>()
-                                                                  .groupValueSelected ==
-                                                              0
-                                                          ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].achPer}'
-                                                          : '${context.watch<TargetTabController>().targetMonthMasterData22[0].achPer}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: theme
-                                                          .textTheme.subtitle1
-                                                          ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500)),
-                                                  SizedBox(
-                                                    height: Screens.bodyheight(
-                                                            context) *
-                                                        0.01,
-                                                  ),
-                                                  Text(
-                                                      context
-                                                                  .watch<
-                                                                      TargetTabController>()
-                                                                  .groupValueSelected ==
-                                                              0
-                                                          ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].achVal}'
-                                                          : '${context.watch<TargetTabController>().targetMonthMasterData22[0].achVal}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: theme
-                                                          .textTheme.bodyText1
-                                                          ?.copyWith(
-                                                              color: Colors
-                                                                  .grey[600]))
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          Screens.bodyheight(context) * 0.005,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                            left: Screens.bodyheight(context) *
-                                                0.01,
-                                          ),
-                                          child: Card(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    topRight:
-                                                        Radius.circular(8))),
-                                            child: Container(
-                                              height:
-                                                  Screens.bodyheight(context) *
-                                                      0.16,
-                                              width:
-                                                  Screens.width(context) * 0.45,
-                                              decoration: BoxDecoration(
-                                                  color: theme.primaryColor
-                                                      .withOpacity(0.05)),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 5,
-                                                              horizontal: 5),
-                                                      alignment: Alignment
-                                                          .center,
-                                                      // height: Screens.bodyheight(context) * 0.05,
-                                                      // width: Screens.width(context) * 0.4,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          8),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          8)),
-                                                          color: theme
-                                                              .primaryColor,
-                                                          border: Border.all(
-                                                              color: theme
-                                                                  .primaryColor)
-                                                          // borderRadius: BorderRadius.circular(10)),
-                                                          ),
-                                                      child: Text(
-                                                        context
-                                                                    .watch<
-                                                                        TargetTabController>()
-                                                                    .groupValueSelected ==
-                                                                0
-                                                            ? 'Expected Closure for This Month'
-                                                            : 'Expected Closure for This Month',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: theme
-                                                            .textTheme.bodyLarge
-                                                            ?.copyWith(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                      )),
-                                                  SizedBox(
-                                                    height: Screens.bodyheight(
-                                                            context) *
-                                                        0.01,
-                                                  ),
-                                                  Text(
-                                                      context
-                                                                  .watch<
-                                                                      TargetTabController>()
-                                                                  .groupValueSelected ==
-                                                              0
-                                                          ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].expClosePerc}'
-                                                          : '${context.watch<TargetTabController>().targetMonthMasterData22[0].expClosePerc}',
-                                                      style: theme
-                                                          .textTheme.subtitle1
-                                                          ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500)),
-                                                  SizedBox(
-                                                    height: Screens.bodyheight(
-                                                            context) *
-                                                        0.01,
-                                                  ),
-                                                  Text(
-                                                      context
-                                                                  .watch<
-                                                                      TargetTabController>()
-                                                                  .groupValueSelected ==
-                                                              0
-                                                          ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].expCloseVal}'
-                                                          : '${context.watch<TargetTabController>().targetMonthMasterData22[0].expCloseVal}',
-                                                      style: theme
-                                                          .textTheme.bodyText1
-                                                          ?.copyWith(
-                                                              color: Colors
-                                                                  .grey[600]))
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                            right: Screens.bodyheight(context) *
-                                                0.01,
-                                          ),
-                                          child: Card(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    topRight:
-                                                        Radius.circular(8))),
-                                            child: Container(
-                                              height:
-                                                  Screens.bodyheight(context) *
-                                                      0.16,
-                                              width:
-                                                  Screens.width(context) * 0.45,
-                                              decoration: BoxDecoration(
-                                                  color: theme.primaryColor
-                                                      .withOpacity(0.05)),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 5,
-                                                              horizontal: 5),
-                                                      alignment: Alignment
-                                                          .center,
-                                                      // height: Screens.bodyheight(context) * 0.05,
-                                                      // width: Screens.width(context) * 0.4,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          8),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          8)),
-                                                          color: theme
-                                                              .primaryColor,
-                                                          border: Border.all(
-                                                              color: theme
-                                                                  .primaryColor)
-                                                          // borderRadius: BorderRadius.circular(10)),
-                                                          ),
-                                                      child: Text(
-                                                        context
-                                                                    .watch<
-                                                                        TargetTabController>()
-                                                                    .groupValueSelected ==
-                                                                0
-                                                            ? 'Run Rate Req. to Ach Target'
-                                                            : 'Run Rate Req. to Ach Target',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: theme
-                                                            .textTheme.bodyLarge
-                                                            ?.copyWith(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                      )),
-                                                  SizedBox(
-                                                    height: Screens.bodyheight(
-                                                            context) *
-                                                        0.01,
-                                                  ),
-                                                  Text(
-                                                      context
-                                                                  .watch<
-                                                                      TargetTabController>()
-                                                                  .groupValueSelected ==
-                                                              0
-                                                          ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].runRatePerc}'
-                                                          : '${context.watch<TargetTabController>().targetMonthMasterData22[0].runRatePerc}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: theme
-                                                          .textTheme.subtitle1
-                                                          ?.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500)),
-                                                  SizedBox(
-                                                    height: Screens.bodyheight(
-                                                            context) *
-                                                        0.01,
-                                                  ),
-                                                  Text(
-                                                      context
-                                                                  .watch<
-                                                                      TargetTabController>()
-                                                                  .groupValueSelected ==
-                                                              0
-                                                          ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].runRateVal}'
-                                                          : '${context.watch<TargetTabController>().targetMonthMasterData22[0].runRateVal}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: theme
-                                                          .textTheme.bodyText1
-                                                          ?.copyWith(
-                                                              color: Colors
-                                                                  .grey[600]))
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            Screens.bodyheight(context) * 0.01),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                          right: Screens.bodyheight(context) *
-                                              0.015,
-                                          left: Screens.bodyheight(context) *
-                                              0.015,
-                                        ),
-                                        child: context
-                                            .watch<TargetTabController>()
-                                            .createTable(
-                                              theme,
-                                            ))
-                                  ],
-                                ),
-                              )
-                            : Container()
-                      ],
+                      bottom: Screens.padingHeight(context) * 0.01,
+                      left: Screens.width(context) * 0.04,
+                      right: Screens.width(context) * 0.01,
+                    ),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                    child: Text(
+                      context.watch<TargetTabController>().salesPerName.isEmpty
+                          ? ConstantValues.firstName.toString()
+                          : context.watch<TargetTabController>().salesPerName,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: theme.primaryColor,
+                      ),
                     ),
                   ),
-                ))));
-          });
-        });
+                  context.read<TargetTabController>().isloading == false &&
+                          context
+                              .read<TargetTabController>()
+                              .noTargetInit
+                              .isNotEmpty
+                      ? Container(
+                          height: Screens.padingHeight(context),
+                          child: Center(
+                              child: Text(context
+                                  .watch<TargetTabController>()
+                                  .noTargetInit)))
+                      : context.read<TargetTabController>().isloading == true &&
+                              context
+                                      .read<TargetTabController>()
+                                      .targetCheckDataExcep ==
+                                  ''
+                          ? Container(
+                              height: Screens.padingHeight(context),
+                              child: Center(child: CircularProgressIndicator()))
+                          : (context.read<TargetTabController>().isloading ==
+                                      false &&
+                                  context
+                                          .read<TargetTabController>()
+                                          .targetCheckDataExcep !=
+                                      '')
+                              ? Container(
+                                  height: Screens.padingHeight(context),
+                                  child: Center(
+                                      child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      context
+                                              .watch<TargetTabController>()
+                                              .lottie
+                                              .isEmpty
+                                          ? Container()
+                                          : context
+                                                      .watch<
+                                                          TargetTabController>()
+                                                      .lottie
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .watch<
+                                                          TargetTabController>()
+                                                      .lottie
+                                                      .contains(".png")
+                                              ? InkWell(
+                                                  onTap: () {},
+                                                  child: Image.asset(
+                                                      '${context.watch<TargetTabController>().lottie}',
+                                                      height:
+                                                          Screens.padingHeight(
+                                                                  context) *
+                                                              0.2,
+                                                      width: Screens.width(
+                                                              context) *
+                                                          0.5),
+                                                )
+                                              : InkWell(
+                                                  onTap: () {},
+                                                  child: Lottie.asset(
+                                                      '${context.watch<TargetTabController>().lottie}',
+                                                      animate: true,
+                                                      repeat: true,
+                                                      // height: Screens.padingHeight(context) * 0.3,
+                                                      width: Screens.width(
+                                                              context) *
+                                                          0.4),
+                                                ),
+                                      Text(
+                                        '${context.watch<TargetTabController>().targetCheckDataExcep}',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  )),
+                                )
+                              : Container(
+                                  padding: EdgeInsets.only(
+                                      top: Screens.bodyheight(context) * 0.015),
+                                  child: Center(
+                                    child:
+                                        CupertinoSlidingSegmentedControl<int>(
+                                      backgroundColor: Colors.grey,
+                                      padding: EdgeInsets.all(0),
+                                      thumbColor: theme.primaryColor,
+                                      groupValue: context
+                                          .watch<TargetTabController>()
+                                          .groupValueSelected,
+                                      children: {
+                                        0: Container(
+                                          alignment: Alignment.center,
+                                          width: Screens.width(context) * 0.425,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 7, horizontal: 5),
+                                          // height: Screens.bodyheight(context) * 0.05,
+                                          child: Text(
+                                            'Today',
+                                            style: theme.textTheme.bodyLarge
+                                                ?.copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.white),
+                                          ),
+                                        ),
+                                        1: Container(
+                                          alignment: Alignment.center,
+                                          width: Screens.width(context) * 0.42,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 7, horizontal: 5),
+                                          // height: Screens.bodyheight(context) * 0.05,
+                                          child: Text(
+                                            'MTD',
+                                            style: theme.textTheme.bodyLarge
+                                                ?.copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.white),
+                                          ),
+                                        ),
+                                      },
+                                      onValueChanged: (v) {
+                                        setState(() {
+                                          context
+                                              .read<TargetTabController>()
+                                              .groupSelectvalue(v!);
+                                          print(v);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                  SizedBox(
+                    height: Screens.bodyheight(context) * 0.005,
+                  ),
+                  context
+                          .watch<TargetTabController>()
+                          .targetTodayMasterData22
+                          .isNotEmpty
+                      ? Container(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      left: Screens.bodyheight(context) * 0.01,
+                                    ),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8))),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: theme.primaryColor
+                                                .withOpacity(0.05)),
+                                        height:
+                                            Screens.bodyheight(context) * 0.14,
+                                        width: Screens.width(context) * 0.45,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                alignment: Alignment.center,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5, horizontal: 5),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft: Radius
+                                                                .circular(8),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8)),
+                                                    color: theme.primaryColor,
+                                                    border: Border.all(
+                                                        color:
+                                                            theme.primaryColor)
+                                                    // borderRadius: BorderRadius.circular(10)),
+                                                    ),
+                                                child: Text(
+                                                  context
+                                                              .read<
+                                                                  TargetTabController>()
+                                                              .groupValueSelected ==
+                                                          0
+                                                      ? 'Today Target'
+                                                      // '${   context.watch<TargetTabController>() .targetTodayMasterData22[0].targetValue}'
+                                                      : 'MTD Target',
+                                                  // '${   context.watch<TargetTabController>() .targetMonthMasterData22[0].targetQty}',
+                                                  style: theme
+                                                      .textTheme.bodyLarge
+                                                      ?.copyWith(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                )),
+                                            SizedBox(
+                                              height:
+                                                  Screens.bodyheight(context) *
+                                                      0.01,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                    context
+                                                                .read<
+                                                                    TargetTabController>()
+                                                                .groupValueSelected ==
+                                                            0
+                                                        ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].targetValue}'
+                                                        : '${context.watch<TargetTabController>().targetMonthMasterData22[0].targetValue}',
+                                                    style: theme
+                                                        .textTheme.subtitle1
+                                                        // headline6
+                                                        ?.copyWith(
+                                                            // fontSize: 17,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500)),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height:
+                                                  Screens.bodyheight(context) *
+                                                      0.01,
+                                            ),
+                                            Text(
+                                                context
+                                                            .watch<
+                                                                TargetTabController>()
+                                                            .groupValueSelected ==
+                                                        0
+                                                    ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].targetQty}'
+                                                    : '${context.watch<TargetTabController>().targetMonthMasterData22[0].targetQty}',
+                                                style: theme.textTheme.bodyText1
+                                                    ?.copyWith(
+                                                        color:
+                                                            Colors.grey[600]))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      right: Screens.bodyheight(context) * 0.01,
+                                    ),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8))),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: theme.primaryColor
+                                                .withOpacity(0.05)),
+                                        height:
+                                            Screens.bodyheight(context) * 0.14,
+                                        width: Screens.width(context) * 0.45,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                alignment: Alignment.center,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5, horizontal: 5),
+                                                // height: Screens.bodyheight(context) * 0.05,
+                                                // width: Screens.width(context) * 0.4,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft: Radius
+                                                                .circular(8),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8)),
+                                                    color: theme.primaryColor,
+                                                    border: Border.all(
+                                                        color: theme
+                                                            .primaryColor)),
+                                                child: Text(
+                                                  context
+                                                              .watch<
+                                                                  TargetTabController>()
+                                                              .groupValueSelected ==
+                                                          0
+                                                      ? 'Today Achievement'
+                                                      : 'MTD Achievement',
+                                                  // ? '${   context.watch<TargetTabController>() .targetTodayMasterData22[0].kPI2Title}'
+                                                  // : '${   context.watch<TargetTabController>() .targetMonthMasterData22[0].kPI2Title}',
+                                                  textAlign: TextAlign.center,
+                                                  style: theme
+                                                      .textTheme.bodyLarge
+                                                      ?.copyWith(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                )),
+                                            SizedBox(
+                                              height:
+                                                  Screens.bodyheight(context) *
+                                                      0.01,
+                                            ),
+                                            Text(
+                                                context
+                                                            .watch<
+                                                                TargetTabController>()
+                                                            .groupValueSelected ==
+                                                        0
+                                                    ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].achPer}'
+                                                    : '${context.watch<TargetTabController>().targetMonthMasterData22[0].achPer}',
+                                                textAlign: TextAlign.center,
+                                                style: theme.textTheme.subtitle1
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                            SizedBox(
+                                              height:
+                                                  Screens.bodyheight(context) *
+                                                      0.01,
+                                            ),
+                                            Text(
+                                                context
+                                                            .watch<
+                                                                TargetTabController>()
+                                                            .groupValueSelected ==
+                                                        0
+                                                    ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].achVal}'
+                                                    : '${context.watch<TargetTabController>().targetMonthMasterData22[0].achVal}',
+                                                textAlign: TextAlign.center,
+                                                style: theme.textTheme.bodyText1
+                                                    ?.copyWith(
+                                                        color:
+                                                            Colors.grey[600]))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: Screens.bodyheight(context) * 0.005,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      left: Screens.bodyheight(context) * 0.01,
+                                    ),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8))),
+                                      child: Container(
+                                        height:
+                                            Screens.bodyheight(context) * 0.16,
+                                        width: Screens.width(context) * 0.45,
+                                        decoration: BoxDecoration(
+                                            color: theme.primaryColor
+                                                .withOpacity(0.05)),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5, horizontal: 5),
+                                                alignment: Alignment.center,
+                                                // height: Screens.bodyheight(context) * 0.05,
+                                                // width: Screens.width(context) * 0.4,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft: Radius
+                                                                .circular(8),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8)),
+                                                    color: theme.primaryColor,
+                                                    border: Border.all(
+                                                        color:
+                                                            theme.primaryColor)
+                                                    // borderRadius: BorderRadius.circular(10)),
+                                                    ),
+                                                child: Text(
+                                                  context
+                                                              .watch<
+                                                                  TargetTabController>()
+                                                              .groupValueSelected ==
+                                                          0
+                                                      ? 'Expected Closure for This Month'
+                                                      : 'Expected Closure for This Month',
+                                                  textAlign: TextAlign.center,
+                                                  style: theme
+                                                      .textTheme.bodyLarge
+                                                      ?.copyWith(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                )),
+                                            SizedBox(
+                                              height:
+                                                  Screens.bodyheight(context) *
+                                                      0.01,
+                                            ),
+                                            Text(
+                                                context
+                                                            .watch<
+                                                                TargetTabController>()
+                                                            .groupValueSelected ==
+                                                        0
+                                                    ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].expClosePerc}'
+                                                    : '${context.watch<TargetTabController>().targetMonthMasterData22[0].expClosePerc}',
+                                                style: theme.textTheme.subtitle1
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                            SizedBox(
+                                              height:
+                                                  Screens.bodyheight(context) *
+                                                      0.01,
+                                            ),
+                                            Text(
+                                                context
+                                                            .watch<
+                                                                TargetTabController>()
+                                                            .groupValueSelected ==
+                                                        0
+                                                    ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].expCloseVal}'
+                                                    : '${context.watch<TargetTabController>().targetMonthMasterData22[0].expCloseVal}',
+                                                style: theme.textTheme.bodyText1
+                                                    ?.copyWith(
+                                                        color:
+                                                            Colors.grey[600]))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      right: Screens.bodyheight(context) * 0.01,
+                                    ),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8))),
+                                      child: Container(
+                                        height:
+                                            Screens.bodyheight(context) * 0.16,
+                                        width: Screens.width(context) * 0.45,
+                                        decoration: BoxDecoration(
+                                            color: theme.primaryColor
+                                                .withOpacity(0.05)),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5, horizontal: 5),
+                                                alignment: Alignment.center,
+                                                // height: Screens.bodyheight(context) * 0.05,
+                                                // width: Screens.width(context) * 0.4,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft: Radius
+                                                                .circular(8),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8)),
+                                                    color: theme.primaryColor,
+                                                    border: Border.all(
+                                                        color:
+                                                            theme.primaryColor)
+                                                    // borderRadius: BorderRadius.circular(10)),
+                                                    ),
+                                                child: Text(
+                                                  context
+                                                              .watch<
+                                                                  TargetTabController>()
+                                                              .groupValueSelected ==
+                                                          0
+                                                      ? 'Run Rate Req. to Ach Target'
+                                                      : 'Run Rate Req. to Ach Target',
+                                                  textAlign: TextAlign.center,
+                                                  style: theme
+                                                      .textTheme.bodyLarge
+                                                      ?.copyWith(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                )),
+                                            SizedBox(
+                                              height:
+                                                  Screens.bodyheight(context) *
+                                                      0.01,
+                                            ),
+                                            Text(
+                                                context
+                                                            .watch<
+                                                                TargetTabController>()
+                                                            .groupValueSelected ==
+                                                        0
+                                                    ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].runRatePerc}'
+                                                    : '${context.watch<TargetTabController>().targetMonthMasterData22[0].runRatePerc}',
+                                                textAlign: TextAlign.center,
+                                                style: theme.textTheme.subtitle1
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                            SizedBox(
+                                              height:
+                                                  Screens.bodyheight(context) *
+                                                      0.01,
+                                            ),
+                                            Text(
+                                                context
+                                                            .watch<
+                                                                TargetTabController>()
+                                                            .groupValueSelected ==
+                                                        0
+                                                    ? '${context.watch<TargetTabController>().targetTodayMasterData22[0].runRateVal}'
+                                                    : '${context.watch<TargetTabController>().targetMonthMasterData22[0].runRateVal}',
+                                                textAlign: TextAlign.center,
+                                                style: theme.textTheme.bodyText1
+                                                    ?.copyWith(
+                                                        color:
+                                                            Colors.grey[600]))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                  height: Screens.bodyheight(context) * 0.01),
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                    right: Screens.bodyheight(context) * 0.015,
+                                    left: Screens.bodyheight(context) * 0.015,
+                                  ),
+                                  child: context
+                                      .watch<TargetTabController>()
+                                      .createTable(
+                                        theme,
+                                      ))
+                            ],
+                          ),
+                        )
+                      : Container()
+                ],
+              ),
+            ),
+          )))),
+    );
+    //   });
+    // });
   }
 
   // Widget createTable(

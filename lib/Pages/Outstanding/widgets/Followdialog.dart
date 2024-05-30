@@ -162,25 +162,27 @@ class _FollowdialogState extends State<Followdialog> {
                                   ),
                                   Container(
                                     child: Text(
-                                      context
+                                      "${context
                                                           .read<
                                                               Outstandingcontroller>()
-                                                          .config.slpitCurrency22(context.watch<Outstandingcontroller>().totaloutstanding.toString()),
+                                                          .config.slpitCurrency22(context.watch<Outstandingcontroller>().totaloutstanding.toString())}",
                                       style: theme.textTheme.bodyText1!
                                           .copyWith(color: theme.primaryColor),
                                     ),
                                   ),
-                                  Text(
-                                    "Overdue",
-                                    style: theme.textTheme.bodyText1!
-                                        .copyWith(color: Colors.grey),
+                                  Container(
+                                    child: Text(
+                                      "Overdue",
+                                      style: theme.textTheme.bodyText1!
+                                          .copyWith(color: Colors.grey),
+                                    ),
                                   ),
                                   Container(
                                     child: Text(
-                                      context
+                                      "${context
                                                           .read<
                                                               Outstandingcontroller>()
-                                                          .config.slpitCurrency22(context.watch<Outstandingcontroller>().overdue.toString()),
+                                                          .config.slpitCurrency22(context.watch<Outstandingcontroller>().overdue.toString())}",
                                       style: theme.textTheme.bodyText1!
                                           .copyWith(color: theme.primaryColor),
                                     ),
@@ -194,10 +196,10 @@ class _FollowdialogState extends State<Followdialog> {
                                   ),
                                   Container(
                                     child: Text(
-                                      context
+                                      "${context
                                                           .read<
                                                               Outstandingcontroller>()
-                                                          .config.slpitCurrency22(context.watch<Outstandingcontroller>().upcoming.toString()),
+                                                          .config.slpitCurrency22(context.watch<Outstandingcontroller>().upcoming.toString())}",
                                       style: theme.textTheme.bodyText1!
                                           .copyWith(color: theme.primaryColor),
                                     ),
@@ -387,7 +389,7 @@ class _FollowdialogState extends State<Followdialog> {
                                   ),
                                   Container(
                                     child: Text(
-                                      context.read<Outstandingcontroller>().config.alignDate(context.read<Outstandingcontroller>().outstandingkpi[i].TransDate.toString()),
+                                      "${context.read<Outstandingcontroller>().config.alignDate(context.read<Outstandingcontroller>().outstandingkpi[i].TransDate.toString())}",
                                       style: theme.textTheme.bodyText1!
                                           .copyWith(color: theme.primaryColor),
                                     ),
@@ -466,20 +468,20 @@ class _FollowdialogState extends State<Followdialog> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      context
+                                      "${context
                                                           .read<
                                                               Outstandingcontroller>()
-                                                          .config.slpitCurrency22(context.read<Outstandingcontroller>().outstandingkpi[i].TransAmount!.toString()),
+                                                          .config.slpitCurrency22(context.read<Outstandingcontroller>().outstandingkpi[i].TransAmount!.toString())}",
                                       style: theme.textTheme.bodyText1!
                                           .copyWith(color: theme.primaryColor),
                                     ),
                                   ),
                                   Container(
                                     child: Text(
-                                      context
+                                      "${context
                                                           .read<
                                                               Outstandingcontroller>()
-                                                          .config.slpitCurrency22(context.read<Outstandingcontroller>().outstandingkpi[i].BalanceToPay!.toString()),
+                                                          .config.slpitCurrency22(context.read<Outstandingcontroller>().outstandingkpi[i].BalanceToPay!.toString())}",
                                       style: theme.textTheme.bodyText1!
                                           .copyWith(color: theme.primaryColor),
                                     ),

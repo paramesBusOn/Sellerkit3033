@@ -30,7 +30,7 @@ class PatchExCus
   String? remarks;
   String? levelof;
   String? ordertype;
-  
+  String? couponcode;
   String? area;
   String? state;
   int? docent;
@@ -66,7 +66,7 @@ this.CardType,
 this.U_Address1,
 this.U_Address2,
 this.U_Address3,
-
+this.couponcode,
 this.U_City,
 this.U_Country,
 this.U_EMail,
@@ -77,6 +77,52 @@ this.U_Type
 
   });
 
+}
+class couponmodel{
+  String? customerCode;
+  String? itemCode;
+  String? storeCode;
+  int? qty;
+  double? totalBillValue;
+  String? requestedBy_UserCode;
+
+couponmodel({
+ this.customerCode,
+ this.itemCode,
+ this.storeCode,
+ this.qty,
+ this.totalBillValue,
+ this.requestedBy_UserCode
+});
+
+}
+class addspecialprice{
+  int? docentry;
+  String? fromDate;
+  String? toDate;
+  String? customerCode;
+  String? customerName;
+  String? customerMobile;
+  String? itemCode;
+  String? itemName;
+  double? quantity;
+  String? storeCode;
+  String? assignedTo;
+  double? rp;
+addspecialprice({
+  this.docentry,
+this.fromDate,
+this.toDate,
+this.customerCode,
+this.customerName,
+this.customerMobile,
+this.itemCode,
+this.itemName,
+this.quantity,
+this.storeCode,
+this.assignedTo,
+this.rp,
+});
 }
 
 class PostEnq

@@ -97,12 +97,11 @@ class NewEnquiryState extends State<NewEnquiry> {
           body: GestureDetector(
             onTap: () {
               setState(() {
-                FocusScopeNode cf = FocusScope.of(context);
+                 FocusScopeNode cf = FocusScope.of(context);
                 if (!cf.hasPrimaryFocus && cf.focusedChild !=null) {
                   cf.focusedChild!.unfocus();
                 cf.unfocus();  
                 }
-                    
                 // FocusScope.of(context).unfocus();
               });
             },

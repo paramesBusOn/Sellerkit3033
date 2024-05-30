@@ -165,7 +165,7 @@ class _CollectionsState extends State<Collections>
                             .collectionGetList
                             .isNotEmpty &&
                         context.watch<ColletionContoller>().errormsg == '')
-                    ? Un_Settled(context, theme)
+                    ? Un_Settled(context, theme,controller!.index.toString())
                     : (context.watch<ColletionContoller>().preogress == false &&
                             context
                                 .watch<ColletionContoller>()
@@ -219,7 +219,7 @@ class _CollectionsState extends State<Collections>
                             .collectionGetList
                             .isNotEmpty &&
                         context.watch<ColletionContoller>().errormsg == '')
-                    ? settled(context, theme)
+                    ? settled(context, theme,controller!.index.toString())
                     : (context.watch<ColletionContoller>().preogress == false &&
                             context
                                 .watch<ColletionContoller>()
@@ -286,7 +286,7 @@ class _CollectionsState extends State<Collections>
           )),
     );
   }
-Container settled(BuildContext context, ThemeData theme) {
+Container settled(BuildContext context, ThemeData theme,String tabvalue) {
     return Container(
       width: Screens.width(context),
       height: Screens.bodyheight(context),
@@ -337,10 +337,12 @@ Container settled(BuildContext context, ThemeData theme) {
                     //     .length,
                     // prdACC.getAccountsData.length,
                     itemBuilder: (BuildContext context, int i) {
-                      return Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
+                      return Container(
+                        width: Screens.width(context),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Screens.width(context) * 0.02,
+                                  vertical:
+                                      Screens.bodyheight(context) * 0.006),
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -351,16 +353,19 @@ Container settled(BuildContext context, ThemeData theme) {
                                       i,
                                       context
                                           .read<ColletionContoller>()
-                                          .filetercollectionGetListClose[i]);
+                                          .filetercollectionGetListClose[i],tabvalue);
                             });
                           },
                           child: Container(
                             padding: EdgeInsets.all(
                                 Screens.bodyheight(context) * 0.005),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                           decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(8),
+                                        border:
+                                            Border.all(color: Colors.black26)
+                                        // border: Border(bottom: BorderSide(color: Colors.black38))
+                                        ),
                             child: Column(
                               children: [
                                 IntrinsicHeight(
@@ -856,7 +861,7 @@ Container settled(BuildContext context, ThemeData theme) {
   //   );
   // }
 
-  Container Un_Settled(BuildContext context, ThemeData theme) {
+  Container Un_Settled(BuildContext context, ThemeData theme,String tabvalue) {
     return Container(
       width: Screens.width(context),
       height: Screens.bodyheight(context),
@@ -906,10 +911,13 @@ Container settled(BuildContext context, ThemeData theme) {
                     //     .length,
                     // prdACC.getAccountsData.length,
                     itemBuilder: (BuildContext context, int i) {
-                      return Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
+                      return Container(
+                        width: Screens.width(context),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: Screens.width(context) * 0.02,
+                                  vertical:
+                                      Screens.bodyheight(context) * 0.006),
+                      
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -920,7 +928,7 @@ Container settled(BuildContext context, ThemeData theme) {
                                       i,
                                       context
                                           .read<ColletionContoller>()
-                                          .filetercollectionGetListOpen[i]);
+                                          .filetercollectionGetListOpen[i],tabvalue);
                             });
                           },
                           onDoubleTap: (){
@@ -932,16 +940,19 @@ Container settled(BuildContext context, ThemeData theme) {
                                       i,
                                       context
                                           .read<ColletionContoller>()
-                                          .filetercollectionGetListOpen[i]);
+                                          .filetercollectionGetListOpen[i],tabvalue);
                             });
                           },
                           child: Container(
                             padding: EdgeInsets.all(
                                 Screens.bodyheight(context) * 0.005),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                             decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(8),
+                                        border:
+                                            Border.all(color: Colors.black26)
+                                        // border: Border(bottom: BorderSide(color: Colors.black38))
+                                        ),
                             child: Column(
                               children: [
                                 IntrinsicHeight(

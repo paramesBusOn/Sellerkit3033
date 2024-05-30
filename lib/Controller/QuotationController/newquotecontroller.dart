@@ -74,7 +74,62 @@ customermodeldata=value.leadcheckdata;
   });
 
 }
+ scannerreset(){
+itemAlreadyscanned = false;
+  indexscanning=null;
+  notifyListeners();
+  }
+  int? indexscanning;
+  bool itemAlreadyscanned = false;
+  String? Scancode;
+  scanneddataget(BuildContext context){
+  // log("code:::::"+code.toString());
 
+  
+
+
+   
+   notifyListeners();
+  
+  // Get.back();
+// Navigator.pop(context);
+notifyListeners();
+   for (int ij=0;ij<allProductDetails.length;ij++){
+    if(allProductDetails[ij].itemCode ==Scancode){
+      itemAlreadyscanned=true;
+      indexscanning =ij;
+        notifyListeners();
+      break;
+    
+    }
+   
+   }
+    if(itemAlreadyscanned ==true){
+      resetItems(indexscanning!);
+showBottomSheetInsert(context, indexscanning!);
+ notifyListeners();
+   }else{
+    showtoastforscanning();
+     notifyListeners();
+   }
+   
+ 
+
+
+//  checkscannedcode(code);
+ notifyListeners();
+
+  }
+  void showtoastforscanning() {
+    Fluttertoast.showToast(
+        msg: "No Data Found..!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 14.0);
+  }
 // String apipurchaseDate = '';
 //   void showpurchaseDate(BuildContext context) {
 //     showDatePicker(
@@ -146,6 +201,7 @@ List<LevelofData> leveofdata=[];
     notifyListeners();
   }
     clearAllData() {
+      DocDateold='';
       paymentTerm=false;
        leveofdata.clear();
     ordertypedata.clear();
@@ -1668,7 +1724,7 @@ showBottomSheetInsertforedit(
                           //     ? true
                           //     : false,
                           keyboardType: TextInputType.number,
-                          //inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -1770,7 +1826,7 @@ showBottomSheetInsertforedit(
                                     //     dismissDirection: DismissDirection.down,
                                     //   ),
                                     // );
-                                    if (mycontroller[11].text != "0") {
+                                    if (int.parse(mycontroller[11].text) > 0) {
                                       mycontroller[12].clear();
                                       addProductDetails(context);
                                     } else {
@@ -1780,7 +1836,7 @@ showBottomSheetInsertforedit(
                                   child: Text("ok"))
                               : ElevatedButton(
                                   onPressed: () {
-                                    if (mycontroller[11].text != "0") {
+                                    if (int.parse(mycontroller[11].text) > 0) {
                                       updateProductDetails(context, i);
                                     } else {
                                       showtoastproduct();
@@ -1797,6 +1853,8 @@ showBottomSheetInsertforedit(
       }),
     );
   }
+  
+String? DocDateold='';
  showBottomSheetInsert(BuildContext context, int i,) {
     final theme = Theme.of(context);
     selectedItemName = allProductDetails[i].itemName.toString();
@@ -1950,7 +2008,7 @@ if (val.length > 0) {
                           //     ? true
                           //     : false,
                           keyboardType: TextInputType.number,
-                          //inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -2053,7 +2111,7 @@ if (val.length > 0) {
         //     dismissDirection: DismissDirection.down,
         //   ),
         // );
-                                    if(mycontroller[11].text != "0"){
+                                    if(int.parse(mycontroller[11].text)>0){
   mycontroller[12].clear();
                                     addProductDetails(context);
                                     }else{
@@ -2067,7 +2125,7 @@ if (val.length > 0) {
                                   child: Text("ok"))
                               : ElevatedButton(
                                   onPressed: () {
-                                     if(mycontroller[11].text != "0"){
+                                     if(int.parse(mycontroller[11].text)>0){
  updateProductDetails(context, i);
                                      }else{
 
@@ -2110,16 +2168,17 @@ if (val.length > 0) {
         Navigator.pop(context);
         isUpdateClicked = false;
         notifyListeners();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Item Already Added..!!'),
-            backgroundColor: Colors.red,
-            elevation: 10,
-            behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.all(5),
-            dismissDirection: DismissDirection.up,
-          ),
-        );
+        showtoastforall();
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text('Item Already Added..!!'),
+        //     backgroundColor: Colors.red,
+        //     elevation: 10,
+        //     behavior: SnackBarBehavior.floating,
+        //     margin: EdgeInsets.all(5),
+        //     dismissDirection: DismissDirection.up,
+        //   ),
+        // );
       } else {
         productDetails.add(DocumentLines(
             id: 0,
@@ -2150,6 +2209,16 @@ if (val.length > 0) {
         notifyListeners();
       }
     }
+  }
+  void showtoastforall() {
+    Fluttertoast.showToast(
+        msg: "Item Already Added..!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 14.0);
   }
   Config config = new Config();
  
@@ -2276,6 +2345,7 @@ firstPageNextBtn(BuildContext context) {
         notifyListeners();
       } else {
         if (passed == 0) {
+          FocusScope.of(context).unfocus();
           pageController.animateToPage(++pageChanged,
               duration: Duration(milliseconds: 250), curve: Curves.bounceIn);
           // resetValidate();
@@ -2988,6 +3058,7 @@ saveToServer(BuildContext context) async {
     postLead.CardCode = mycontroller[0].text; //
     postLead.CardName = mycontroller[16].text; //
     postLead.DocDate = config.currentDate(); //
+    postLead.DocDateold=DocDateold!.isEmpty?config.currentDate():DocDateold;
     postLead.deliveryDate = apiFDate;
     postLead.paymentDate = apiNdate;
     // postLead.purchaseDate=apipurchaseDate;
@@ -3407,6 +3478,7 @@ valueChosedCusType=ordertypedata[i].Code;
 //       notifyListeners();
 //     }
     // log("datafromlead" + datafromlead[5].toString());
+    DocDateold=datafrommodify[22];
     mycontroller[0].text = datafrommodify[1];
     mycontroller[16].text = datafrommodify[2];
     // mycontroller[1].text = datafromlead[1];

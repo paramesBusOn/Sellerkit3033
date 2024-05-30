@@ -469,39 +469,92 @@ class AssignedToDialogUserState extends State<AssignedToDialogUser> {
   Container assignedToApiRespPage(BuildContext context, ThemeData theme) {
     return Container(
       width: Screens.width(context) * 0.9,
-      height: Screens.bodyheight(context) * 0.35,
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              context.watch<EnquiryUserContoller>().isSuccessforward == true
-                  ? "Success"
-                  : context
-                      .watch<EnquiryUserContoller>()
-                      .getassignedToApiActResp,
-              style: context
-                      .watch<EnquiryUserContoller>()
-                      .getassignedToApiActResp
-                      .contains("N")
-                  ? theme.textTheme.headline6?.copyWith(color: Colors.green)
-                  : theme.textTheme.headline6?.copyWith(color: Colors.red),
+      // height: Screens.bodyheight(context) * 0.35,
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+           Container(
+          width: Screens.width(context),
+          height: Screens.bodyheight(context) * 0.06,
+          child: ElevatedButton(
+            onPressed: null,
+            style: ElevatedButton.styleFrom(
+              textStyle: TextStyle(
+                  // fontSize: 12,
+                  ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10),
+                topLeft: Radius.circular(10),
+              )), //Radius.circular(6)
             ),
-            SizedBox(
-              height: Screens.bodyheight(context) * 0.02,
+            child: Text(
+              "Alert",
+              style: theme.textTheme.bodyText1?.copyWith(color: Colors.white),
             ),
-            Text(
-              context.watch<EnquiryUserContoller>().isSuccessforward == true
-                  ? "Updated Successfully..!"
-                  : context
-                      .watch<EnquiryUserContoller>()
-                      .getassignedToApiActRespMsg,
-              style: theme.textTheme.bodyText1,
-            ),
-          ],
+          ),
         ),
+        Container(
+          child: Column(children: [
+Text(
+            context.watch<EnquiryUserContoller>().isSuccessforward == true
+                ? "Success"
+                : context
+                    .watch<EnquiryUserContoller>()
+                    .getassignedToApiActResp,
+            style: context
+                    .watch<EnquiryUserContoller>()
+                    .getassignedToApiActResp
+                    .contains("N")
+                ? theme.textTheme.headline6?.copyWith(color: Colors.green)
+                : theme.textTheme.headline6?.copyWith(color: Colors.red),
+          ),
+          SizedBox(
+            height: Screens.bodyheight(context) * 0.02,
+          ),
+          Text(
+            context.watch<EnquiryUserContoller>().isSuccessforward == true
+                ? "Updated Successfully..!"
+                : context
+                    .watch<EnquiryUserContoller>()
+                    .getassignedToApiActRespMsg,
+            style: theme.textTheme.bodyText1,
+          ),
+       SizedBox(
+                height: Screens.bodyheight(context) * 0.02,
+              ),
+              Container(
+                width: Screens.width(context) * 0.26,
+                height: Screens.bodyheight(context) * 0.06,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.primaryColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6))),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        Navigator.pop(context);
+                        //      context
+                        // .read<LeadTabController>()
+                        // .swipeRefreshIndiactor();
+                      });
+                    },
+                    child: Text(
+                      "Ok",
+                    )),
+              ),
+       SizedBox(
+            height: Screens.bodyheight(context) * 0.01,
+          ),
+          ],),
+        ),
+          
+      
+      
+        ],
       ),
     );
   }
@@ -1066,9 +1119,17 @@ class AssignedToDialogUserState extends State<AssignedToDialogUser> {
                                       BorderRadius.all(Radius.circular(6))),
                             ),
                             onPressed: () {
-                              context
+                              // log("ConstantValues.tenetID::"+ConstantValues.tenetID.toString());
+                              // if(ConstantValues.tenetID!.toLowerCase().contains("bus002")){
+                              //   log("sppppsppppsppsppppspppp");
+
+                              // }else{
+                                context
                                   .read<EnquiryUserContoller>()
                                   .makePhoneCall(widget.openenqdata.CardCode!);
+
+                              // }
+                              
                             },
                             child: Icon(Icons.call,
                                 color: Colors.white,
@@ -1485,6 +1546,7 @@ class AssignedToDialogUserState extends State<AssignedToDialogUser> {
         },
         child: Container(
           // alignment: Alignment.center,
+           width: Screens.width(context) * 0.4,
           // width: Screens.width(context) * 0.2,
           // height: Screens.bodyheight(context) * 0.06,
           padding: EdgeInsets.all(5),
@@ -1503,6 +1565,7 @@ class AssignedToDialogUserState extends State<AssignedToDialogUser> {
                   .watch<EnquiryUserContoller>()
                   .filteruserLtData[ind]
                   .UserName!,
+                  textAlign: TextAlign.center,
               // maxLines: 1,
               //overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyText2?.copyWith(

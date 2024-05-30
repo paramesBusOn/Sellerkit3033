@@ -196,7 +196,7 @@ callsecondaryApi()async{
  final stopwatch = Stopwatch()..start();
         // log("Start: Initial Loading.." ); 
     loadingApi = "EnquiryType";
-     await enquiryTypeApi.getData(ConstantValues.slpcode).then((value) {//exce
+     await enquiryTypeApi.getData(ConstantValues.slpcode).then((value) {
  if (value.stcode! >= 200 && value.stcode! <= 210) {
       exception = false;
       if (value.itemdata != null) {
@@ -236,7 +236,7 @@ callsecondaryApi()async{
     // CustomerTagTypeModal customerTagTypeModal =
     //     await customerTagTypeApi.getData(ConstantValues.slpcode);
     loadingApi = "customerTagType";
-     await customerTagTypeApi.getData(ConstantValues.slpcode).then((value){//exc
+     await customerTagTypeApi.getData(ConstantValues.slpcode).then((value){
 if (value.stcode! >= 200 &&
         value.stcode! <= 210) {
       exception = false;
@@ -681,17 +681,17 @@ offerproduct =
          
     // }
     // log("valuesInserCusTag: " + customerTagTypeData.length.toString());
- await DBOperation.inserstateMaster(stateData, db);//
-    await DBOperation.insertCusTagType(customerTagTypeData, db);//
-await DBOperation.insertlevelofType(levelofdata, db);//
-await DBOperation.insertOrderTypeta(ordertypedata, db);//
+ await DBOperation.inserstateMaster(stateData, db);
+    await DBOperation.insertCusTagType(customerTagTypeData, db);
+await DBOperation.insertlevelofType(levelofdata, db);
+await DBOperation.insertOrderTypeta(ordertypedata, db);
     // log("valuesInserEnq: " + enqTypeData.length.toString());
-    await DBOperation.insertEnqType(enqTypeData, db);//
+    await DBOperation.insertEnqType(enqTypeData, db);
     // log("enqReffersdata: " + enqReffdata.length.toString());
-    await DBOperation.insertEnqReffers(enqReffdata, db);//
+    await DBOperation.insertEnqReffers(enqReffdata, db);
     // log("userListData:" + userListData.length.toString());
-    await DBOperation.insertUserList(userListData, db);//
-    await DBOperation.insertLeadStatusList(leadcheckdata, db);//
+    await DBOperation.insertUserList(userListData, db);
+    await DBOperation.insertLeadStatusList(leadcheckdata, db);
     // log("leadcheckdata:" + leadcheckdata.length.toString());
     if (offerzone.isNotEmpty) {
       await DBOperation.insertOfferZone(offerzone, db);
@@ -741,7 +741,7 @@ ItemMasterNewModal itemMasterData = await itemMasterApiNew.getData();
         exception = false;
        
         if (itemMasterData.itemdata != null) {
-          //  log("Api itemMasterData.itemdata!.length ${itemMasterData.itemdata!.length.toString()}");
+           log("Api itemMasterData.itemdata!.length ${itemMasterData.itemdata!.length.toString()}");
 
           String date = config.currentDate();
           final stopwatch = Stopwatch()..start();
@@ -753,9 +753,9 @@ ItemMasterNewModal itemMasterData = await itemMasterApiNew.getData();
               calcType:itemMasterData.itemdata![ij].calcType!,
                 id: itemMasterData.itemdata![ij].id!,
                 itemCode: itemMasterData.itemdata![ij].itemcode!.replaceAll("'", "''"),
-                brand: itemMasterData.itemdata![ij].Brand!,
-                division: itemMasterData.itemdata![ij].Division!,
-                category: itemMasterData.itemdata![ij].Category!,
+                brand: itemMasterData.itemdata![ij].Brand!.replaceAll("'", "''"),
+                division: itemMasterData.itemdata![ij].Division!.replaceAll("'", "''"),
+                category: itemMasterData.itemdata![ij].Category!.replaceAll("'", "''"),
                 itemName: itemMasterData.itemdata![ij].itemName!.replaceAll("'", "''"),
                 segment: itemMasterData.itemdata![ij].Segment!,
                 isselected: 0,
@@ -773,11 +773,11 @@ ItemMasterNewModal itemMasterData = await itemMasterApiNew.getData();
                 modelNo: itemMasterData.itemdata![ij].modelNo!.replaceAll("'", "''"),
                 partCode: itemMasterData.itemdata![ij].partCode!.replaceAll("'", "''"),
                 skucode: itemMasterData.itemdata![ij].skucode,
-                brandCode: itemMasterData.itemdata![ij].brandCode,
-                itemGroup: itemMasterData.itemdata![ij].itemGroup,
-                specification: itemMasterData.itemdata![ij].specification,
+                brandCode: itemMasterData.itemdata![ij].brandCode!.replaceAll("'", "''"),
+                itemGroup: itemMasterData.itemdata![ij].itemGroup!.replaceAll("'", "''"),
+                specification: itemMasterData.itemdata![ij].specification!.replaceAll("'", "''"),
                 sizeCapacity: itemMasterData.itemdata![ij].sizeCapacity,
-                clasification: itemMasterData.itemdata![ij].clasification,
+                clasification: itemMasterData.itemdata![ij].clasification!.replaceAll("'", "''"),
                 uoM: itemMasterData.itemdata![ij].uoM,
                 taxRate: itemMasterData.itemdata![ij].taxRate,
                 catalogueUrl1: itemMasterData.itemdata![ij].catalogueUrl1,
@@ -813,7 +813,7 @@ ItemMasterNewModal itemMasterData = await itemMasterApiNew.getData();
                     itemMasterData.itemdata![ij].allowOrderBelowCost,
                 isFixedPrice: itemMasterData.itemdata![ij].isFixedPrice,
                 validTill: itemMasterData.itemdata![ij].validTill.toString(),
-                color: itemMasterData.itemdata![ij].color.toString()));
+                color: itemMasterData.itemdata![ij].color!.replaceAll("'", "''")));
             // log("valuesInserMaster2222" + valuesInserMaster.length.toString());
             // dbHelper.insertdocuments(valuesInserMaster[ij]);
           }
@@ -910,7 +910,7 @@ await DBOperation.insertItemMaster(valuesInserMaster, db);
                       child: Text(
                         "No",
                       ),
-                      style: TextButton.styleFrom(foregroundColor: Colors.red)),
+                      style: TextButton.styleFrom(backgroundColor: Colors.red)),
                   TextButton(
                       onPressed: () async {
                         setState(() {

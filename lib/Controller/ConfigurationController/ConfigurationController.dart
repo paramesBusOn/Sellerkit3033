@@ -383,7 +383,6 @@ postLoginData. devicename='${brand} ${model}';
       // await config.getSetup();
     }
   }
-  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
 
   checkLoc() async {
     if (Platform.isAndroid) {
@@ -395,14 +394,14 @@ postLoginData. devicename='${brand} ${model}';
     await Future.delayed(Duration(seconds: 3));
     Connectivity()
         .onConnectivityChanged
-        .listen((List<ConnectivityResult> result) async {
+        .listen((ConnectivityResult result) async {
       // log("result:::" + result.name.toString());
       // Got a new connectivity status!
 
-      if (_connectionStatus == 'none') {
+      if (result.name == 'none') {
         ConstantValues.ipaddress = '';
         ConstantValues.ipname = '';
-      } else if (_connectionStatus == 'mobile') {
+      } else if (result.name == 'mobile') {
         if (Platform.isAndroid) {
           final MobileNetworkInfo mobileNetworkInfo = MobileNetworkInfo();
           final String? name = await Config.getipaddress();
@@ -418,7 +417,7 @@ postLoginData. devicename='${brand} ${model}';
           ConstantValues.ipaddress = wifiiInfo[1];
           ConstantValues.ipname = wifiiInfo[0];
         }
-      } else if (_connectionStatus == 'wifi') {
+      } else if (result.name == 'wifi') {
         String? name= await Config.getipaddress();
         List<String>? wifiiInfo = await config.setNetwork();
         ConstantValues.ipaddress = name == null ? 'null' : name;

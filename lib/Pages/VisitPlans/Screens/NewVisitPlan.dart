@@ -64,15 +64,16 @@ class NewVisitPlanState extends State<NewVisitPlan> {
         drawer: drawer3(context),
         appBar: appbar("Schedule Visit", scaffoldKey, theme, context),
         body: GestureDetector(
-          onTap: (){
-            setState(() {
-              FocusScopeNode cf = FocusScope.of(context);
+           onTap: () {
+              setState(() {
+                 FocusScopeNode cf = FocusScope.of(context);
                 if (!cf.hasPrimaryFocus && cf.focusedChild !=null) {
                   cf.focusedChild!.unfocus();
                 cf.unfocus();  
                 }
-            });
-          },
+                // FocusScope.of(context).unfocus();
+              });
+            },
           onHorizontalDragUpdate: (details) {
             // Check if the user is swiping from left to right
             print(details.primaryDelta);

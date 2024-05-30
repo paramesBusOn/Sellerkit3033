@@ -2,18 +2,11 @@
 
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:sellerkit/Constant/ConstantRoutes.dart';
-import 'package:sellerkit/Constant/Helper.dart';
-import 'package:sellerkit/Constant/SharedPreference.dart';
-import 'package:sellerkit/Controller/SiteInController/SiteInController.dart';
 import 'package:sellerkit/Controller/SiteOutController/SiteOutController.dart';
-import 'package:sellerkit/Pages/Challenges/Screens/Challenges.dart';
-import 'package:sellerkit/Pages/MyEarnings/Screens/MyEarnings.dart';
-import 'package:sellerkit/Pages/MyPerformance/Screens/MyPerformance.dart';
-import 'package:sellerkit/Pages/Settings/Screen/Settings.dart';
-import 'package:sellerkit/Pages/VisitPlans/visitplanScreen.dart';
 import 'package:sellerkit/Services/DayStartEndApi/DaycheckAPi.dart';
 import 'package:sellerkit/Widgets/IconContainer.dart';
 import 'package:sellerkit/Widgets/IconContainer2.dart';
@@ -192,7 +185,7 @@ Container drawer3(BuildContext context) {
                                         });
                                   }
                                 },
-                                icon: Icons.edit_note,
+                                icon: Icons.perm_phone_msg,
                                 iconColor: theme.primaryColor, // Colors.green,
                                 title: 'Enquiries',
                               ),
@@ -274,7 +267,7 @@ Container drawer3(BuildContext context) {
 
                                   //Navigator.push(context, MaterialPageRoute(builder:(_)=>NewLeadFrom()));
                                 },
-                                icon: Icons.credit_score_rounded,
+                                icon: Icons.handshake,
                                 iconColor: theme.primaryColor, //.pink,
                                 title: 'Orders',
                               ),
@@ -303,13 +296,13 @@ Container drawer3(BuildContext context) {
                                         });
                                   }
                                 },
-                                icon: Icons.redeem_rounded,
+                                icon: Icons.hourglass_empty,
                                 iconColor: theme.primaryColor, //Colors.amber,
                                 title: 'Follow up',
                               ),
-                              IconContainer(
-                                theme: theme,
-                                callback: () {
+
+                              InkWell(
+                                onTap: () {
                                   if (MenuAuthDetail.Walkins == "Y") {
                                     Navigator.pop(context);
                                     Get.toNamed(ConstantRoutes.walkins);
@@ -331,10 +324,127 @@ Container drawer3(BuildContext context) {
                                         });
                                   }
                                 },
-                                icon: Icons.wysiwyg,
-                                iconColor: theme.primaryColor, //Colors.blue,
-                                title: 'Walkins',
+                                child: Container(
+                                  alignment: Alignment.bottomCenter,
+                                  width: Screens.width(context) * 0.25,
+                                  height: Screens.fullHeight(context) * 0.11,
+                                  decoration: BoxDecoration(
+                                      //   color: Colors.red[200],
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        width: Screens.width(context) * 0.26,
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              width: Screens.width(context) *
+                                                  0.108,
+                                              // padding: EdgeInsets.all(5),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  color: theme.primaryColor
+                                                      .withOpacity(
+                                                          0.2), //,Colors.amber,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: IconButton(
+                                                alignment:
+                                                    Alignment.bottomCenter,
+                                                onPressed: () {
+                                                  if (MenuAuthDetail.Walkins ==
+                                                      "Y") {
+                                                    Navigator.pop(context);
+                                                    Get.toNamed(
+                                                        ConstantRoutes.walkins);
+                                                  } else {
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            true,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              4))),
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .all(0),
+                                                              insetPadding:
+                                                                  EdgeInsets.all(
+                                                                      Screens.bodyheight(
+                                                                              context) *
+                                                                          0.02),
+                                                              content: settings(
+                                                                  context));
+                                                        });
+                                                  }
+                                                },
+                                                icon: FaIcon(FontAwesomeIcons
+                                                    .users), // Icons.home,
+                                                color: theme
+                                                    .primaryColor, //Colors.red,//Colors.white,
+                                                iconSize: Screens.padingHeight(
+                                                        context) *
+                                                    0.03,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        width: Screens.width(context) * 0.26,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Walkins",
+                                          textAlign: TextAlign.center,
+                                          style: theme.textTheme.bodyText1
+                                              ?.copyWith(
+                                                  color: theme.primaryColor,
+
+                                                  //color:Colors.red,//Colors.white,//
+                                                  fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
+                              // IconContainer(
+                              //   theme: theme,
+                              //   callback: () {
+                              //     if (MenuAuthDetail.Walkins == "Y") {
+                              //       Navigator.pop(context);
+                              //       Get.toNamed(ConstantRoutes.walkins);
+                              //     } else {
+                              //       showDialog(
+                              //           context: context,
+                              //           barrierDismissible: true,
+                              //           builder: (BuildContext context) {
+                              //             return AlertDialog(
+                              //                 shape: RoundedRectangleBorder(
+                              //                     borderRadius:
+                              //                         BorderRadius.all(
+                              //                             Radius.circular(4))),
+                              //                 contentPadding: EdgeInsets.all(0),
+                              //                 insetPadding: EdgeInsets.all(
+                              //                     Screens.bodyheight(context) *
+                              //                         0.02),
+                              //                 content: settings(context));
+                              //           });
+                              //     }
+                              //   },
+                              //   icon: Icons.wysiwyg,
+                              //   iconColor: theme.primaryColor, //Colors.blue,
+                              //   title: 'Walkins',
+                              // ),
                             ],
                           ),
                           SizedBox(
@@ -347,9 +457,8 @@ Container drawer3(BuildContext context) {
                             child: Row(
                               // mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                IconContainer(
-                                  theme: theme,
-                                  callback: () {
+                                InkWell(
+                                  onTap: () {
                                     if (MenuAuthDetail.Leads == "Y") {
                                       Navigator.pop(context);
                                       Get.toNamed(ConstantRoutes.openLeadPage);
@@ -374,11 +483,130 @@ Container drawer3(BuildContext context) {
                                           });
                                     }
                                   },
-                                  icon: Icons.open_in_browser_sharp,
-                                  iconColor:
-                                      theme.primaryColor, // Colors.green,
-                                  title: 'Open Lead',
+                                  child: Container(
+                                    alignment: Alignment.bottomCenter,
+                                    width: Screens.width(context) * 0.25,
+                                    height: Screens.fullHeight(context) * 0.11,
+                                    decoration: BoxDecoration(
+                                        //   color: Colors.red[200],
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Container(
+                                          width: Screens.width(context) * 0.26,
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                width: Screens.width(context) *
+                                                    0.108,
+                                                // padding: EdgeInsets.all(5),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                    color: theme.primaryColor
+                                                        .withOpacity(
+                                                            0.2), //,Colors.amber,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: IconButton(
+                                                  alignment: Alignment.center,
+                                                  onPressed: () {
+                                                    if (MenuAuthDetail.Leads ==
+                                                        "Y") {
+                                                      Navigator.pop(context);
+                                                      Get.toNamed(ConstantRoutes
+                                                          .openLeadPage);
+                                                    } else {
+                                                      showDialog(
+                                                          context: context,
+                                                          barrierDismissible:
+                                                              true,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                                shape: RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(Radius.circular(
+                                                                            4))),
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .all(0),
+                                                                insetPadding:
+                                                                    EdgeInsets.all(
+                                                                        Screens.bodyheight(context) *
+                                                                            0.02),
+                                                                content: settings(
+                                                                    context));
+                                                          });
+                                                    }
+                                                  },
+                                                  icon: FaIcon(FontAwesomeIcons
+                                                      .funnelDollar), // Icons.home,
+                                                  color: theme
+                                                      .primaryColor, //Colors.red,//Colors.white,
+                                                  iconSize:
+                                                      Screens.padingHeight(
+                                                              context) *
+                                                          0.03,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          width: Screens.width(context) * 0.26,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "Open Lead",
+                                            textAlign: TextAlign.center,
+                                            style: theme.textTheme.bodyText1
+                                                ?.copyWith(
+                                                    color: theme.primaryColor,
+
+                                                    //color:Colors.red,//Colors.white,//
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
+                                // IconContainer(
+                                //   theme: theme,
+                                //   callback: () {
+                                //     if (MenuAuthDetail.Leads == "Y") {
+                                //       Navigator.pop(context);
+                                //       Get.toNamed(ConstantRoutes.openLeadPage);
+                                //     } else {
+                                //       showDialog(
+                                //           context: context,
+                                //           barrierDismissible: true,
+                                //           builder: (BuildContext context) {
+                                //             return AlertDialog(
+                                //                 shape: RoundedRectangleBorder(
+                                //                     borderRadius:
+                                //                         BorderRadius.all(
+                                //                             Radius.circular(
+                                //                                 4))),
+                                //                 contentPadding:
+                                //                     EdgeInsets.all(0),
+                                //                 insetPadding: EdgeInsets.all(
+                                //                     Screens.bodyheight(
+                                //                             context) *
+                                //                         0.02),
+                                //                 content: settings(context));
+                                //           });
+                                //     }
+                                //   },
+                                //   icon: Icons.open_in_browser_sharp,
+                                //   iconColor:
+                                //       theme.primaryColor, // Colors.green,
+                                //   title: 'Open Lead',
+                                // ),
                                 SizedBox(
                                   width: Screens.width(context) * 0.02,
                                 ),
@@ -493,7 +721,7 @@ Container drawer3(BuildContext context) {
                                           });
                                     }
                                   },
-                                  icon: Icons.inventory,
+                                  icon: Icons.warehouse,
                                   iconColor:
                                       theme.primaryColor, // Colors.green,
                                   title: 'Stocks'),
@@ -550,12 +778,152 @@ Container drawer3(BuildContext context) {
                                         });
                                   }
                                 },
-                                icon: Icons.free_cancellation,
+                                icon: Icons.redeem_rounded,
                                 iconColor: theme.primaryColor, //Colors.orange,
                                 title: 'Offer Zone',
                               ),
                             ],
                           ),
+                          SizedBox(
+                            height: Screens.fullHeight(context) * 0.01,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: Screens.width(context) * 0.02),
+                            child: Row(
+                              children: [
+                                //                          InkWell(
+                                //   onTap: () {
+                                //                                 // if (MenuAuthDetail.OfferZone == "Y") {
+                                //                                   //ch ! replace =
+                                //                                   Navigator.pop(context);
+                                //                                   Get.toNamed(ConstantRoutes.specialpricereq);
+                                //                                 // } else {
+                                //                                 //   showDialog(
+                                //                                 //       context: context,
+                                //                                 //       barrierDismissible: true,
+                                //                                 //       builder: (BuildContext context) {
+                                //                                 //         return AlertDialog(
+                                //                                 //             shape: RoundedRectangleBorder(
+                                //                                 //                 borderRadius:
+                                //                                 //                     BorderRadius.all(
+                                //                                 //                         Radius.circular(4))),
+                                //                                 //             contentPadding: EdgeInsets.all(0),
+                                //                                 //             insetPadding: EdgeInsets.all(
+                                //                                 //                 Screens.bodyheight(context) *
+                                //                                 //                     0.02),
+                                //                                 //             content: settings(context));
+                                //                                 //       });
+                                //                                 // }
+                                //                               },
+                                //   child: Container(
+                                //     alignment: Alignment.bottomCenter,
+                                //     width: Screens.width(context)*0.25,
+                                //     height: Screens.fullHeight(context)*0.11,
+                                //     decoration: BoxDecoration(
+                                //                  //   color: Colors.red[200],
+                                //       borderRadius: BorderRadius.circular(8)
+                                //     ),
+                                //     child: Column(
+                                //       mainAxisAlignment:   MainAxisAlignment.spaceAround,
+                                //       children: [
+                                //         Container(
+                                //           width: Screens.width(context) * 0.26,
+                                //           alignment: Alignment.center,
+
+                                //           child: Column(
+                                //             children: [
+                                //               Container(
+                                //                   width: Screens.width(context) * 0.108,
+                                //                   // padding: EdgeInsets.all(5),
+                                //                   alignment: Alignment.center,
+                                //                   decoration: BoxDecoration(
+                                //                     color: theme.primaryColor.withOpacity(0.2),//,Colors.amber,
+                                //                     borderRadius: BorderRadius.circular(10)
+                                //                   ),
+                                //                 child: IconButton(
+                                //                   alignment: Alignment.bottomCenter,
+                                //                   onPressed: () {
+                                //                                 // if (MenuAuthDetail.OfferZone == "Y") {
+                                //                                   //ch ! replace =
+                                //                                   Navigator.pop(context);
+                                //                                   Get.toNamed(ConstantRoutes.specialpricereq);
+                                //                                 // } else {
+                                //                                 //   showDialog(
+                                //                                 //       context: context,
+                                //                                 //       barrierDismissible: true,
+                                //                                 //       builder: (BuildContext context) {
+                                //                                 //         return AlertDialog(
+                                //                                 //             shape: RoundedRectangleBorder(
+                                //                                 //                 borderRadius:
+                                //                                 //                     BorderRadius.all(
+                                //                                 //                         Radius.circular(4))),
+                                //                                 //             contentPadding: EdgeInsets.all(0),
+                                //                                 //             insetPadding: EdgeInsets.all(
+                                //                                 //                 Screens.bodyheight(context) *
+                                //                                 //                     0.02),
+                                //                                 //             content: settings(context));
+                                //                                 //       });
+                                //                                 // }
+                                //                               },
+                                //                  icon: FaIcon(FontAwesomeIcons.user),// Icons.home,
+                                //                   color: theme.primaryColor,//Colors.red,//Colors.white,
+                                //                   iconSize: Screens.padingHeight(context) * 0.03,
+                                //                 ),
+                                //               ),
+
+                                //             ],
+                                //           ),
+                                //         ),
+                                //                Container(
+                                //                     width: Screens.width(context) * 0.26,
+                                //                     alignment: Alignment.center,
+                                //                   child: Text(
+                                //                     "Special Price Request",textAlign: TextAlign.center,
+                                //                     style: theme.textTheme.bodyText1?.copyWith(
+                                //                        color: theme.primaryColor,
+
+                                //                        //color:Colors.red,//Colors.white,//
+                                //                         fontWeight: FontWeight.w400),
+                                //                   ),
+                                //                 ),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
+                                IconContainer(
+                                  theme: theme,
+                                  callback: () {
+                                    // if (MenuAuthDetail.OfferZone == "Y") {
+                                    //ch ! replace =
+                                    Navigator.pop(context);
+                                    Get.offAllNamed(ConstantRoutes.specialpricereq);
+                                    // } else {
+                                    //   showDialog(
+                                    //       context: context,
+                                    //       barrierDismissible: true,
+                                    //       builder: (BuildContext context) {
+                                    //         return AlertDialog(
+                                    //             shape: RoundedRectangleBorder(
+                                    //                 borderRadius:
+                                    //                     BorderRadius.all(
+                                    //                         Radius.circular(4))),
+                                    //             contentPadding: EdgeInsets.all(0),
+                                    //             insetPadding: EdgeInsets.all(
+                                    //                 Screens.bodyheight(context) *
+                                    //                     0.02),
+                                    //             content: settings(context));
+                                    //       });
+                                    // }
+                                  },
+                                  icon: Icons.receipt,
+                                  iconColor:
+                                      theme.primaryColor, //Colors.orange,
+                                  title: 'Special Price Request',
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -627,16 +995,16 @@ Container drawer3(BuildContext context) {
                                   }
                                 },
                                 icon: Icons.contact_page,
-                                iconColor:theme.primaryColor,
+                                iconColor: theme.primaryColor,
                                 title: 'Accounts',
                               ),
                               IconContainer(
                                 theme: theme,
                                 callback: () {
                                   if (MenuAuthDetail.Accounts == "Y") {
-                                  // ch
-                                  Navigator.pop(context);
-                                  Get.offAllNamed(ConstantRoutes.outstanding);
+                                    // ch
+                                    Navigator.pop(context);
+                                    Get.offAllNamed(ConstantRoutes.outstanding);
                                   } else {
                                     showDialog(
                                         context: context,
@@ -664,8 +1032,9 @@ Container drawer3(BuildContext context) {
                                 callback: () {
                                   // Get.toNamed(ConstantRoutes.collectionlist);
                                   // if (MenuAuthDetail.Collection == "Y") {
-                                    Navigator.pop(context);
-                                    Get.offAllNamed(ConstantRoutes.collectionlist);
+                                  Navigator.pop(context);
+                                  Get.offAllNamed(
+                                      ConstantRoutes.collectionlist);
                                   // } else {
                                   //   showDialog(
                                   //       context: context,
@@ -684,7 +1053,7 @@ Container drawer3(BuildContext context) {
                                   //       });
                                   // }
                                 },
-                                icon: Icons.send_time_extension,
+                                icon: Icons.attach_money,
                                 iconColor: theme.primaryColor, //Colors.amber,
                                 title: 'Collection',
                                 textalign: TextAlign.center,
@@ -806,8 +1175,7 @@ Container drawer3(BuildContext context) {
                                         if (value.data == 1) {
                                           Get.toNamed(
                                               ConstantRoutes.dayEndPage);
-                                        }
-                                 else       if (value.data == 0) {
+                                        } else if (value.data == 0) {
                                           Get.toNamed(
                                               ConstantRoutes.daystartend);
                                         } else {
@@ -917,8 +1285,7 @@ Container drawer3(BuildContext context) {
                                 callback: () {
                                   if (MenuAuthDetail.Visitplane == "Y") {
                                     Navigator.pop(context);
-                                 Get.offAllNamed(
-                                              ConstantRoutes.visitplan);    
+                                    Get.offAllNamed(ConstantRoutes.visitplan);
                                     // Navigator.push(
                                     //     context,
                                     //     MaterialPageRoute(
@@ -1021,8 +1388,7 @@ Container drawer3(BuildContext context) {
                               IconContainer2(
                                 theme: theme,
                                 callback: () {
-                                  if (MenuAuthDetail.LeaveRequest ==
-                                      "Y") {
+                                  if (MenuAuthDetail.LeaveRequest == "Y") {
                                     Navigator.pop(context);
                                     Get.offAllNamed(ConstantRoutes.leaveReqtab);
                                   } else {
@@ -1034,13 +1400,10 @@ Container drawer3(BuildContext context) {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(
-                                                              4))),
-                                              contentPadding:
-                                                  EdgeInsets.all(0),
-                                              insetPadding: EdgeInsets
-                                                  .all(Screens.bodyheight(
-                                                          context) *
+                                                          Radius.circular(4))),
+                                              contentPadding: EdgeInsets.all(0),
+                                              insetPadding: EdgeInsets.all(
+                                                  Screens.bodyheight(context) *
                                                       0.02),
                                               content: settings(context));
                                         });
@@ -1054,8 +1417,7 @@ Container drawer3(BuildContext context) {
                               IconContainer2(
                                 theme: theme,
                                 callback: () {
-                                  if (MenuAuthDetail.LeaveApproval ==
-                                      "Y") {
+                                  if (MenuAuthDetail.LeaveApproval == "Y") {
                                     Navigator.pop(context);
                                     Get.offAllNamed(
                                         ConstantRoutes.leaveApprList);
@@ -1068,13 +1430,10 @@ Container drawer3(BuildContext context) {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(
-                                                              4))),
-                                              contentPadding:
-                                                  EdgeInsets.all(0),
-                                              insetPadding: EdgeInsets
-                                                  .all(Screens.bodyheight(
-                                                          context) *
+                                                          Radius.circular(4))),
+                                              contentPadding: EdgeInsets.all(0),
+                                              insetPadding: EdgeInsets.all(
+                                                  Screens.bodyheight(context) *
                                                       0.02),
                                               content: settings(context));
                                         });
@@ -1171,34 +1530,30 @@ Container drawer3(BuildContext context) {
                               IconContainer(
                                 theme: theme,
                                 callback: () {
-                                  // if (MenuAuthDetail.Earnings == "Y") {
-                                  //   //ch
-                                  //   Navigator.pop(context);
-                                  //   Navigator.push(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //         builder: (context) => MyEarnings(),
-                                  //       ));
-                                  // } else {
-                                  //   showDialog(
-                                  //       context: context,
-                                  //       barrierDismissible: true,
-                                  //       builder: (BuildContext context) {
-                                  //         return AlertDialog(
-                                  //             shape: RoundedRectangleBorder(
-                                  //                 borderRadius:
-                                  //                     BorderRadius.all(
-                                  //                         Radius.circular(4))),
-                                  //             contentPadding: EdgeInsets.all(0),
-                                  //             insetPadding: EdgeInsets.all(
-                                  //                 Screens.bodyheight(context) *
-                                  //                     0.02),
-                                  //             content: settings(context));
-                                  //       });
-                                  // }
+                                  if (MenuAuthDetail.Earnings == "Y") {
+                                    //ch
+                                    Navigator.pop(context);
+                                    Get.offAllNamed(ConstantRoutes.earnings);
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: true,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(4))),
+                                              contentPadding: EdgeInsets.all(0),
+                                              insetPadding: EdgeInsets.all(
+                                                  Screens.bodyheight(context) *
+                                                      0.02),
+                                              content: settings(context));
+                                        });
+                                  }
                                 },
                                 icon: Icons.account_balance_wallet,
-                                iconColor: Colors.grey, //Colors.blue,
+                                iconColor: theme.primaryColor, //Colors.blue,
                                 title: 'Earnings',
                               ),
                               IconContainer(
@@ -1242,9 +1597,8 @@ Container drawer3(BuildContext context) {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              IconContainer(
-                                theme: theme,
-                                callback: () {
+                              InkWell(
+                                onTap: () {
                                   if (MenuAuthDetail.Target == "Y") {
                                     //ch
                                     Navigator.pop(context);
@@ -1267,10 +1621,119 @@ Container drawer3(BuildContext context) {
                                         });
                                   }
                                 },
-                                icon: Icons.content_paste_search,
-                               iconColor: theme.primaryColor,//.pink,
-                                title: 'Targets',
+                                child: Container(
+                                  alignment: Alignment.bottomCenter,
+                                  width: Screens.width(context) * 0.25,
+                                  height: Screens.fullHeight(context) * 0.11,
+                                  decoration: BoxDecoration(
+                                      //   color: Colors.red[200],
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        width: Screens.width(context) * 0.26,
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                width: Screens.width(context) *
+                                                    0.108,
+                                                padding: EdgeInsets.all(5),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                    color: theme.primaryColor
+                                                        .withOpacity(
+                                                            0.2), //,Colors.amber,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Image.asset(
+                                                  "Assets/archery2.png",
+                                                  fit: BoxFit.contain,
+                                                  color: theme.primaryColor,
+                                                )
+                                                // IconButton(
+                                                //   alignment: Alignment.bottomCenter,
+                                                //   onPressed:  () {
+                                                //               if (MenuAuthDetail.Walkins == "Y") {
+                                                //                 Navigator.pop(context);
+                                                //                 Get.toNamed(ConstantRoutes.walkins);
+                                                //               } else {
+                                                //                 showDialog(
+                                                //                     context: context,
+                                                //                     barrierDismissible: true,
+                                                //                     builder: (BuildContext context) {
+                                                //                       return AlertDialog(
+                                                //                           shape: RoundedRectangleBorder(
+                                                //                               borderRadius:
+                                                //                                   BorderRadius.all(
+                                                //                                       Radius.circular(4))),
+                                                //                           contentPadding: EdgeInsets.all(0),
+                                                //                           insetPadding: EdgeInsets.all(
+                                                //                               Screens.bodyheight(context) *
+                                                //                                   0.02),
+                                                //                           content: settings(context));
+                                                //                     });
+                                                //               }
+                                                //             },
+                                                //  icon: FaIcon(FontAwesomeIcons.users),// Icons.home,
+                                                //   color: theme.primaryColor,//Colors.red,//Colors.white,
+                                                //   iconSize: Screens.padingHeight(context) * 0.03,
+                                                // ),
+                                                ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        width: Screens.width(context) * 0.26,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Targets",
+                                          textAlign: TextAlign.center,
+                                          style: theme.textTheme.bodyText1
+                                              ?.copyWith(
+                                                  color: theme.primaryColor,
+
+                                                  //color:Colors.red,//Colors.white,//
+                                                  fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
+
+                              // IconContainer(
+                              //   theme: theme,
+                              //   callback: () {
+                              //     if (MenuAuthDetail.Target == "Y") {
+                              //       //ch
+                              //       Navigator.pop(context);
+                              //       Get.offAllNamed(ConstantRoutes.targets);
+                              //     } else {
+                              //       showDialog(
+                              //           context: context,
+                              //           barrierDismissible: true,
+                              //           builder: (BuildContext context) {
+                              //             return AlertDialog(
+                              //                 shape: RoundedRectangleBorder(
+                              //                     borderRadius:
+                              //                         BorderRadius.all(
+                              //                             Radius.circular(4))),
+                              //                 contentPadding: EdgeInsets.all(0),
+                              //                 insetPadding: EdgeInsets.all(
+                              //                     Screens.bodyheight(context) *
+                              //                         0.02),
+                              //                 content: settings(context));
+                              //           });
+                              //     }
+                              //   },
+                              //   icon: Icons.assessment,
+                              //  iconColor: theme.primaryColor,//.pink,
+                              //   title: 'Targets',
+                              // ),
                               IconContainer(
                                 theme: theme,
                                 callback: () {
@@ -1361,37 +1824,149 @@ Container drawer3(BuildContext context) {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              IconContainer(
-                                  theme: theme,
-                                  callback: () {
-                                    // if (MenuAuthDetail.Profile == "Y") {
-                                    Navigator.pop(context);
-                                    Get.toNamed(ConstantRoutes.newprofile);
-                                    // } else {
-                                    //   showDialog(
-                                    //       context: context,
-                                    //       barrierDismissible: true,
-                                    //       builder: (BuildContext context) {
-                                    //         return AlertDialog(
-                                    //             shape: RoundedRectangleBorder(
-                                    //                 borderRadius:
-                                    //                     BorderRadius.all(
-                                    //                         Radius.circular(
-                                    //                             4))),
-                                    //             contentPadding:
-                                    //                 EdgeInsets.all(0),
-                                    //             insetPadding: EdgeInsets.all(
-                                    //                 Screens.bodyheight(
-                                    //                         context) *
-                                    //                     0.02),
-                                    //             content: settings(context));
-                                    //       });
-                                    // }
-                                  },
-                                  icon: Icons.photo_camera_front_outlined,
-                                  iconColor:
-                                      theme.primaryColor, // Colors.green,
-                                  title: 'Profile'),
+                              InkWell(
+                                onTap: () {
+                                  // if (MenuAuthDetail.Profile == "Y") {
+                                  Navigator.pop(context);
+                                  Get.toNamed(ConstantRoutes.newprofile);
+                                  // } else {
+                                  //   showDialog(
+                                  //       context: context,
+                                  //       barrierDismissible: true,
+                                  //       builder: (BuildContext context) {
+                                  //         return AlertDialog(
+                                  //             shape: RoundedRectangleBorder(
+                                  //                 borderRadius:
+                                  //                     BorderRadius.all(
+                                  //                         Radius.circular(
+                                  //                             4))),
+                                  //             contentPadding:
+                                  //                 EdgeInsets.all(0),
+                                  //             insetPadding: EdgeInsets.all(
+                                  //                 Screens.bodyheight(
+                                  //                         context) *
+                                  //                     0.02),
+                                  //             content: settings(context));
+                                  //       });
+                                  // }
+                                },
+                                child: Container(
+                                  alignment: Alignment.bottomCenter,
+                                  width: Screens.width(context) * 0.25,
+                                  height: Screens.fullHeight(context) * 0.11,
+                                  decoration: BoxDecoration(
+                                      //   color: Colors.red[200],
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        width: Screens.width(context) * 0.26,
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              width: Screens.width(context) *
+                                                  0.108,
+                                              // padding: EdgeInsets.all(5),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  color: theme.primaryColor
+                                                      .withOpacity(
+                                                          0.2), //,Colors.amber,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: IconButton(
+                                                alignment: Alignment.center,
+                                                onPressed: () {
+                                                  // if (MenuAuthDetail.Profile == "Y") {
+                                                  Navigator.pop(context);
+                                                  Get.toNamed(ConstantRoutes
+                                                      .newprofile);
+                                                  // } else {
+                                                  //   showDialog(
+                                                  //       context: context,
+                                                  //       barrierDismissible: true,
+                                                  //       builder: (BuildContext context) {
+                                                  //         return AlertDialog(
+                                                  //             shape: RoundedRectangleBorder(
+                                                  //                 borderRadius:
+                                                  //                     BorderRadius.all(
+                                                  //                         Radius.circular(
+                                                  //                             4))),
+                                                  //             contentPadding:
+                                                  //                 EdgeInsets.all(0),
+                                                  //             insetPadding: EdgeInsets.all(
+                                                  //                 Screens.bodyheight(
+                                                  //                         context) *
+                                                  //                     0.02),
+                                                  //             content: settings(context));
+                                                  //       });
+                                                  // }
+                                                },
+                                                icon: FaIcon(FontAwesomeIcons
+                                                    .user), // Icons.home,
+                                                color: theme
+                                                    .primaryColor, //Colors.red,//Colors.white,
+                                                iconSize: Screens.padingHeight(
+                                                        context) *
+                                                    0.03,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        width: Screens.width(context) * 0.26,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Profile",
+                                          textAlign: TextAlign.center,
+                                          style: theme.textTheme.bodyText1
+                                              ?.copyWith(
+                                                  color: theme.primaryColor,
+
+                                                  //color:Colors.red,//Colors.white,//
+                                                  fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // IconContainer(
+                              //     theme: theme,
+                              //     callback: () {
+                              //       // if (MenuAuthDetail.Profile == "Y") {
+                              //       Navigator.pop(context);
+                              //       Get.toNamed(ConstantRoutes.newprofile);
+                              //       // } else {
+                              //       //   showDialog(
+                              //       //       context: context,
+                              //       //       barrierDismissible: true,
+                              //       //       builder: (BuildContext context) {
+                              //       //         return AlertDialog(
+                              //       //             shape: RoundedRectangleBorder(
+                              //       //                 borderRadius:
+                              //       //                     BorderRadius.all(
+                              //       //                         Radius.circular(
+                              //       //                             4))),
+                              //       //             contentPadding:
+                              //       //                 EdgeInsets.all(0),
+                              //       //             insetPadding: EdgeInsets.all(
+                              //       //                 Screens.bodyheight(
+                              //       //                         context) *
+                              //       //                     0.02),
+                              //       //             content: settings(context));
+                              //       //       });
+                              //       // }
+                              //     },
+                              //     icon: Icons.photo_camera_front_outlined,
+                              //     iconColor:
+                              //         theme.primaryColor, // Colors.green,
+                              //     title: 'Profile'),
                               // IconContainer(
                               //   theme: theme,
                               //   callback: () {
@@ -1452,20 +2027,94 @@ Container drawer3(BuildContext context) {
                               //     iconColor:
                               //         theme.primaryColor, // Colors.green,
                               //     title: ' Change\npassword'),
-                              IconContainer(
-                                theme: theme,
-                                callback: () async {
-                                 
+
+                              InkWell(
+                                onTap: () async {
                                   // Navigator.pop(context);
                                   // DashBoardController.isLogout = true;
-                                  await DashBoardController
-                                      .logOutMethod();
-                                 
+                                  await DashBoardController.logOutMethod();
                                 },
-                                icon: Icons.logout_outlined,
-                                iconColor: theme.primaryColor, //Colors.orange,
-                                title: 'Logout',
+                                child: Container(
+                                  alignment: Alignment.bottomCenter,
+                                  width: Screens.width(context) * 0.25,
+                                  height: Screens.fullHeight(context) * 0.11,
+                                  decoration: BoxDecoration(
+                                      //   color: Colors.red[200],
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        width: Screens.width(context) * 0.26,
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              width: Screens.width(context) *
+                                                  0.108,
+                                              // padding: EdgeInsets.all(5),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  color: theme.primaryColor
+                                                      .withOpacity(
+                                                          0.2), //,Colors.amber,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: IconButton(
+                                                alignment: Alignment.center,
+                                                onPressed: () async {
+                                                  // Navigator.pop(context);
+                                                  // DashBoardController.isLogout = true;
+                                                  await DashBoardController
+                                                      .logOutMethod();
+                                                },
+                                                icon: FaIcon(FontAwesomeIcons
+                                                    .powerOff), // Icons.home,
+                                                color: theme
+                                                    .primaryColor, //Colors.red,//Colors.white,
+                                                iconSize: Screens.padingHeight(
+                                                        context) *
+                                                    0.03,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        width: Screens.width(context) * 0.26,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Logout",
+                                          textAlign: TextAlign.center,
+                                          style: theme.textTheme.bodyText1
+                                              ?.copyWith(
+                                                  color: theme.primaryColor,
+
+                                                  //color:Colors.red,//Colors.white,//
+                                                  fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
+
+                              // IconContainer(
+                              //   theme: theme,
+                              //   callback: () async {
+
+                              //     // Navigator.pop(context);
+                              //     // DashBoardController.isLogout = true;
+                              //     await DashBoardController
+                              //         .logOutMethod();
+
+                              //   },
+                              //   icon: Icons.logout_outlined,
+                              //   iconColor: theme.primaryColor, //Colors.orange,
+                              //   title: 'Logout',
+                              // ),
                             ],
                           ),
                         ],

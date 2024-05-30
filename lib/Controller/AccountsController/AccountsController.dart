@@ -241,6 +241,7 @@ class AccountsContoller extends ChangeNotifier {
   }
 
   createOrder(int ind) {
+    log("SUCCSS" + AccountsDataFilter[ind].toString());
     OrderNewController.datafromAcc.clear();
     OrderNewController.datafromAcc.add(AccountsDataFilter[ind].CustomerCode!);
     OrderNewController.datafromAcc.add(AccountsDataFilter[ind].CustomerName!);
@@ -265,6 +266,7 @@ class AccountsContoller extends ChangeNotifier {
     Get.toNamed(ConstantRoutes.ordernew);
   }
   createOutstanding(int ind) {
+    log("SUCCSS" + AccountsDataFilter[ind].toString());
     Outstandingcontroller.datafromAcc.clear();
     Outstandingcontroller.datafromAcc.add(AccountsDataFilter[ind].CustomerCode!);
     Outstandingcontroller.datafromAcc.add(AccountsDataFilter[ind].CustomerName!);
@@ -315,6 +317,7 @@ class AccountsContoller extends ChangeNotifier {
     Get.toNamed(ConstantRoutes.newcollection);
   }
    createVisitplan(int ind) {
+    log("SUCCSS" + AccountsDataFilter[ind].toString());
     NewVisitplanController.datafromAcc.clear();
     NewVisitplanController.datafromAcc.add(AccountsDataFilter[ind].CustomerCode!);
     NewVisitplanController.datafromAcc.add(AccountsDataFilter[ind].CustomerName!);

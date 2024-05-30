@@ -122,7 +122,7 @@ class outstandingData {
       });
 
   factory outstandingData.fromJson(Map<String, dynamic> jsons) {
-    log("jsons::::"+jsons.toString());
+    // log("jsons::::"+jsons.toString());
     return outstandingData(
         alternateMobileNo: jsons['AlternateMobileNo']??'',//
         amountPaid: jsons['AmountPaid']??'',//

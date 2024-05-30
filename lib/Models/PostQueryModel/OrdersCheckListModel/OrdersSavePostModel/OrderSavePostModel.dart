@@ -270,6 +270,7 @@ class PostOrder {
   double? doctotal;
   String? DocDate;
   String? CardCode;
+  String? DocDateold;
   //
   // String? U_sk_enqId;
   String? U_sk_leadId;
@@ -299,6 +300,7 @@ class PostOrder {
 
   PostOrder(
       {
+        this.DocDateold,
         this.CardCode,
       //New
       this.updateDate,
@@ -403,11 +405,15 @@ class DocumentLines {
   bool? isfixedprice;
   bool? allownegativestock;
   bool? alloworderbelowcost;
+  String? complementary;
+  String? couponcode;
 
   
 
   DocumentLines(
       {
+        this.couponcode,
+        this.complementary,
         this.MRP,
          this.alloworderbelowcost,
          this.allownegativestock,
@@ -473,7 +479,8 @@ class DocumentLines {
       "quantity": Quantity!,
       "price": Price,
       "storecode": storecode,
-      "deliveryfrom": deliveryfrom
+      "deliveryfrom": deliveryfrom,
+      "couponcode":couponcode
      
     };
     return map;

@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sellerkit/Constant/Configuration.dart';
@@ -117,7 +118,67 @@ isSelectedSegmentViewAll2(){
   isSegmentViewAllSelected = true;
   notifyListeners();
 }
+ scannerreset(){
+itemAlreadyscanned = false;
+  indexscanning=null;
+  listPriceAvail = filterdataprice;
+  Scancode='';
+  notifyListeners();
+  }
+  String? indexscanning;
+  bool itemAlreadyscanned = false;
+  
+  String? Scancode;
+  scanneddataget(BuildContext context){
+  log("code:::::"+Scancode.toString());
 
+  log("filterdataprice::::"+filterdataprice.length.toString());
+
+
+   
+   
+  
+  // Get.back();
+// Navigator.pop(context);
+
+   for (int ij=0;ij<filterdataprice.length;ij++){
+    if(filterdataprice[ij].itemCode ==Scancode){
+      itemAlreadyscanned=true;
+      indexscanning =filterdataprice[ij].itemCode;
+        notifyListeners();
+      break;
+    
+    }
+   
+   }
+    if(itemAlreadyscanned ==true){
+      // resetItems(indexscanning!);
+      onfieldSccanned(indexscanning!);
+      Get.toNamed(ConstantRoutes.listStockAvailability);
+// showBottomSheetInsert(context, indexscanning!);
+ notifyListeners();
+   }else{
+    showtoastforscanning();
+     notifyListeners();
+   }
+   
+ 
+
+
+//  checkscannedcode(code);
+ notifyListeners();
+
+  }
+  void showtoastforscanning() {
+    Fluttertoast.showToast(
+        msg: "No Data Found..!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 14.0);
+  }
   filterList(String v) {
     if (v.isNotEmpty) {
       listPriceAvail = filterdataprice
@@ -457,6 +518,7 @@ filterList2(String v) {
     isBrandViewAllSelected = false;
     isProductViewAllSelected = false;
     isSegmentViewAllSelected = false;
+    getdataFromDb();
     getDataFromDB();
   }
 
@@ -760,7 +822,30 @@ filterList2(String v) {
         .replaceAll("]", "");
     return Future.value(text);
   }
+  getdataFromDb() async {
+    final Database db = (await DBHelper.getInstance())!;
+    listPriceAvail = await DBOperation.getAllProducts(db);
+    filterdataprice = listPriceAvail;
+    notifyListeners();
+  }
+onfieldSccanned(String indexscanning)async{
+  final Database db = (await DBHelper.getInstance())!;
+  await DBOperation.onFieldScanned(
+    indexscanning.isEmpty? "''" :indexscanning, 
+    db).then((value) async {
+      // brandList.clear();
+      // productList.clear();
+      // segmentList.clear();
+      //  log("dataprice: : "+value.map((e) => e.price.toString()).toList().toString());
+      listPriceAvail = value;
+      filterdataprice = listPriceAvail;
+      // brandList = await distinctBrand(value);
+      // productList = await distinctProduct(value);
+      // segmentList = await distinctSegment(value);
+      notifyListeners();
+    });
 
+}
   //filter
   onSelectedFilter() async {
    final Database db = (await DBHelper.getInstance())!;

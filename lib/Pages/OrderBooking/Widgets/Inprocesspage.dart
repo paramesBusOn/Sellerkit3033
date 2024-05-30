@@ -351,13 +351,13 @@ class _InProcessPageState extends State<InProcessPage> {
                                     Container(
                                       width: Screens.width(context) * 0.4,
                                       child: Text(
-                                          widget.InProcessAllData[i].createdon!.isEmpty
+                                          widget.InProcessAllData[i].DocDate!.isEmpty
                                               ? ''
                                               : context
                                                   .read<OrderTabController>()
                                                   .config
                                                   .alignDate(
-                                                      "${widget.InProcessAllData[i].createdon}"), //  "Looking for ${context.watch<EnquiryUserContoller>().getopenEnqData[i].Lookingfor}",
+                                                      "${widget.InProcessAllData[i].DocDate}"), //  "Looking for ${context.watch<EnquiryUserContoller>().getopenEnqData[i].Lookingfor}",
                                           style:
                                               widget.theme.textTheme.bodyText2?.copyWith(
                                                   //color:theme.primaryColor,
@@ -446,14 +446,14 @@ class _InProcessPageState extends State<InProcessPage> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(4)),
                                     child: Text(
-                                        widget.InProcessAllData[i].LastUpdateTime!.isEmpty
+                                        widget.InProcessAllData[i].createdon!.isEmpty
                                             ? ''
-                                            : "Last Updated: " +
+                                            : "Created Date: " +
                                                 context
                                                     .watch<OrderTabController>()
                                                     .config
                                                     .subtractDateTime(
-                                                        "${widget.InProcessAllData[i].LastUpdateTime}"), //     "${context.watch<EnquiryUserContoller>().getopenEnqData[i].Status}",
+                                                        "${widget.InProcessAllData[i].createdon}"), //     "${context.watch<EnquiryUserContoller>().getopenEnqData[i].Status}",
                                         style:
                                             widget.theme.textTheme.bodyText2?.copyWith(
                                           color: Colors.grey,

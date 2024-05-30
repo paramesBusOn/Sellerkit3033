@@ -65,13 +65,13 @@ class NewCollectionContoller extends ChangeNotifier {
   static String? title;
   List<String> paths = [];
 
-  // pdfMethod() async {
-  //   final tempDir = await getTemporaryDirectory();
-  //   print("direc: " + tempDir.path.toString() + '/$title-$docNO.pdf');
-  //   paths.add('${tempDir.path}/$title-$docNO.pdf');
-  //   await Share.shareFiles(paths);
-  //   paths.clear();
-  // }
+  pdfMethod() async {
+    final tempDir = await getTemporaryDirectory();
+    print("direc: " + tempDir.path.toString() + '/$title-$docNO.pdf');
+    paths.add('${tempDir.path}/$title-$docNO.pdf');
+    await Share.shareFiles(paths);
+    paths.clear();
+  }
 
   init(BuildContext context) async {
     ClearDataAll();

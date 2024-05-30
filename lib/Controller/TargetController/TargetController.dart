@@ -1,11 +1,8 @@
-import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
 import 'package:sellerkit/Models/TargetModel/TargetModel.dart';
-
+import '../../Constant/ConstantRoutes.dart';
 import '../../Constant/ConstantSapValues.dart';
 import '../../Constant/Screen.dart';
 import '../../Models/TargetModel/TargetUsersModel.dart';
@@ -13,11 +10,12 @@ import '../../Services/TargetApi/TargetApi/TargetApi.dart';
 import '../../Services/TargetApi/TargetApi/TargetUsersApi.dart';
 
 class TargetTabController extends ChangeNotifier {
-  TargetTabController() {
-    defaultuseData();
-  }
+  // TargetTabController() {
+  //   defaultuseData();
+  // }
 
   void init() {
+    defaultuseData();
     clearTargetListData();
     logData();
     notifyListeners();
@@ -96,12 +94,13 @@ class TargetTabController extends ChangeNotifier {
   }
 
   Future callTargetUsersApi(BuildContext context) async {
-    noTargetInit='';
+    filterTargetUserList = [];
+    targetUserList = [];
     await GetTargetUsersApi.getData().then((value) async {
       isloading = false;
 
       if (value.stcode! >= 200 && value.stcode! <= 210) {
-        if (value.targetuserDataList != null) {
+        if (value.targetuserDataList!.isNotEmpty) {
           apicall = true;
 
           targetUserList = value.targetuserDataList!;
@@ -109,25 +108,35 @@ class TargetTabController extends ChangeNotifier {
               (a, b) => a.name!.toLowerCase().compareTo(b.name!.toLowerCase()));
 
           filterTargetUserList = targetUserList;
-          for (var i = 0; i < filterTargetUserList.length; i++) {
-            if (filterTargetUserList[i].id.toString() ==
-                    ConstantValues.UserId ||
-                filterTargetUserList[i].name == ConstantValues.Usercode) {
-              searchcontroller.text = filterTargetUserList[i].name.toString();
+          searchcontroller.text = ConstantValues.firstName.toString();
+          selectedUser = ConstantValues.UserId;
+          // for (var i = 0; i < filterTargetUserList.length; i++) {
+          //   if (filterTargetUserList[i].id.toString() ==
+          //           ConstantValues.UserId ||
+          //       filterTargetUserList[i].name == ConstantValues.Usercode) {
+          //     searchcontroller.text = filterTargetUserList[i].name.toString();
 
-              selectedUser = ConstantValues.UserId;
-              log('targetUserList22::${targetUserList.length}');
-            }
-          }
+          //     selectedUser = ConstantValues.UserId;
+          //     log('targetUserList22::${targetUserList.length}');
+          //   }
+          // }
           notifyListeners();
 
           log('targetUserList::${targetUserList.length}');
           notifyListeners();
-        } else if (value.targetuserDataList == null) {
+        } else if (value.targetuserDataList!.isEmpty) {
           targetTodayMasterData22 = [];
           targetMonthMasterData22 = [];
-          targetCheckDataExcep = 'No Data ..!!';
-          lottie = 'Assets/no-data.png';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('User Setup Not Initialised..!!'),
+              backgroundColor: Colors.red,
+              elevation: 10,
+              behavior: SnackBarBehavior.floating,
+              margin: EdgeInsets.all(5),
+              dismissDirection: DismissDirection.up,
+            ),
+          );
 
           isloading = false;
           notifyListeners();
@@ -149,7 +158,6 @@ class TargetTabController extends ChangeNotifier {
         targetTodayMasterData22 = [];
         targetMonthMasterData22 = [];
         lottie = 'Assets/NetworkAnimation.json';
-
         targetCheckDataExcep = 'Check Your Internet Connection..!!';
 
         // ScaffoldMessenger.of(context).showSnackBar(
@@ -354,7 +362,6 @@ class TargetTabController extends ChangeNotifier {
   clearTargetListData() {
     targetTodayMasterData22 = [];
     targetMonthMasterData22 = [];
-    usernameerror = '';
     salesPerName = '';
     noTargetInit = '';
     lottie = '';
@@ -371,13 +378,11 @@ class TargetTabController extends ChangeNotifier {
     isloading = false;
     apicall = false;
     selectedUser = null;
-    usernameerror = '';
     notifyListeners();
   }
 
   clearTargetFilterData() {
     lottie = '';
-    usernameerror = '';
     searchcontroller.text = '';
     filterTargetUserList = [];
     targetUserList = [];
@@ -387,12 +392,10 @@ class TargetTabController extends ChangeNotifier {
     notifyListeners();
   }
 
-  String usernameerror = '';
   targetApplyBtn(BuildContext context) async {
     log('searchcontroller.text::${searchcontroller.text}');
     for (var i = 0; i < filterTargetUserList.length; i++) {
-      if (searchcontroller.text == filterTargetUserList[i].name) {
-        usernameerror = '';
+      if (selectedUser.toString() == filterTargetUserList[i].id.toString()) {
         targetTodayMasterData22 = [];
         targetMonthMasterData22 = [];
         GetTargetApi.slpId = filterTargetUserList[i].id.toString();
@@ -402,11 +405,26 @@ class TargetTabController extends ChangeNotifier {
         Navigator.pop(context);
         notifyListeners();
       } else {
-        usernameerror = 'Enter the correct user name';
         notifyListeners();
       }
     }
     notifyListeners();
+  }
+
+  DateTime? currentBackPressTime;
+  Future<bool> onbackpress() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Get.toNamed(ConstantRoutes.dashboard);
+      notifyListeners();
+
+      return Future.value(true);
+    }
+    notifyListeners();
+
+    return Future.value(true);
   }
 
   showUserBottomSheet(
@@ -435,6 +453,7 @@ class TargetTabController extends ChangeNotifier {
                 Form(
                   key: formkey,
                   child: TextFormField(
+                    readOnly: true,
                     controller: searchcontroller,
                     textDirection: TextDirection.ltr,
                     validator: (val) {
@@ -443,21 +462,21 @@ class TargetTabController extends ChangeNotifier {
                       }
                       return null;
                     },
-                    onTap: () {
-                      searchcontroller = searchcontroller;
+                    // onTap: () {
+                    //   searchcontroller = searchcontroller;
 
-                      searchcontroller.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: searchcontroller.text.length,
-                      );
-                    },
-                    onChanged: ((value) {
-                      st(
-                        () {
-                          filterSearchBoxList(value);
-                        },
-                      );
-                    }),
+                    //   searchcontroller.selection = TextSelection(
+                    //     baseOffset: 0,
+                    //     extentOffset: searchcontroller.text.length,
+                    //   );
+                    // },
+                    // onChanged: ((value) {
+                    //   st(
+                    //     () {
+                    //       filterSearchBoxList(value);
+                    //     },
+                    //   );
+                    // }),
                     decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
@@ -484,16 +503,6 @@ class TargetTabController extends ChangeNotifier {
                   visible: apicall,
                   child: Column(
                     children: [
-                      usernameerror.isNotEmpty
-                          ? Container(
-                              padding: EdgeInsets.only(
-                                  left: Screens.width(context) * 0.04),
-                              alignment: Alignment.centerLeft,
-                              child: Text(usernameerror,
-                                  style: theme.textTheme.bodyText1
-                                      ?.copyWith(color: theme.primaryColor)),
-                            )
-                          : Container(),
                       SizedBox(
                         height: Screens.padingHeight(context) * 0.02,
                       ),
@@ -512,9 +521,7 @@ class TargetTabController extends ChangeNotifier {
                                         st(
                                           () {
                                             selectedUser =
-                                                filterTargetUserList[i]
-                                                    .id
-                                                    .toString();
+                                                targetUserList[i].id.toString();
 
                                             searchcontroller.text =
                                                 filterTargetUserList[i]

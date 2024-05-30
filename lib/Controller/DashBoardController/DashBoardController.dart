@@ -7,6 +7,7 @@ import 'package:charts_flutter_new/flutter.dart' as charts;
 // import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 // import 'package:network_info_plus/network_info_plus.dart';
@@ -15,15 +16,23 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:screen_capture_event/screen_capture_event.dart';
 import 'package:sellerkit/Constant/Configuration.dart';
 import 'package:sellerkit/Constant/LocationTrack.dart';
+import 'package:sellerkit/Controller/OutStandingController/OutStandingController.dart';
 import 'package:sellerkit/DBHelper/DBHelper.dart';
 import 'package:sellerkit/DBHelper/DBOperation.dart';
 import 'package:sellerkit/DBModel/ItemMasertDBModel.dart';
 import 'package:sellerkit/DBModel/ScreenShotModel.dart';
+import 'package:sellerkit/DBModel/outstandingDBmodel.dart';
+import 'package:sellerkit/DBModel/outstandinglinechild.dart';
+import 'package:sellerkit/Models/OutStandingModel/outstandingmodel.dart';
+import 'package:sellerkit/Models/PostQueryModel/EnquiriesModel/GetCustomerDetailsModel.dart';
+import 'package:sellerkit/Pages/Dashboard/Screens/Dashboard.dart';
 import 'package:sellerkit/Pages/Dashboard/widgets/SetupAlertBox.dart';
 import 'package:sellerkit/Services/AddressGetApi/AddressGetApi.dart';
 import 'package:sellerkit/Services/LocalNotification/LocalNotification.dart';
 import 'package:sellerkit/Services/LoginVerificationApi/LoginVerificationApi.dart';
 import 'package:sellerkit/Services/LogoutApi/LogoutApi.dart';
+import 'package:sellerkit/Services/OutstandingApi/outstandingApi.dart';
+import 'package:sellerkit/Services/PostQueryApi/EnquiriesApi/GetCustomerDetails.dart';
 import 'package:sellerkit/Widgets/Dialogbox.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -64,12 +73,517 @@ class DashBoardController extends ChangeNotifier {
   }
 
 
+  bool loadOrderViewDtlsApi = false;
+  String errorOrderViewDtls = '';
+  bool viewOrderDtls = false;
+  bool viewLeadDtls = false;
+  bool viewOutStatndingDtls = false;
+  bool viewDefault = true;
+
+  List<GetCustomerData> customerdetails=[];
+  List<GetenquiryData> enquirydetails = [];
+  List<GetenquiryData> leaddetails = [];
+  List<GetenquiryData>? quotationdetails = [];
+  List<GetenquiryData>? orderdetails = [];
+  List<GetenquiryData>? customerDatalist = [];
+
   String adrress = '';
 
   LocationPermission? permission;
   bool? locationbool = false;
   bool? camerabool = false;
   bool? notificationbool = false;
+  
+  String docentry = '';
+  setDocentry(String value) {
+    docentry = value;
+    notifyListeners();
+  }
+
+  // viewDetailsMethod(String mobile, String docentry, String doctype,
+  //     BuildContext context) async {
+  //   String doctype2 = doctype;
+  //   switch (doctype2) {
+  //     case 'Order':
+  //       viewOrderDtls = !viewOrderDtls;
+  //       notifyListeners();
+  //       if (viewOrderDtls == true) {
+  //         setDocentry(docentry);
+  //         await callOrderDetailsQTHApi(docentry);
+  //         setviewBool(doctype, context);
+  //       } else {
+  //         setviewBool('', context);
+  //       }
+  //       break;
+  //     case 'Outstanding':
+  //       viewOutStatndingDtls = !viewOutStatndingDtls;
+  //       notifyListeners();
+  //       if (viewOutStatndingDtls == true) {
+  //         setDocentry(docentry);
+
+  //         await setOutstandingDetails(mobile);
+  //         setviewBool(doctype, context);
+  //       } else {
+  //         setviewBool('', context);
+  //       }
+  //       break;
+  //     case 'Lead':
+  //       viewLeadDtls = !viewLeadDtls;
+  //       notifyListeners();
+  //       if (viewLeadDtls == true) {
+  //         await refershAfterClosedialog();
+  //         await clearAllListData();
+  //         setDocentry(docentry);
+  //         await callGetLeadDeatilsApi(docentry);
+  //         setviewBool(doctype, context);
+  //       } else {
+  //         await refershAfterClosedialog();
+  //         await clearAllListData();
+  //         setviewBool('', context);
+  //       }
+  //       break;
+  //     default:
+  //   }
+  //   notifyListeners();
+  // }
+
+  // setviewBool(String doctype, BuildContext context) {
+  //   String doctype2 = doctype;
+  //   switch (doctype2) {
+  //     case 'Order':
+  //       viewOrderDtls = true;
+  //       viewLeadDtls = false;
+  //       viewOutStatndingDtls = false;
+  //       viewDefault = false;
+  //       notifyListeners();
+
+  //       break;
+  //     case 'Outstanding':
+  //       viewOrderDtls = false;
+  //       viewLeadDtls = false;
+  //       viewOutStatndingDtls = true;
+  //       viewDefault = false;
+  //       notifyListeners();
+
+  //       break;
+  //     case 'Lead':
+  //       viewOrderDtls = false;
+  //       viewLeadDtls = true;
+  //       viewOutStatndingDtls = false;
+  //       viewDefault = false;
+  //       notifyListeners();
+
+  //       break;
+  //     default:
+  //       callApi(context, dashbordTextController.text);
+  //       refreshSucessdialog();
+  //       clearAllListData();
+  //       viewOrderDtls = false;
+  //       viewLeadDtls = false;
+  //       viewOutStatndingDtls = false;
+  //       viewDefault = true;
+  //       notifyListeners();
+  //   }
+  //   notifyListeners();
+  // }
+
+
+double? totaloutstanding = 0.0;
+  double? overdue = 0.0;
+  double? upcoming = 0.0;
+  //
+
+  List<outstandingDBModel> valueDBmodel = [];
+  List<outstandinglineDBModel> valueDBmodelchild = [];
+  List<outstandKPI> outstandingkpi = [];
+  List<outstandingData> outstanddata = [];
+  List<outstandingLine> outstandline = [];
+  List<ontapKpi> ontapKpi2 = [];
+
+  bool apiOutloading = false;
+  String errorOutstdmsg = '';
+  getAllOutstandingscall() async {
+    outstanddata.clear();
+    outstandline.clear();
+    apiOutloading = true;
+    // outsatandingmodel outsatandingModel = await GetoutstandingApi.getData();
+    // String meth = ConstantApiUrl.outStandingApi!;
+    await GetoutstandingApi.getData().then((value) async {
+      if (value.stcode! >= 200 && value.stcode! <= 210) {
+        if (value.outstandhead!.outstanddata != null &&
+            value.outstandhead!.outstanddata!.isNotEmpty &&
+            value.outstandhead!.outstandline != null &&
+            value.outstandhead!.outstandline!.isNotEmpty) {
+          apiOutloading = false;
+          notifyListeners();
+          outstanddata = value.outstandhead!.outstanddata!;
+          outstandline = value.outstandhead!.outstandline!;
+          await tableinsert();
+        } else {
+          apiOutloading = false;
+          errorOutstdmsg = 'No Outstanding..!!';
+          notifyListeners();
+        }
+      } else if (value.stcode! >= 400 && value.stcode! <= 410) {
+        apiOutloading = false;
+        errorOutstdmsg = '${value.message}..${value.exception}..!!';
+        notifyListeners();
+      } else if (value.stcode! == 500) {
+        apiOutloading = false;
+        errorOutstdmsg = '${value.exception}..${value.message}..!!';
+
+        notifyListeners();
+      }
+    });
+  }
+
+  tableinsert() async {
+    final Database db = (await DBHelper.getInstance())!;
+    // await DBOperation.truncareoutstandingmaste(db);
+    // await DBOperation.truncareoutstandingline(db);
+    await DBOperation.insertOutstandingMaster(outstanddata, db);
+    await DBOperation.insertOutstandingchild(outstandline, db);
+
+    notifyListeners();
+    await getdbmodel();
+    notifyListeners();
+  }
+
+  showdialogcircular(BuildContext context,) async {
+    // mobileno2 = mobileno;
+    // dashbordTextController.text = mobileno2;
+    // print(dashbordTextController);
+    notifyListeners();
+
+    // await Future.delayed(const Duration(milliseconds: 50));
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // if (mobileno.isNotEmpty) {
+     
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: const EdgeInsets.all(10),
+              contentPadding: const EdgeInsets.all(0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+
+              // title: Text("hi"),
+              content:  Container(
+        width: Screens.width(context) * 0.9,
+        height: Screens.bodyheight(context) * 0.3,
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+            ],
+          ),
+        ))
+              
+              );
+        },
+      ).then((value) {
+        if(customerapicLoading ==false){
+Navigator.pop(context);
+        }
+        
+      });
+    // }
+    notifyListeners();
+    // await HelperFunctions.saveNavigationCountSharedPreference('false');
+    // });
+  }
+   showdialog(BuildContext context,List<GetCustomerData> customerdata,List<GetenquiryData>? customerDatalist) async {
+    // mobileno2 = mobileno;
+    // dashbordTextController.text = mobileno2;
+    // print(dashbordTextController);
+    notifyListeners();
+
+    // await Future.delayed(const Duration(milliseconds: 50));
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // if (mobileno.isNotEmpty) {
+     
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              insetPadding: const EdgeInsets.all(10),
+              contentPadding: const EdgeInsets.all(0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+
+              // title: Text("hi"),
+              content:  NewWidget(customerdata: customerdata,customerDatalist:customerDatalist));
+        },
+      ).then((value) {
+        refershAfterClosedialog();
+      });
+    // }
+    notifyListeners();
+    // await HelperFunctions.saveNavigationCountSharedPreference('false');
+    // });
+  }
+  refershAfterClosedialog() {
+    viewDefault = false;
+    viewLeadDtls = false;
+    viewOutStatndingDtls = false;
+    viewOrderDtls = false;
+    // dashbordTextController.clear();
+    //
+    // forwaVisitTime = '';
+    // forwardnextWonFD = '';
+    // nextpurchasedate = '';
+    // nextpurchasedate = '';
+    mycontroller[5].clear();
+    // leadCheckDataExcep = '';
+    // iscorectime = false;
+    // iscorectime2 = false;
+    // leadOpenAllData.clear();
+    // leadClosedAllData.clear();
+    // leadLostAllData.clear();
+    // filterleadOpenAllData.clear();
+
+    // filterleadClosedAllData.clear();
+
+    // viewDetailsdialog = false;
+    // isSameBranch = true;
+    // quataDate = "";
+    // apiQuaDate = "";
+    mycontroller[3].text = "";
+    mycontroller[4].text = "";
+    // forwardSuccessMsg = "";
+    // updateConvertToQuatationUpdialog = false;
+    // caseStatusSelectedcode = "";
+    // caseStatusSelected = "";
+    // isSelectedFollowUp = '';
+    // isSelectedFollowUpcode = '';
+    // assignVisitTime = "Followup Time";
+    // leadDeatilsQTHData.clear();
+    // leadDeatilsQTLData.clear();
+    // leadDeatilsLData.clear();
+    // selectedUserList = '';
+
+    notifyListeners();
+  }
+getdbmodel() async {
+    apiOutloading = true;
+    notifyListeners();
+    final Database db = (await DBHelper.getInstance())!;
+    valueDBmodel = await DBOperation.getoutstandingMaster(db);
+    valueDBmodelchild = await DBOperation.getoutstandingchild(db);
+    // await countofKpi();
+    log("valueDBmodel.${valueDBmodel.length}");
+    log("valueDBmodelchild::${valueDBmodelchild.length}");
+    List<Map<String, Object?>> assignDB =
+        await DBOperation.getOutLFtr("AssignedTo", db);
+
+    List<Map<String, Object?>> customerDB =
+        await DBOperation.getOutLFtr("CustomerName", db);
+    notifyListeners();
+    // await dataget(assignDB, customerDB);
+    notifyListeners();
+    apiOutloading = false;
+    notifyListeners();
+  }
+bool customerapicLoading = false;
+  bool get getcustomerapicLoading => customerapicLoading;
+  bool oldcutomer = false;
+  String exceptionOnApiCall = '';
+  callApi(BuildContext context, String mobile) async {
+    //a
+    //fs
+    customerdetails.clear();
+    customerDatalist = [];
+    customerapicLoading = true;
+    notifyListeners();
+    if( customerapicLoading == true){
+      // showdialogcircular(context);
+    }else{}
+    // GetCutomerpost reqpost = GetCutomerpost(customermobile: mobile);
+    // String meth = ConstantApiUrl.getCustomerApi!;
+    await GetCutomerDetailsApi.getData(mobile,"${ConstantValues.slpcode}").then((value) async {
+      if (value.stcode! >= 200 && value.stcode! <= 210) {
+        if (value.itemdata != null) {
+          if (value.itemdata!.customerdetails != null &&value.itemdata!.customerdetails!.isNotEmpty
+              ) {
+            // customerdetails = value.itemdata!.customerdetails!;
+            customerdetails.add(GetCustomerData(
+              del_Address1: value.itemdata!.customerdetails![0].del_Address1, 
+              del_Address2: value.itemdata!.customerdetails![0].del_Address2, 
+              del_Address3: value.itemdata!.customerdetails![0].del_Address3, 
+              del_Area: value.itemdata!.customerdetails![0].del_Area, 
+              del_city: value.itemdata!.customerdetails![0].del_city, 
+              del_country: value.itemdata!.customerdetails![0].del_country, 
+              del_district: value.itemdata!.customerdetails![0].del_district, 
+              del_pincode:value.itemdata!.customerdetails![0]. del_pincode, 
+              del_state: value.itemdata!.customerdetails![0].del_state, 
+              pan:value.itemdata!.customerdetails![0]. pan, 
+              website: value.itemdata!.customerdetails![0].website, 
+              facebook: value.itemdata!.customerdetails![0].facebook, 
+              cardtype:value.itemdata!.customerdetails![0]. cardtype, 
+              status: value.itemdata!.customerdetails![0].status, 
+              contactName: value.itemdata!.customerdetails![0].contactName, 
+              altermobileNo:value.itemdata!.customerdetails![0]. altermobileNo, 
+              customerGroup:value.itemdata!.customerdetails![0]. customerGroup, 
+              Mgr_UserName:value.itemdata!.customerdetails![0]. Mgr_UserName, 
+              comapanyname:value.itemdata!.customerdetails![0]. comapanyname, 
+              visitTime:value.itemdata!.customerdetails![0]. visitTime, 
+              remindOn:value.itemdata!.customerdetails![0]. remindOn, 
+              isClosed: value.itemdata!.customerdetails![0].isClosed, 
+              isVisitRequired:value.itemdata!.customerdetails![0]. isVisitRequired, 
+              storecode:value.itemdata!.customerdetails![0]. storecode, 
+              area:value.itemdata!.customerdetails![0]. area, 
+              district: value.itemdata!.customerdetails![0].district, 
+              itemCode:value.itemdata!.customerdetails![0]. itemCode, 
+              itemname:value.itemdata!.customerdetails![0]. itemname, 
+              leadConverted:value.itemdata!.customerdetails![0]. leadConverted, 
+              createdBy:value.itemdata!.customerdetails![0]. createdBy, 
+              createdDateTime:value.itemdata!.customerdetails![0]. createdDateTime, 
+              updatedBy:value.itemdata!.customerdetails![0]. updatedBy, 
+              updatedDateTime:value.itemdata!.customerdetails![0]. updatedDateTime, 
+              enquirydscription:value.itemdata!.customerdetails![0]. enquirydscription, 
+              quantity:value.itemdata!.customerdetails![0]. quantity,
+               ID: value.itemdata!.customerdetails![0].ID, 
+              customerCode:value.itemdata!.customerdetails![0]. customerCode, 
+              Status:value.itemdata!.customerdetails![0]. Status, 
+              customerName:value.itemdata!.customerdetails![0]. customerName, 
+              AssignedTo_User:value.itemdata!.customerdetails![0]. AssignedTo_User, 
+              EnqDate:value.itemdata!.customerdetails![0]. EnqDate, 
+              Followup:value.itemdata!.customerdetails![0]. Followup, 
+              Mgr_UserCode:value.itemdata!.customerdetails![0]. Mgr_UserCode, 
+              AssignedTo_UserName:value.itemdata!.customerdetails![0]. AssignedTo_UserName, 
+              EnqType:value.itemdata!.customerdetails![0]. EnqType, 
+              Lookingfor:value.itemdata!.customerdetails![0]. Lookingfor, 
+              PotentialValue:value.itemdata!.customerdetails![0]. PotentialValue, 
+              Address_Line_1:value.itemdata!.customerdetails![0]. Address_Line_1, 
+              Address_Line_2:value.itemdata!.customerdetails![0]. Address_Line_2, 
+              Pincode:value.itemdata!.customerdetails![0]. Pincode, 
+              City: value.itemdata!.customerdetails![0].City, 
+              State:value.itemdata!.customerdetails![0]. State, 
+              Country: value.itemdata!.customerdetails![0].Country, 
+              Manager_Status_Tab:value.itemdata!.customerdetails![0]. Manager_Status_Tab, 
+              Slp_Status_Tab:value.itemdata!.customerdetails![0]. Slp_Status_Tab, 
+              email:value.itemdata!.customerdetails![0]. email, 
+              referal: value.itemdata!.customerdetails![0].referal, 
+              gst:value.itemdata!.customerdetails![0]. gst, 
+              mobileNo:value.itemdata!.customerdetails![0]. mobileNo, 
+              codeid: value.itemdata!.customerdetails![0].codeid, 
+              address3:value.itemdata!.customerdetails![0]. address3
+              ));
+            log("customerdetails::"+customerdetails.length.toString());
+            // mapValues(value.itemdata!.customerdetails![0]);
+            oldcutomer = true;
+            // }
+            
+            // customerDatalist = [];
+
+            if (value.itemdata!.enquirydetails != null) {
+              for (int i = 0; i < value.itemdata!.enquirydetails!.length; i++) {
+                // if ((value.itemdata!.enquirydetails![i].DocType == 'Lead' ||
+                //         value.itemdata!.enquirydetails![i].DocType == 'Order' ||
+                //         value.itemdata!.enquirydetails![i].DocType ==
+                //             'Outstanding') ) {
+                  customerDatalist!.add(GetenquiryData(
+                      DocType: value.itemdata!.enquirydetails![i].DocType,
+                      AssignedTo: value.itemdata!.enquirydetails![i].AssignedTo,
+                      BusinessValue:
+                          value.itemdata!.enquirydetails![i].BusinessValue,
+                      CurrentStatus:
+                          value.itemdata!.enquirydetails![i].CurrentStatus,
+                      DocDate: value.itemdata!.enquirydetails![i].DocDate,
+                      DocNum: value.itemdata!.enquirydetails![i].DocNum,
+                      Status: value.itemdata!.enquirydetails![i].Status,
+                      Store: value.itemdata!.enquirydetails![i].Store));
+                // }
+              }
+              // await Future.delayed(Duration(milliseconds: 50));
+              // WidgetsBinding.instance.addPostFrameCallback((_) {
+              //   showDialog(
+              //       builder: (_) {
+              //         return CustomerDetailsViewBox(
+              //           customerDatalist: customerDatalist!,
+              //           customerdetails: customerdetails,
+              //           // dashbordCnt: dashbordCnt,
+              //         );
+              //       },
+              //       context: context);
+              // });
+            }
+            // else if (value.itemdata!.enquirydetails!.isNotEmpty &&
+            //     value.itemdata!.enquirydetails != null) {
+            //   for (int i = 0; i < value.itemdata!.enquirydetails!.length; i++) {
+
+            //   }
+            //   log("Anbuenq");
+            //   enquirydetails = value.itemdata!.enquirydetails;
+
+            // }
+
+             for (int i = 0; i < valueDBmodel.length; i++) {
+      if (valueDBmodel[i].customerCode == mobile) {
+        customerDatalist!.add(GetenquiryData(
+            DocType: 'Outstanding',
+            AssignedTo: valueDBmodel[i].assignedTo,
+            BusinessValue: valueDBmodel[i].amountPaid,
+            CurrentStatus: 'Open',
+            DocDate: '',
+            DocNum: valueDBmodel[i].customerCode != null
+                ? int.parse(valueDBmodel[i].customerCode.toString())
+                : 0,
+            Status: 'Open',
+            Store: valueDBmodel[i].storeCode));
+      }
+    }
+     customerapicLoading = false;
+    //  Navigator.pop(context);
+          showdialog(context,customerdetails!,customerDatalist);
+          } else {
+            oldcutomer = false;
+            customerapicLoading = false;
+            showtoastproduct();
+            // await Future.delayed(const Duration(milliseconds: 50));
+            // WidgetsBinding.instance.addPostFrameCallback((_) {
+            //   showDialog(
+            //       builder: (_) {
+            //         return CustomerDetailsViewBox(
+            //           customerDatalist: customerDatalist!,
+            //           customerdetails: customerdetails,
+            //           // dashbordCnt: dashbordCnt,
+            //         );
+            //       },
+            //       context: context);
+            // });
+          }
+        } else if (value.itemdata == null) {
+          oldcutomer = false;
+          customerapicLoading = false;
+          showtoastproduct();
+          notifyListeners();
+        }
+      } else if (value.stcode! >= 400 && value.stcode! <= 410) {
+        customerapicLoading = false;
+        exceptionOnApiCall = '${value.stcode!}..!!${value.exception}..!! ';
+      } else if (value.stcode == 500) {
+        customerapicLoading = false;
+        exceptionOnApiCall =
+            '${value.stcode!}..!!Network Issue..\nTry again Later..!!';
+      }
+    });
+   
+  }
+  void showtoastproduct() {
+    Fluttertoast.showToast(
+        msg: "No Data..!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 14.0);
+  }
  static Future logOutMethod()async{
    String? fcm2 = await HelperFunctions.getFCMTokenSharedPreference();
     String? deviceID = await HelperFunctions.getDeviceIDSharedPreference();
@@ -158,7 +672,7 @@ print('Sucess'+value.message);
 //   }
 // }
 
- Future<void> popupmenu(BuildContext context) async {
+  popupmenu(BuildContext context) async {
     final theme = Theme.of(context);
     await showDialog<dynamic>(
         barrierDismissible: true,
@@ -236,7 +750,33 @@ print('Sucess'+value.message);
     }
     return res;
   }
-  
+  // int? unSeenNotify;
+  // int get getunSeenNotify=>unSeenNotify!=null?unSeenNotify!:0;
+
+//   onReciveFCM(){
+//     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+//       List<NotificationModel> notify = [];
+//   if (message.notification != null) {
+//    localNotificationService.showNitification(titile:message.notification!.title,msg:message.notification!.body);
+//  notify.add(
+//   NotificationModel(
+//     docEntry: int.parse(message.data['DocEntry'].toString()),
+//     titile: message.notification!.title,
+//     description: message.notification!.body!,
+//     receiveTime: config.currentDate(),
+//     seenTime: '0', ));
+
+//   dbHelper.insertNotification(notify);
+//    NotificationUpdateApi.getData(
+//     docEntry: int.parse(message.data['DocEntry'].toString()),
+//     deliveryDT: config.currentDate(),
+//     readDT: 'null',
+//     deviceCode: 'null'
+//   );
+//   print("repeat 1 dash");
+//   }
+// });
+// }
 
   @override
   void dispose() {
@@ -244,7 +784,11 @@ print('Sucess'+value.message);
     super.dispose();
   }
 
-
+// getUnSeenNotify()
+// async{
+//   unSeenNotify = await dbHelper.getUnSeenNotificationCount();
+//   notifyListeners();
+// }
   static bool isLogout = false;
 
   logoutSession() async {
@@ -259,6 +803,39 @@ print('Sucess'+value.message);
     });
   }
 
+//  Future<void> listener( int j) async{
+//     log("ssdasdasdada $j");
+//     for (int i = 0; i < feedData2.length; i++) {
+  //log("i $i");
+  //   if (i != j) {
+  // log("i!=j: $i");
+  // FijkState? state = feedData2[i].player!.state;
+  // if (state == FijkState.started) {
+  //   if( feedData2[i].player!=null){
+  //     feedData2[i].player!.pause();
+  //  log("sate::: ${feedData2[i].player!.state}");
+  //   }
+  // } else if (state == FijkState.paused) {
+  //  feedData2[i].player!.start();
+  // } else if (state == FijkState.completed) {
+  //   feedData2[i].player!.start();
+  // }
+
+  // }
+  // if(i != j){
+  //   if( feedData2[i].player!=null){
+  //     await feedData2[i].player!.pause();
+  //  log("if sate $i::: ${feedData2[i].player!.state}");
+  //   }
+  // }
+  // else{
+  //    if( feedData2[i].player!=null){
+  //  log("else sate $i::: ${feedData2[i].player!.state}");
+  //   }
+  // }
+  //   }
+  // }
+
   String data = '';
 
   int feedint = 0;
@@ -268,7 +845,25 @@ print('Sucess'+value.message);
   }
 
   WebViewController? controllerGlobal;
-  
+  // final LocalAuthentication auth = LocalAuthentication();
+
+  // checkAuth() async {
+  //   try {
+  //     final bool didAuthenticate = await auth.authenticate(
+  //         localizedReason: 'Please authenticate to show account balance',
+  //         options: const AuthenticationOptions(useErrorDialogs: false));
+  //   } on PlatformException catch (e) {
+  //     if (e.code == auth_error.notEnrolled) {
+  //       print("if: " + e.code.toString());
+  //     } else if (e.code == auth_error.lockedOut ||
+  //         e.code == auth_error.permanentlyLockedOut) {
+  //       print("else if: " + e.code.toString());
+  //     } else {
+  //       print("else: ");
+  //     }
+  //   }
+  // }
+
   Future<int> getDefaultValues() async {
     int i = 0;
     await HelperFunctions.getSapURLSharedPreference().then((value) {
@@ -343,7 +938,7 @@ print('Sucess'+value.message);
     log("firstName : ${ConstantValues.firstName}");
     notifyListeners();
     await callFeedsApi();
-  //  await getdataFromDb();
+   await getdataFromDb();
     // await callKpiApi();
     notifyListeners();
     // notifyListeners();
@@ -460,11 +1055,19 @@ print('Sucess'+value.message);
   bool get getisloading => isloading;
   List<FeedsModalData> feedData = [];
  List<ItemMasterDBModel> allProductDetails = [];
+getdataFromDb() async {
+    final Database db = (await DBHelper.getInstance())!;
+    allProductDetails = await DBOperation.getAllProducts(db);
+    log("allProductDetails::"+allProductDetails.length.toString());
+   notifyListeners();
+  }
   List<FeedsModalData> get getfeedData => feedData;
   FeedsModalData2? feeddata2;
   FeedsModalData2? get getfeeddata2 => feeddata2;
   List<FeedsModalData> searchfeedfilter = [];
   List<FeedsModalData> get getsearchfeedfilter => searchfeedfilter;
+  // List<FeedsModalData> feedData2 = [];
+  // List<FeedsModalData> get getfeedData2 => feedData;
   callFeedsApi() async {
     lottiurl='';
     isloading = true;
@@ -523,7 +1126,7 @@ print('Sucess'+value.message);
   //   }
 
   // }
- static  List<TextEditingController> mycontroller =
+   List<TextEditingController> mycontroller =
       List.generate(30, (i) => TextEditingController());
 
   SearchFilter(String v) {
@@ -549,6 +1152,79 @@ print('Sucess'+value.message);
       if (success) debugPrint('removed image!');
     });
   }
+
+  // initializedData() {
+  //   int ip = 0;
+  //   log("Videoooooo11111");
+  //   for (int i = 0; i < feedData.length; i++) {
+  //     if (feedData[i].MediaType == "Video") {
+  //       // FijkPlayer player = new FijkPlayer();
+
+  //       log("Videoooooo2222");
+  // player2.add(player);
+  // player2[ip].setDataSource(
+  //     //"http://216.48.186.108:19977/SK/s1.mp4",
+  //     feedData[i].MediaURL1.toString(),
+  //     // "http://216.48.186.108:19977/SK/%E0%AE%A4%E0%AE%AE%E0%AE%BF%E0%AE%B4%E0%AF%8D%20%20%E0%AE%A8%E0%AE%BE%E0%AE%9F%E0%AF%86%E0%AE%99%E0%AF%8D%E0%AE%95%E0%AF%81%E0%AE%AE%E0%AF%8D%20SATHYA.mp4",
+  //     showCover: true,
+  //     autoPlay: false);
+
+  //     player2[ip].addListener(()=>listener(i));
+
+  //   feedData2.add(FeedsModalData(
+  //     FeedsID: feedData[i].FeedsID,
+  //     CreatedDate: feedData[i].CreatedDate,
+  //     Title: feedData[i].Title,
+  //     Description: feedData[i].Description,
+  //     MediaType: feedData[i].MediaType,
+  //     MediaURL1: feedData[i].MediaURL1,
+  //     MediaURL2: feedData[i].MediaURL2,
+  //     MediaURL3: feedData[i].MediaURL3,
+  //     ValidTill: feedData[i].ValidTill,
+  //     UserCode: feedData[i].UserCode,
+  //     Reaction: feedData[i].Reaction,
+  //     ProfilePic: feedData[i].ProfilePic,
+  //     CreatedBy: feedData[i].CreatedBy,
+  //     //player: player2[ip]
+  //   ));
+  //   ip = ip + 1;
+  // } else {
+  //   log("Videoooooo333333");
+
+  //   feedData2.add(FeedsModalData(
+  //         FeedsID: feedData[i].FeedsID,
+  //         CreatedDate: feedData[i].CreatedDate,
+  //         Title: feedData[i].Title,
+  //         Description: feedData[i].Description,
+  //         MediaType: feedData[i].MediaType,
+  //         MediaURL1: feedData[i].MediaURL1,
+  //         MediaURL2: feedData[i].MediaURL2,
+  //         MediaURL3: feedData[i].MediaURL3,
+  //         ValidTill: feedData[i].ValidTill,
+  //         UserCode: feedData[i].UserCode,
+  //         Reaction: feedData[i].Reaction,
+  //         ProfilePic: feedData[i].ProfilePic,
+  //         CreatedBy: feedData[i].CreatedBy,
+  //       ));
+  //     }
+  //   }
+
+  //   ///
+
+  //   log("ssss: " + feedData2.map((e) => e.toMap()).toList().toString());
+  // }
+
+  //  iniS(){
+  //   int ip=0;
+  //      for(int i=0; i<feedData.length; i++){
+  //     if( feedData[i].MediaType == "Video"){
+  //       player2.add(player);
+  //       player2[ip].setDataSource(
+  //         "http://216.48.186.108:19977/SK/%E0%AE%A4%E0%AE%AE%E0%AE%BF%E0%AE%B4%E0%AF%8D%20%20%E0%AE%A8%E0%AE%BE%E0%AE%9F%E0%AF%86%E0%AE%99%E0%AF%8D%E0%AE%95%E0%AF%81%E0%AE%AE%E0%AF%8D%20SATHYA.mp4",
+  //          showCover: true, autoPlay: false);
+  //       ip = ip+1;
+  //   }}
+  //  }
 
   Future<void> launchUrlInBrowser(String url) async {
     if (!await launchUrl(Uri.parse(url),
@@ -699,7 +1375,7 @@ print('Sucess'+value.message);
     feedData.clear();
     notifyListeners();
     callFeedsApi();
-    // await getdataFromDb();
+    await getdataFromDb();
   }
 
   ////kpi controller

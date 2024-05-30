@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors, unnecessary_new
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,7 @@ import '../widgets/FollowUPCommingPage.dart';
 import '../widgets/FollowUPODue.dart';
 
 class FollowUpTab extends StatefulWidget {
-  const FollowUpTab({Key? key}) : super(key: key);
+  FollowUpTab({Key? key}) : super(key: key);
 
   @override
   State<FollowUpTab> createState() => _FollowUpTabState();
@@ -31,7 +32,7 @@ class _FollowUpTabState extends State<FollowUpTab>
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller =  TabController(vsync: this, length: 2, initialIndex: 0);
+    controller = new TabController(vsync: this, length: 2, initialIndex: 0);
   }
 
   @override
@@ -45,7 +46,7 @@ class _FollowUpTabState extends State<FollowUpTab>
             controller: controller,
             tabs: myTabs,
           ),
-          title: const Text('Followup'),
+          title: Text('Followup'),
         ),
         drawer: drawer3(context),
         body: GestureDetector(onHorizontalDragUpdate: (details) {

@@ -73,7 +73,6 @@ class _SiteOutState extends State<SiteOut> {
           drawer: drawer3(context),
           appBar: appbar("Site Check-Out", scaffoldKey, theme, context),
           body: GestureDetector(
-            
              onHorizontalDragUpdate: (details) {
                     // Check if the user is swiping from left to right
                     print(details.primaryDelta);
@@ -83,17 +82,16 @@ class _SiteOutState extends State<SiteOut> {
                       });
                     }
                   },
-            onTap: () {
-              setState(() {
-                FocusScopeNode cf = FocusScope.of(context);
+             onTap: () {
+            setState(() {
+               FocusScopeNode cf = FocusScope.of(context);
                 if (!cf.hasPrimaryFocus && cf.focusedChild !=null) {
                   cf.focusedChild!.unfocus();
                 cf.unfocus();  
                 }
-                    
-                // FocusScope.of(context).unfocus();
-              });
-            },
+              // FocusScope.of(context).unfocus();
+            });
+          },
             child: Container(
               padding: paddings.padding2(context),
               child:context.watch<SiteOutController>().isloadingmainPage==true?Center(child: CircularProgressIndicator(),) : Form(

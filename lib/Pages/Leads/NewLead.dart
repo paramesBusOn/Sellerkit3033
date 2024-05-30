@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:sellerkit/Constant/ConstantRoutes.dart';
 import 'package:sellerkit/Constant/ConstantSapValues.dart';
 import 'package:sellerkit/Constant/Screen.dart';
+import 'package:sellerkit/Widgets/qrpage.dart';
 import '../../Controller/LeadController/LeadNewController.dart';
 import '../../Widgets/Appbar.dart';
 import '../../Widgets/Navi3.dart';
@@ -95,7 +96,6 @@ context.read<LeadNewController>().restricteddialog(context);
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    
                     FocusScope.of(context).unfocus();
                   });
                 },
@@ -535,41 +535,68 @@ context.read<LeadNewController>().isdatevalid == false
           top: Screens.bodyheight(context) * 0.02),
       child: Column(
         children: [
-          Container(
-            height: Screens.bodyheight(context) * 0.06,
-            decoration: BoxDecoration(
-              color: theme.primaryColor.withOpacity(0.1), //Colors.grey[200],
-              borderRadius:
-                  BorderRadius.circular(Screens.width(context) * 0.02),
-            ),
-            child: TextField(
-              autocorrect: false,
-              onChanged: (val) {
-                context.read<LeadNewController>().filterList(val);
-              },
-              controller: context.read<LeadNewController>().mycontroller[12],
-              decoration: InputDecoration(
-                filled: false,
-                hintText: 'Search Here!!..',
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    FocusScopeNode focus = FocusScope.of(context);
-                    if (!focus.hasPrimaryFocus) {
-                      focus.unfocus();
-                    }
-                    context.read<LeadNewController>().changeVisible();
-                  }, //
-                  color: theme.primaryColor,
+          Row(
+             mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width:context.read<LeadNewController>().showItemList == true? Screens.width(context)*0.80:Screens.width(context)*0.95,
+                
+                height: Screens.bodyheight(context) * 0.06,
+                decoration: BoxDecoration(
+                  color: theme.primaryColor.withOpacity(0.1), //Colors.grey[200],
+                  borderRadius:
+                      BorderRadius.circular(Screens.width(context) * 0.02),
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 11,
-                  horizontal: 10,
+                child: TextField(
+                  autocorrect: false,
+                  onChanged: (val) {
+                    context.read<LeadNewController>().filterList(val);
+                  },
+                  controller: context.read<LeadNewController>().mycontroller[12],
+                  decoration: InputDecoration(
+                    filled: false,
+                    hintText: 'Search Here!!..',
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        FocusScopeNode focus = FocusScope.of(context);
+                        if (!focus.hasPrimaryFocus) {
+                          focus.unfocus();
+                        }
+                        context.read<LeadNewController>().changeVisible();
+                      }, //
+                      color: theme.primaryColor,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 11,
+                      horizontal: 10,
+                    ),
+                  ),
                 ),
               ),
-            ),
+          
+           context.read<LeadNewController>().showItemList == true?   Container(
+            // alignment: Alignment.center,
+            child: IconButton(
+              onPressed: (){
+                setState(() {
+                   context.read<LeadNewController>().     scannerreset();
+                   qrscannerState.leadscan=true;
+                Navigator.push(context,MaterialPageRoute(builder: (_) => qrscanner()))
+//                 .then((value){
+// return context.read<LeadNewController>().scanneddataget(context);
+//                 } 
+//                  )
+                 ;
+                });
+           
+              },
+              icon: Icon(Icons.qr_code_scanner_outlined,color: theme.primaryColor,size: 30,)),
+          ):Container()
+          
+            ],
           ),
           context.read<LeadNewController>().showItemList == true
               ? Expanded(

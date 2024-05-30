@@ -118,6 +118,8 @@ class PostOrder {
   // String? DocType;
   double? doctotal;
   String? DocDate;
+  String? DocDateold;
+
   String? CardCode;
   //
   // String? U_sk_enqId;
@@ -150,6 +152,7 @@ class PostOrder {
 
   PostOrder(
       {
+        this.DocDateold,
         this.purchaseDate,
         this.payvalue,
         this.CardCode,

@@ -30,7 +30,7 @@ class ShowSearchDialogState extends State<Upgraderdialogbox> {
       context.read<ConfigurationContoller>().showVersion();
       String? storeversion = await context
           .read<ConfigurationContoller>()
-          .getStoreVersion('com.busondigitalservice.sellerkit3033');
+          .getStoreVersion('com.busondigitalservice.sellerkit');
       if (ConstantValues.appversion == storeversion) {
         Navigator.pop(context);
         Navigator.pushAndRemoveUntil(
@@ -48,7 +48,7 @@ class ShowSearchDialogState extends State<Upgraderdialogbox> {
     return AlertDialog(
       content: SizedBox(
         width: Screens.width(context),
-        height: Screens.bodyheight(context) * 0.3,
+        height: Screens.bodyheight(context) * 0.27,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ class ShowSearchDialogState extends State<Upgraderdialogbox> {
             ),
             Text(
               "To use this app, download the latest version, You can keep using this app while downloading the update",
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyText1,
             ),
             IntrinsicHeight(
               child: Row(
@@ -101,21 +101,22 @@ class ShowSearchDialogState extends State<Upgraderdialogbox> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SizedBox(
+                Container(
                   width: Screens.width(context) * 0.25,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.primaryColor,
                       ),
                       onPressed: () async {
+                        
                         if (Platform.isAndroid || Platform.isIOS) {
-                          // final appId = Platform.isAndroid
-                          //     ? 'com.busondigitalservice.sellerkit'
-                          //     : 'com.busondigitalservice.sellerkit';
+                          final appId = Platform.isAndroid
+                              ? 'com.busondigitalservice.sellerkit'
+                              : 'com.busondigitalservice.sellerkit';
                           final url = Uri.parse(
                             Platform.isAndroid
-                                ? "https://play.google.com/store/apps/details?id=com.busondigitalservice.sellerkit3033"
-                                : "https://apps.apple.com/app/id6502172748",
+                                ? "https://play.google.com/store/apps/details?id=com.busondigitalservice.sellerkit"
+                                : "https://apps.apple.com/app/id$appId",
                           );
                           launchUrl(
                             url,

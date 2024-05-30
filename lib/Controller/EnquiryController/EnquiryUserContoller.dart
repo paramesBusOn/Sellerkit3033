@@ -574,8 +574,10 @@ List<Distcolumn> assigncolumn22 = [];
   assignvalue='';
   if(isselected){
     selectedassignto.add(itemvalue);
+    notifyListeners();
   }else{
     selectedassignto.remove(itemvalue);
+    notifyListeners();
   }
   assignvalue=selectedassignto.join(', ');
   log("selectedassignto::"+selectedassignto.toString());

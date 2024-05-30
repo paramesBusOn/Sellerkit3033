@@ -51,8 +51,9 @@ class DBOperation {
 await db.execute(
   "INSERT INTO $tableItemMaster (${values.first.toMap().keys.join(', ')}) VALUES ${values.map((item) => '(${item.toMap().values.map((v) => v==null ? "NULL" :"'$v'").join(', ')})').join(', ')}"
 );
+log("values len: " + tableItemMaster.length.toString());
     }catch(e){
-// log("values len:xxxx "+e.toString());
+log("values len:xxxx "+e.toString());
     }
     stopwatch.stop();
     // log('API insertItemMaster ${stopwatch.elapsedMilliseconds} milliseconds');
@@ -873,6 +874,138 @@ WHERE $fav IS NOT '';
           isFixedPrice: false,
           validTill: '',
           color: '');
+    });
+  }
+
+
+  static Future<List<ItemMasterDBModel>> onFieldScanned(
+      String itemcode,Database db
+      ) async {
+    final List<Map<String, Object?>> result = await db.rawQuery("""
+ SELECT * From ItemMaster A
+      Where 
+      Instr(case when length('$itemcode') <> 0 then ', ' || '$itemcode' || ',' else ', '|| A.ItemCode || ','  end,', ' || A.ItemCode || ',' ) > 0
+      
+""");
+
+    
+    
+
+    log(("""
+ SELECT * From ItemMaster A
+      Where 
+      A.ItemCode <> 'null' and coalesce(A.ItemCode,'') <> '' AND
+      
+      ('$itemcode' = '' OR A.ItemCode in ($itemcode)) 
+      
+"""));
+
+    return List.generate(result.length, (i) {
+      return ItemMasterDBModel(
+        calcType:result[i]['calcType'].toString() ,
+        payOn:result[i]['payOn'].toString() ,
+          id: int.parse(result[i]['Id'].toString()),
+          IMId: int.parse(result[i]['IMId'].toString()),
+          itemCode: result[i]['ItemCode'].toString(),
+          itemName: result[i]['ItemName'].toString(),
+          brand: result[i]['Brand'].toString(),
+          category: result[i]['Category'].toString(),
+          division: result[i]['Division'].toString(),
+          segment: result[i]['Segment'].toString(),
+          isselected: int.parse(result[i]['IsSelected'].toString()),
+          favorite: result[i]['Favorite'].toString(),
+          mgrPrice: double.parse(result[i]['MgrPrice'].toString()),
+          slpPrice: double.parse(result[i]['SlpPrice'].toString()),
+          storeStock: double.parse(result[i]['StoreStock'].toString()),
+          whsStock: double.parse(result[i]['WhsStock'].toString()),
+          refreshedRecordDate: result[i]['RefreshedRecordDate'].toString(),
+          itemDescription: result[i]['ItemDescription'].toString(),
+          modelNo: result[i]['ModelNo'].toString(),
+          partCode: result[i]['PartCode'].toString(),
+          skucode: result[i]['Skucode'].toString(),
+          brandCode: result[i]['BrandCode'].toString(),
+          itemGroup: result[i]['ItemGroup'].toString(),
+          specification: result[i]['Specification'].toString(),
+          sizeCapacity: result[i]['SizeCapacity'].toString(),
+          clasification: result[i]['Clasification'].toString(),
+          uoM: result[i]['UoM'].toString(),
+          taxRate: result[i]['TaxRate'] == null
+              ? 0
+              : int.parse(result[i]['TaxRate'].toString()),
+          catalogueUrl1: result[i]['CatalogueUrl1'].toString(),
+          catalogueUrl2: result[i]['CatalogueUrl2'].toString(),
+          imageUrl1: result[i]['ImageUrl1'].toString(),
+          imageUrl2: result[i]['ImageUrl2'].toString(),
+          textNote: result[i]['TextNote'].toString(),
+          status: result[i]['Status'].toString(),
+          movingType: result[i]['MovingType'].toString(),
+          eol: result[i]['eol'] == null
+              ? false
+              : bool.parse(result[i]['eol'].toString()),
+          veryFast: result[i]['VeryFast'] == null
+              ? false
+              : bool.parse(result[i]['VeryFast'].toString()),
+          fast: result[i]['Fast'] == null
+              ? false
+              : bool.parse(result[i]['Fast'].toString()),
+          slow: result[i]['Slow'] == null
+              ? false
+              : bool.parse(result[i]['Slow'].toString()),
+          verySlow: result[i]['VerySlow'] == null
+              ? false
+              : bool.parse(result[i]['VerySlow'].toString()),
+          serialNumber: result[i]['SerialNumber'] == null
+              ? false
+              : bool.parse(result[i]['SerialNumber'].toString()),
+          priceStockId: result[i]['PriceStockId'] == null
+              ? 0
+              : int.parse(result[i]['PriceStockId'].toString()),
+          storeCode: result[i]['StoreCode'].toString(),
+          whseCode: result[i]['WhseCode'].toString(),
+          sp: result[i]['Sp'] == null
+              ? 0.0
+              : double.parse(result[i]['Sp'].toString()),
+          ssp1: result[i]['Ssp1'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp1'].toString()),
+          ssp2: result[i]['Ssp2'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp2'].toString()),
+          ssp3: result[i]['Ssp3'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp3'].toString()),
+          ssp4: result[i]['Ssp4'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp4'].toString()),
+          ssp5: result[i]['Ssp5'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp5'].toString()),
+          ssp1Inc: result[i]['Ssp1Inc'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp1Inc'].toString()),
+          ssp2Inc: result[i]['Ssp2Inc'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp2Inc'].toString()),
+          ssp3Inc: result[i]['Ssp3Inc'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp3Inc'].toString()),
+          ssp4Inc: result[i]['Ssp4Inc'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp4Inc'].toString()),
+          ssp5Inc: result[i]['Ssp5Inc'] == null
+              ? 0.0
+              : double.parse(result[i]['Ssp5Inc'].toString()),
+          allowNegativeStock: result[i]['AllowNegativeStock'] == null
+              ? false
+              : bool.parse(result[i]['AllowNegativeStock'].toString()),
+          allowOrderBelowCost: result[i]['AllowOrderBelowCost'] == null
+              ? false
+              : bool.parse(result[i]['AllowOrderBelowCost'].toString()),
+          isFixedPrice: result[i]['IsFixedPrice'] == null
+              ? false
+              : bool.parse(result[i]['IsFixedPrice'].toString()),
+          validTill: result[i]['ValidTill'].toString(),
+          color: result[i]['color'].toString());
     });
   }
 

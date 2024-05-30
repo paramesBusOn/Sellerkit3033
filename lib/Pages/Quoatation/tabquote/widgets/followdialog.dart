@@ -3007,6 +3007,7 @@ class _FollowDialogState extends State<FollowDialog> {
           Container(
             width: Screens.width(context),
             height: Screens.bodyheight(context) * 0.77,
+            
             padding: EdgeInsets.only(
               top: Screens.bodyheight(context) * 0.01,
               bottom: Screens.bodyheight(context) * 0.01,
@@ -3016,6 +3017,7 @@ class _FollowDialogState extends State<FollowDialog> {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
+               
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(

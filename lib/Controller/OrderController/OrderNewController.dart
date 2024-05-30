@@ -10,6 +10,8 @@ import 'package:sellerkit/Constant/GetFilePath.dart';
 import 'package:sellerkit/Models/PostQueryModel/EnquiriesModel/OrderTypeModel.dart';
 import 'package:sellerkit/Models/PostQueryModel/EnquiriesModel/levelofinterestModel.dart';
 import 'package:sellerkit/Models/PostQueryModel/OrdersCheckListModel/OrdersSavePostModel/paymodemodel.dart';
+import 'package:sellerkit/Models/PostQueryModel/OrdersCheckListModel/couponModel.dart';
+import 'package:sellerkit/Services/PostQueryApi/OrdersApi/couponApi.dart';
 import 'package:sellerkit/Services/PostQueryApi/OrdersApi/paymentmode.dart';
 import 'package:sellerkit/Services/PostQueryApi/QuotatationApi/QuotesQTHApi.dart';
 import 'package:sellerkit/Services/customerdetApi/customerdetApi.dart';
@@ -162,9 +164,9 @@ customermodeldata=value.leadcheckdata;
 //
 
   List<GlobalKey<FormState>> formkey =
-      new List.generate(3, (i) => new GlobalKey<FormState>(debugLabel: "Lead"));
+      new List.generate(6, (i) => new GlobalKey<FormState>(debugLabel: "Lead"));
   List<TextEditingController> mycontroller =
-      List.generate(35, (i) => TextEditingController());
+      List.generate(40, (i) => TextEditingController());
 
   Config config = new Config();
 
@@ -360,16 +362,30 @@ List<Custype> custype=[
     enqList = await DBOperation.getEnqData(db);
     notifyListeners();
   }
-  scanneddataget(String code,BuildContext context){
-  // log("code:::::"+code.toString());
-  int? index;
+  scannerreset(){
+itemAlreadyscanned = false;
+  indexscanning=null;
+  notifyListeners();
+  }
+  int? indexscanning;
   bool itemAlreadyscanned = false;
-   Navigator.pop(context);
+  String? Scancode;
+  scanneddataget(BuildContext context){
+  // log("code:::::"+code.toString());
+
+  
+
+
+   
    notifyListeners();
+  
+  // Get.back();
+// Navigator.pop(context);
+notifyListeners();
    for (int ij=0;ij<allProductDetails.length;ij++){
-    if(allProductDetails[ij].itemCode ==code){
+    if(allProductDetails[ij].itemCode ==Scancode){
       itemAlreadyscanned=true;
-      index =ij;
+      indexscanning =ij;
         notifyListeners();
       break;
     
@@ -377,7 +393,8 @@ List<Custype> custype=[
    
    }
     if(itemAlreadyscanned ==true){
-showBottomSheetInsert(context, index!);
+      resetItems(indexscanning!);
+showBottomSheetInsert(context, indexscanning!);
  notifyListeners();
    }else{
     showtoastforscanning();
@@ -493,18 +510,169 @@ showBottomSheetInsert(context, index!);
             isfixedprice: isfixedpriceorder,
             allownegativestock:allownegativestockorder ,
             alloworderbelowcost: alloworderbelowcostorder,
+            complementary: assignvalue,
+            couponcode: mycontroller[36].text ==null || mycontroller[36].text.isEmpty?
+   null:mycontroller[36].text,
             ));
-        // log("productslist" + productDetails.length.toString());
-        // log("product" + productDetails[0].deliveryfrom.toString());
-        showItemList = false;
+         showItemList = false;
         mycontroller[12].clear();
         Navigator.pop(context);
+        
         isUpdateClicked = false;
+        // showComplementry(context);
+        
+        // log("productslist" + productDetails.length.toString());
+        // log("product" + productDetails[0].deliveryfrom.toString());
+       
         notifyListeners();
       }
     }
   }
 
+  addfinalproduct(BuildContext context){
+   productDetails.add(DocumentLines(
+            id: 0,
+            docEntry: 0,
+            linenum: 0,
+            ItemCode: selectedItemCode,
+            ItemDescription: selectedItemName,
+            Quantity: quantity,
+            LineTotal: total,
+            Price: unitPrice,
+            TaxCode: taxvalue,
+            TaxLiable: "tNO",
+            storecode:  ConstantValues.Storecode ,
+            deliveryfrom: isselected[0] == true ? "store" : "Whse",
+            sp: sporder,
+            slpprice: slppriceorder,
+            storestock: storestockorder,
+            whsestock:whsestockorder ,
+            isfixedprice: isfixedpriceorder,
+            allownegativestock:allownegativestockorder ,
+            alloworderbelowcost: alloworderbelowcostorder,
+            complementary: assignvalue
+            ));
+             showItemList = false;
+        // mycontroller[12].clear();
+      
+        
+        isUpdateClicked = false;
+            Navigator.pop(context);
+           
+            notifyListeners(); 
+           
+  }
+showComplementry(BuildContext context){
+  final theme = Theme.of(context);
+  showModalBottomSheet(
+    isDismissible :false,
+    context: context, 
+    builder: (context)=>
+    StatefulBuilder(builder: (context,st){
+      return Container(
+        padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Complementry Items",
+              style: theme.textTheme.bodyText1!.copyWith(
+                color: theme.primaryColor
+              ),
+            ),
+            // if(){
+
+            // }else{
+              
+            // }
+           iscomplement == false?Container(): Container(
+              child: Text("* Select Complementary",style:TextStyle(color:Colors.red)),
+            ),
+          Container(
+            height: Screens.padingHeight(context)*0.3,
+            width: Screens.width(context),
+            child:SingleChildScrollView(
+              child: ListBody(
+                                        children:allProductDetails.take(10)
+                                       . map((item )
+                                         => CheckboxListTile(
+                                          value:selectedassignto.contains(item.itemCode) ,
+                                          title: Text(item.itemCode.toString()),
+                                          controlAffinity: ListTileControlAffinity.leading,
+                                          onChanged: (ischecked)=>
+                                          st((){
+ itemselectassignto(item.itemCode.toString(),ischecked!);
+                                         
+                                          })
+                                           ,
+                                    
+                                         )
+                                         ).toList()
+                                      ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: ElevatedButton(onPressed: (){
+              if(assignvalue==null || assignvalue!.isEmpty){
+                st((){
+             
+            iscomplement=true;
+            });
+              }
+            st((){
+              addfinalproduct(context);
+            });
+            }, child: Text("save")),
+          )
+        ],),
+      );
+
+    })
+    );
+
+}
+
+splitcomplement(String products){
+
+
+  List<String> productList = products.split(',').map((item) => item.trim()).toList();
+return ListView.builder(
+  shrinkWrap : true,
+  physics: NeverScrollableScrollPhysics(),
+      itemCount: productList.length,
+      itemBuilder: (context, index) {
+        return  Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('* ${productList[index]}', style: TextStyle(fontSize: 15)),
+            SizedBox(height: 5,)
+          ],
+        );
+          
+        
+      },
+    );
+
+}
+bool iscomplement=false;
+String? assignvalue;
+ itemselectassignto(String itemvalue,bool isselected){
+  assignvalue='';
+  if(isselected){
+    selectedassignto.add(itemvalue);
+  }else{
+    selectedassignto.remove(itemvalue);
+  }
+  assignvalue=selectedassignto.join(', ');
+  log("selectedassignto::"+selectedassignto.toString());
+  log("assignvalue::"+assignvalue.toString());
+  notifyListeners();
+ }
+
+List<String> selectedassignto=[];
   updateProductDetails(BuildContext context, int i) {
     if (formkey[1].currentState!.validate()) {
       productDetails[i].Quantity = quantity;
@@ -524,6 +692,14 @@ showBottomSheetInsert(context, index!);
     mycontroller[10].text = allProductDetails[i].sp!.toStringAsFixed(2);
     //.clear();
     mycontroller[11].clear();
+    mycontroller[36].clear();
+    assignvalue = null;
+    iscomplement=false;
+    selectedassignto.clear();
+    getcoupondata.clear();
+    couponload=false;
+    isappliedcoupon=false;
+    notifyListeners();
   }
 
   filterList(String v) {
@@ -1859,6 +2035,7 @@ mycontroller[24].text = datafromAcc[17] == null ||
 //       notifyListeners();
 //     }
     // log("datafromlead" + datafromlead[5].toString());
+    DocDateold=datafrommodify[22];
     mycontroller[0].text = datafrommodify[1];
     mycontroller[16].text = datafrommodify[2];
     // mycontroller[1].text = datafromlead[1];
@@ -2741,8 +2918,15 @@ valueChosedCusType=ordertypedata[i].Code;
   }
 String? valueChosedStatus;
 String? valueChosedCusType;
+String? valueChosedrefcode;
 choosedType(String? val){
   valueChosedCusType=val;
+  notifyListeners();
+
+}
+
+choosedrefer(String? val){
+  valueChosedrefcode=val;
   notifyListeners();
 
 }
@@ -2752,7 +2936,14 @@ notifyListeners();
 }
   clearAllData() {
     log("step1");
+    mycontroller[36].clear();
+    getcoupondata.clear();
+    couponload=false;
+    isappliedcoupon=false;
     paymentTerm=false;
+     assignvalue = null;
+    iscomplement=false;
+    selectedassignto.clear();
      leveofdata.clear();
      enquirydetails.clear();
      leaddetails.clear();
@@ -2766,7 +2957,7 @@ notifyListeners();
     mycontroller[29].clear();
     mycontroller[30].clear();
  customermodeldata=null;
-
+DocDateold='';
     paymode.clear();
     reyear = null;
     reminderOn = false;
@@ -2776,9 +2967,9 @@ notifyListeners();
     reminutes = null;
     isTextFieldEnabled = true;
     iscomeforupdate = false;
-    String statecode = '';
-    String countrycode = '';
-    String statename = '';
+     statecode = '';
+     countrycode = '';
+     statename = '';
     statebool = false;
     statebool2 = false;
     isText1Correct = false;
@@ -2942,7 +3133,7 @@ notifyListeners();
 
   int docnum = 0;
   bool iscomeforupdate = false;
-
+String? DocDateold='';
 //save all values tp server
 
   saveToServer(BuildContext context) async {
@@ -3039,6 +3230,8 @@ notifyListeners();
         : mycontroller[5].text;
     patch.U_State = statecode;
     patch.U_Country = countrycode;
+   patch. couponcode=mycontroller[36].text ==null || mycontroller[36].text.isEmpty?
+   null:mycontroller[36].text;
     patch.U_ShipCountry = countrycode2;
     patch.levelof=valueChosedStatus==null ||valueChosedStatus!.isEmpty?null:valueChosedStatus;
         patch.ordertype=valueChosedCusType==null ||valueChosedCusType!.isEmpty?null:valueChosedCusType;
@@ -3066,6 +3259,7 @@ notifyListeners();
     postLead.DocDate = config.currentDate(); //
     postLead.deliveryDate = apiFDate;
     postLead.paymentDate = apiNdate;
+    postLead.DocDateold=DocDateold!.isEmpty?config.currentDate():DocDateold;
     patch.enqid = enqID == null ? 0 : enqID;
     patch.enqtype = basetype == null ? -1 : basetype;
     List<DocumentLines> productDetails2 = [];
@@ -3662,6 +3856,7 @@ OrderSuccessPageState.paymode = paymode[i].description.toString();
         notifyListeners();
       } else {
         if (passed == 0) {
+          FocusScope.of(context).unfocus();
           pageController.animateToPage(++pageChanged,
               duration: Duration(milliseconds: 250), curve: Curves.bounceIn);
           resetValidate();
@@ -4378,7 +4573,7 @@ paymentTerm=true;
     selectedItemName = allProductDetails[i].itemName.toString();
     selectedItemCode = allProductDetails[i].itemCode.toString();
     taxvalue=double.parse(allProductDetails[i].taxRate.toString());
-    // log("taxvalue::"+taxvalue.toString());
+    log("taxvalue::"+taxvalue.toString());
     sporder=allProductDetails[i].sp == null
         ? 0.0
         : double.parse(allProductDetails[i].sp.toString());
@@ -4398,7 +4593,16 @@ paymentTerm=true;
       isScrollControlled: true,
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, st) {
-        return Container(
+        return  couponload ==true?
+        Container(
+          height:Screens.padingHeight(context)*0.3,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ):
+        
+        
+         Container(
             padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
             child: Form(
               key: formkey[1],
@@ -4493,7 +4697,9 @@ paymentTerm=true;
                             return null;
                           },
                           readOnly:
-                          allProductDetails[i].isFixedPrice ==false ?false:
+                       isappliedcoupon ==true?true:  
+                        allProductDetails[i].isFixedPrice ==false 
+                           ?false:
                            true,
                            keyboardType:  TextInputType.numberWithOptions(decimal: true),
                            inputFormatters: <TextInputFormatter>[
@@ -4512,6 +4718,7 @@ paymentTerm=true;
                           ),
                         ),
                       ),
+                      
                       SizedBox(
                         height: 15,
                       ),
@@ -4535,6 +4742,7 @@ paymentTerm=true;
                               }
                             });
                           },
+                          readOnly: isappliedcoupon ==true && getcoupondata.isNotEmpty?true:false,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "ENTER QUANTITY";
@@ -4545,7 +4753,7 @@ paymentTerm=true;
                           //     ? true
                           //     : false,
                           keyboardType: TextInputType.number,
-                          //inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -4560,6 +4768,211 @@ paymentTerm=true;
                         ),
                       ),
                       //  ),
+ SizedBox(
+                        height: 5,
+                      ),
+                      // Container(
+                      //             height: Screens.padingHeight(context) * 0.06,
+                      //             width: Screens.width(context),
+                      //             child: DropdownButtonFormField(
+                      //               decoration: InputDecoration(
+                      //                 // hintText: 'Email',
+                      //                 labelText: 'Select refercode',
+                      //                 border: UnderlineInputBorder(),
+                      //                 enabledBorder: UnderlineInputBorder(
+                      //                   borderSide:
+                      //                       BorderSide(color: Colors.grey),
+                      //                 ),
+                      //                 focusedBorder: UnderlineInputBorder(
+                      //                   borderSide:
+                      //                       BorderSide(color: Colors.grey),
+                      //                 ),
+                      //                 errorBorder: UnderlineInputBorder(),
+                      //                 focusedErrorBorder:
+                      //                     UnderlineInputBorder(),
+                      //               ),
+                      //               // hint: Text(
+                      //               //   context
+                      //               //       .watch<NewEnqController>()
+                      //               //       .gethinttextforOpenLead!,
+                      //               //   style: theme.textTheme.bodyText2?.copyWith(
+                      //               //       color: context
+                      //               //               .watch<NewEnqController>()
+                      //               //               .gethinttextforOpenLead!
+                      //               //               .contains(" *")
+                      //               //           ? Colors.red
+                      //               //           : Colors.black),
+                      //               // ),
+                      //               value:valueChosedrefcode,
+                      //               //dropdownColor:Colors.green,
+                      //               icon: Icon(Icons.arrow_drop_down),
+                      //               iconSize: 30,
+                      //               style: TextStyle(
+                      //                   color: Colors.black, fontSize: 16),
+                      //               isExpanded: true,
+                      //               onChanged: (String? val) {
+                      //                 // setState(() {
+                      //                   st((){
+                      //                     valueChosedrefcode=val!;
+                      //                   });
+                      //                   // choosedrefer(val.toString());
+                      //                 // });
+                      //               },
+                      //               items: <String>['data1', 'data2', 'data3', 'data4']
+                      //                   .map((e) {
+                      //                 return DropdownMenuItem(
+                      //                     // ignore: unnecessary_brace_in_string_interps
+                      //                     value: "${e}",
+                      //                     child: Container(
+                      //                         // height: Screens.bodyheight(context)*0.1,
+                      //                         child: Text("${e}")));
+                      //               }).toList(),
+                      //             ),
+                      //           ),
+                      //  SizedBox(
+                      //   height: 5,
+                      // ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                     getcoupondata.isEmpty?Container():     Container(
+                      width: Screens.width(context)*0.5,
+                        alignment: Alignment.centerLeft,
+                            child: TextFormField(
+                              controller: mycontroller[36],
+                              decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 10,
+                    ),
+                                 labelText: 'Couponcode',
+                                      labelStyle: theme.textTheme.bodyText1!
+                                          .copyWith(color: Colors.grey),
+                             enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.grey),
+                                        //  when the TextFormField in unfocused
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.grey),
+                                        //  when the TextFormField in focused
+                                      ),
+                                      border: UnderlineInputBorder(),
+                                      // enabledBorder: UnderlineInputBorder(),
+                                      // focusedBorder: UnderlineInputBorder(),
+                                      errorBorder: UnderlineInputBorder(),
+                                      focusedErrorBorder:
+                                          UnderlineInputBorder(),
+                              ),
+                            ),
+                           
+                          ),
+                           SizedBox(
+                        height: 5,
+                      ),
+                       
+                               
+                          InkWell(
+                            onTap: ()async{
+                              if(mycontroller[11].text.isEmpty){
+                                st((){
+showtoastforcoupon("Enter QUANTITY");
+                                });
+                          
+                              }else{
+                                st((){
+//  callcouponApi();
+
+ 
+ st((){
+  getcoupondata.clear();
+couponload=true;
+ });
+  
+  notifyListeners();
+ couponmodel coupondata= couponmodel();
+ coupondata.customerCode=mycontroller[0].text;
+ coupondata.itemCode=selectedItemCode;
+ coupondata.storeCode=ConstantValues.Storecode;
+ coupondata.qty =int.parse(mycontroller[11].text);
+ coupondata.totalBillValue=double.parse(mycontroller[10].text);
+ coupondata.requestedBy_UserCode=ConstantValues.Usercode;
+
+ CouponApi.getData(coupondata).then((value) {
+ if (value.stcode! >= 200 && value.stcode! <= 210) {
+        
+
+        if (value.CouponModaldatageader!.Ordercheckdata != null && value.CouponModaldatageader!.Ordercheckdata!.isNotEmpty) {
+          log("not null");
+          st((){
+ getcoupondata = value.CouponModaldatageader!.Ordercheckdata!;
+  log("getcoupondata::"+getcoupondata.length.toString());
+   mycontroller[36].text= getcoupondata[0].CouponCode.toString();
+  mycontroller[10].text =getcoupondata[0].RP!.toStringAsFixed(2);
+  mycontroller[11].text=getcoupondata[0].Quantity!.toStringAsFixed(0);
+   unitPrice =
+                                      double.parse(mycontroller[10].text);
+                                  quantity =
+                                      double.parse(mycontroller[11].text);
+                                  total = unitPrice! * quantity!;
+  //  total = double.parse(mycontroller[10].text!) * double.parse(mycontroller[11].text!);
+notifyListeners();
+isappliedcoupon=true;
+
+notifyListeners();
+couponload=false;
+ });
+ 
+          // mapcoupon(value.CouponModaldatageader!.Ordercheckdata!);
+notifyListeners();
+          // mapValues(value.Ordercheckdatageader!.Ordercheckdata!);
+        } else if (value.CouponModaldatageader!.Ordercheckdata == null||value.CouponModaldatageader!.Ordercheckdata!.isEmpty) {
+          log("Order data null");
+          st((){
+ couponload=false;
+          
+          showtoastforcoupon("There is no couponcode for this customer");
+          });
+         
+          notifyListeners();
+        }
+      } else if (value.stcode! >= 400 && value.stcode! <= 410) {
+        st((){
+ couponload=false;
+         showtoastforcoupon('${value.message}..!!${value.exception}....!!');
+          });
+       
+        
+        notifyListeners();
+      } else  {
+        st((){ couponload=false;
+        
+         showtoastforcoupon('${value.stcode!}..!!Network Issue..\nTry again Later..!!');
+    
+          });
+         
+     notifyListeners();
+      }
+      notifyListeners();
+});
+                                });
+                          
+                              }
+                              
+                            },
+                            child: Container(
+                              alignment: Alignment.centerRight,
+                              child: Text("Apply Coupon Code",
+                              style: theme.textTheme.bodyText1!.copyWith(
+                                color:theme.primaryColor,
+                                decoration: TextDecoration.underline
+                              ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 10,
                       ),
@@ -4647,7 +5060,7 @@ paymentTerm=true;
                                     //     dismissDirection: DismissDirection.down,
                                     //   ),
                                     // );
-                                    if (mycontroller[11].text != "0") {
+                                    if (int.parse(mycontroller[11].text) > 0) {
                                       mycontroller[12].clear();
                                       addProductDetails(context);
                                     } else {
@@ -4657,7 +5070,7 @@ paymentTerm=true;
                                   child: Text("ok"))
                               : ElevatedButton(
                                   onPressed: () {
-                                    if (mycontroller[11].text != "0") {
+                                    if (int.parse(mycontroller[11].text) > 0) {
                                       updateProductDetails(context, i);
                                     } else {
                                       showtoastproduct();
@@ -4674,8 +5087,27 @@ paymentTerm=true;
       }),
     );
   }
+List<GetAllcouponData> getcoupondata=[];
+bool? couponload=false;
+bool? isappliedcoupon=false;
+void showtoastforcoupon(String? msg) {
+    Fluttertoast.showToast(
+        msg: "${msg}",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 14.0);
+  }
+callcouponApi()async{
+ 
+}
 
-
+mapcoupon(List<GetAllcouponData> getcoupondata){
+  
+notifyListeners();
+}
    showBottomSheetInsertforedit(
     BuildContext context,
     int i,
@@ -4850,7 +5282,7 @@ paymentTerm=true;
                           //     ? true
                           //     : false,
                           keyboardType: TextInputType.number,
-                          //inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -4952,7 +5384,7 @@ paymentTerm=true;
                                     //     dismissDirection: DismissDirection.down,
                                     //   ),
                                     // );
-                                    if (mycontroller[11].text != "0") {
+                                    if (int.parse(mycontroller[11].text)>0) {
                                       mycontroller[12].clear();
                                       addProductDetails(context);
                                     } else {
@@ -4962,7 +5394,7 @@ paymentTerm=true;
                                   child: Text("ok"))
                               : ElevatedButton(
                                   onPressed: () {
-                                    if (mycontroller[11].text != "0") {
+                                    if (int.parse(mycontroller[11].text)>0) {
                                       updateProductDetails(context, i);
                                     } else {
                                       showtoastproduct();
@@ -5448,4 +5880,22 @@ class Custype{
     required this.name
 
   });
+}
+class complementary{
+  String? itemName;
+  String? ItemCode;
+  double? SP;
+  double? offer;
+  double? Percentage;
+  double? qty;
+
+complementary({
+  required this.itemName,
+  required this.ItemCode,
+  required this.Percentage,
+  required this.SP,
+  required this.offer,
+  required this.qty
+
+});
 }

@@ -1487,6 +1487,7 @@ String lottie='';
     NewquoteController.datafrommodify.add(leadOpenAllData!.gSTNo.toString());
     NewquoteController.datafrommodify.add(leadOpenAllData!.cusgroup.toString());
      NewquoteController.datafrommodify.add(leadOpenAllData!.OrderType.toString());
+     NewquoteController.datafrommodify.add(leadOpenAllData!.DocDate.toString());
     QuoteNewState.iscomfromLead = true;
     Get.toNamed(ConstantRoutes.quotesnew);
     notifyListeners();

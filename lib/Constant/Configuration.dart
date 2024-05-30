@@ -826,7 +826,9 @@ log("formattedDate:::"+formattedDate.toString());
     print('Formatted Date: $formattedDate');
     return formattedDate;
   }
-
+DateTime findFirstDateOfTheMonth(DateTime dateTime) {
+    return DateTime(dateTime.year, dateTime.month, 1);
+  }
   String alignDate(String date) {
     if (date != null) {
       String dateT = date.replaceAll("T", "");
@@ -838,7 +840,17 @@ log("formattedDate:::"+formattedDate.toString());
       return "00-00-0000";
     }
   }
-
+String alignTimenew(String date) {
+    if (date != null) {
+      String dateT = date.replaceAll("T", "");
+      var dates = DateTime.parse(date);
+      print(
+          "${dates.day.toString().padLeft(2, '0')}-${dates.month.toString().padLeft(2, '0')}-${dates.year}");
+      return "${dates.hour.toString().padLeft(2, '0')}:${dates.minute.toString().padLeft(2, '0')}:${dates.second}";
+    } else {
+      return "00-00-0000";
+    }
+  }
   String alignTime(String date) {
     if (date != null) {
       String dateT = date.replaceAll("T", "");

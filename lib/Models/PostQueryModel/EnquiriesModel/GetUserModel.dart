@@ -51,7 +51,7 @@ List<UserListData>? userLtData;
   }
 }
 
-class UserListData {
+class   UserListData {
   UserListData({
     required this.storeid,
     // required this.UserKey,

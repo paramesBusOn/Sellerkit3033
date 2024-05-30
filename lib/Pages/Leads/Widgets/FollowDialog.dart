@@ -415,7 +415,7 @@ class _FollowDialogState extends State<FollowDialog> {
                           //   height: Screens.bodyheight(context) * 0.06,
                           //   child: ElevatedButton(
                           //       style: ElevatedButton.styleFrom(
-                          //         backgroundColor: context
+                          //         primary: context
                           //                     .watch<LeadTabController>()
                           //                     .getcaseStatusSelected ==
                           //                 'Open'
@@ -458,7 +458,7 @@ class _FollowDialogState extends State<FollowDialog> {
                           //   height: Screens.bodyheight(context) * 0.06,
                           //   child: ElevatedButton(
                           //       style: ElevatedButton.styleFrom(
-                          //         backgroundColor: context
+                          //         primary: context
                           //                     .watch<LeadTabController>()
                           //                     .getcaseStatusSelected ==
                           //                 'Won'
@@ -501,7 +501,7 @@ class _FollowDialogState extends State<FollowDialog> {
                           //   height: Screens.bodyheight(context) * 0.06,
                           //   child: ElevatedButton(
                           //       style: ElevatedButton.styleFrom(
-                          //         backgroundColor: context
+                          //         primary: context
                           //                     .watch<LeadTabController>()
                           //                     .getcaseStatusSelected ==
                           //                 'Lost'
@@ -1772,8 +1772,10 @@ class _FollowDialogState extends State<FollowDialog> {
             ),
           ),
           Container(
+            alignment: Alignment.topCenter,
             width: Screens.width(context),
             height: Screens.bodyheight(context) * 0.77,
+            // color:Colors.amber,
             padding: EdgeInsets.only(
               top: Screens.bodyheight(context) * 0.01,
               bottom: Screens.bodyheight(context) * 0.01,
@@ -3019,7 +3021,7 @@ class _FollowDialogState extends State<FollowDialog> {
 
           // ElevatedButton(
           //                       style: ElevatedButton.styleFrom(
-          //                         backgroundColor: context
+          //                         primary: context
           //                                     .watch<LeadTabController>()
           //                                     .getcaseStatusSelected ==
           //                                 'Open'

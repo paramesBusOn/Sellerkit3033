@@ -584,7 +584,7 @@ String lottie='';
          lottie='';
         leadCheckDataExcep = '${value.message}..!!${value.exception}....!!';
         notifyListeners();
-      } else if (value.stcode == 500) {
+      } else  {
         datagotByApi=true;
          lottie='Assets/NetworkAnimation.json';
         leadCheckDataExcep = '${value.stcode!}..!!Network Issue..\nTry again Later..!!';
@@ -1061,6 +1061,7 @@ OrderNewController.datafrommodify.add(leadOpenAllData!.gSTNo.toString());
 OrderNewController.datafrommodify.add(leadOpenAllData!.CustomerGroup.toString());
 
 OrderNewController.datafrommodify.add(leadOpenAllData!.OrderType.toString());
+OrderNewController.datafrommodify.add(leadOpenAllData!.DocDate.toString());
  OrderBookNewState.iscomfromLead = true;
           Get.toNamed(ConstantRoutes.ordernew);
           notifyListeners();

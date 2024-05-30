@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:sellerkit/Constant/ConstantRoutes.dart';
 import 'package:sellerkit/Constant/ConstantSapValues.dart';
 import 'package:sellerkit/Constant/Screen.dart';
-import 'package:sellerkit/Pages/OrderBooking/Screens/qrpage.dart';
+import 'package:sellerkit/Widgets/qrpage.dart';
 import '../../Controller/OrderController/OrderNewController.dart';
 import '../../Widgets/Appbar.dart';
 import '../../Widgets/Navi3.dart';
@@ -34,21 +34,19 @@ class OrderBookNewState extends State<OrderBookNew> {
       setState(() {
         // log("  iscomfromLead;"+  iscomfromLead.toString());
 
-         if(ConstantValues.  multistoreuser ==1){
+        if (ConstantValues.multistoreuser == 1) {
+          context.read<OrderNewController>().restricteddialog(context);
+        } else {
+          if (iscomfromLead == false) {
+            log("ANBU222::");
+            context.read<OrderNewController>().init();
+          } else if (iscomfromLead == true) {
+            log("ANBU::");
+            context.read<OrderNewController>().checkComeFromEnq(context);
 
-context.read<OrderNewController>().restricteddialog(context);
-         }else{
-if (iscomfromLead == false) {
-          log("ANBU222::");
-          context.read<OrderNewController>().init();
-        } else if (iscomfromLead == true) {
-          log("ANBU::");
-          context.read<OrderNewController>().checkComeFromEnq(context);
-
-          iscomfromLead = false;
+            iscomfromLead = false;
+          }
         }
-         }
-        
       });
 
       // print("sap user id: "+ConstantValues.sapUserID);
@@ -58,8 +56,9 @@ if (iscomfromLead == false) {
       //  log("oldcutomer: "+context.read<OrderNewController>().oldcutomer.toString());
     });
   }
- DateTime? currentBackPressTime;
-  
+
+  DateTime? currentBackPressTime;
+
   Future<bool> onbackpress() {
     DateTime now = DateTime.now();
 
@@ -88,7 +87,7 @@ if (iscomfromLead == false) {
     final theme = Theme.of(context);
 
     return WillPopScope(
-       onWillPop: onbackpress,
+      onWillPop: onbackpress,
       child: Scaffold(
           drawerEnableOpenDragGesture: false,
           // backgroundColor: Colors.grey[200],
@@ -224,7 +223,12 @@ if (iscomfromLead == false) {
                       ),
                     ),
                   ),
-          context.watch<OrderNewController>().     paymentTerm ==false?Container():  Text("Enter Payment Terms",style: TextStyle(color: Colors.red),),
+                  context.watch<OrderNewController>().paymentTerm == false
+                      ? Container()
+                      : Text(
+                          "Enter Payment Terms",
+                          style: TextStyle(color: Colors.red),
+                        ),
                   //SizedBox(height: Screens.bodyheight(context)*0.02,),
                   // SizedBox(
                   //   height: Screens.bodyheight(context) * 0.01,
@@ -663,7 +667,7 @@ if (iscomfromLead == false) {
                                                                     .files
                                                                     .removeAt(
                                                                         i);
-                                                                        context
+                                                                context
                                                                     .read<
                                                                         OrderNewController>()
                                                                     .filedata
@@ -748,7 +752,7 @@ if (iscomfromLead == false) {
                                                                     .files
                                                                     .removeAt(
                                                                         i);
-                                                                        context
+                                                                context
                                                                     .read<
                                                                         OrderNewController>()
                                                                     .filedata
@@ -836,7 +840,7 @@ if (iscomfromLead == false) {
                                                                     .files
                                                                     .removeAt(
                                                                         i);
-                                                                        context
+                                                                context
                                                                     .read<
                                                                         OrderNewController>()
                                                                     .filedata
@@ -921,7 +925,7 @@ if (iscomfromLead == false) {
                                                                     .files
                                                                     .removeAt(
                                                                         i);
-                                                                        context
+                                                                context
                                                                     .read<
                                                                         OrderNewController>()
                                                                     .filedata
@@ -1001,12 +1005,11 @@ if (iscomfromLead == false) {
                                                                       OrderNewController>()
                                                                   .files
                                                                   .removeAt(i);
-                                                                  context
-                                                                    .read<
-                                                                        OrderNewController>()
-                                                                    .filedata
-                                                                    .removeAt(
-                                                                        i);
+                                                              context
+                                                                  .read<
+                                                                      OrderNewController>()
+                                                                  .filedata
+                                                                  .removeAt(i);
                                                             });
                                                           },
                                                           icon: Icon(
@@ -1076,19 +1079,17 @@ if (iscomfromLead == false) {
                       width: Screens.width(context) * 0.3,
                       height: Screens.bodyheight(context) * 0.07,
                       child: ElevatedButton(
-                          onPressed:
-                              context
-                                          .watch<OrderNewController>()
-                                          .getisloadingBtn ==
-                                      true
-                                  ? null
-                                  :
-                              () {
-                            // print("aaaa");
-                            context
-                                .read<OrderNewController>()
-                                .thirPageBtnClicked(context);
-                          },
+                          onPressed: context
+                                      .watch<OrderNewController>()
+                                      .getisloadingBtn ==
+                                  true
+                              ? null
+                              : () {
+                                  // print("aaaa");
+                                  context
+                                      .read<OrderNewController>()
+                                      .thirPageBtnClicked(context);
+                                },
                           child: context
                                       .watch<OrderNewController>()
                                       .getisloadingBtn ==
@@ -1136,17 +1137,18 @@ if (iscomfromLead == false) {
           bottom: Screens.bodyheight(context) * 0.01,
           top: Screens.bodyheight(context) * 0.02),
       child: Column(
-
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
               Container(
-                // width:context.read<OrderNewController>().showItemList == true? Screens.width(context)*0.80:Screens.width(context)*0.95,
-                
+                width: context.read<OrderNewController>().showItemList == true
+                    ? Screens.width(context) * 0.80
+                    : Screens.width(context) * 0.95,
                 height: Screens.bodyheight(context) * 0.06,
                 decoration: BoxDecoration(
-                  color: theme.primaryColor.withOpacity(0.1), //Colors.grey[200],
+                  color:
+                      theme.primaryColor.withOpacity(0.1), //Colors.grey[200],
                   borderRadius:
                       BorderRadius.circular(Screens.width(context) * 0.02),
                 ),
@@ -1155,7 +1157,8 @@ if (iscomfromLead == false) {
                   onChanged: (val) {
                     context.read<OrderNewController>().filterList(val);
                   },
-                  controller: context.read<OrderNewController>().mycontroller[12],
+                  controller:
+                      context.read<OrderNewController>().mycontroller[12],
                   decoration: InputDecoration(
                     filled: false,
                     hintText: 'Search Here!!..',
@@ -1179,17 +1182,34 @@ if (iscomfromLead == false) {
                   ),
                 ),
               ),
-          
-      //  context.read<OrderNewController>().showItemList == true?   Container(
-      //       // alignment: Alignment.center,
-      //       child: IconButton(
-      //         onPressed: (){
-      //           Navigator.push(context, MaterialPageRoute(builder: (context)=>qrscanner()));
-      //         },
-      //         icon: Icon(Icons.qr_code_scanner_outlined,color: theme.primaryColor,size: 30,)),
-      //     ):Container()
-      //       ],
-      //     ),
+              context.read<OrderNewController>().showItemList == true
+                  ? Container(
+                      // alignment: Alignment.center,
+                      child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              context.read<OrderNewController>().scannerreset();
+                              qrscannerState.orderscan = true;
+                              Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => qrscanner()))
+//                 .then((value){
+// return context.read<OrderNewController>().scanneddataget(context);
+//                 }
+//                  )
+                                  ;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.qr_code_scanner_outlined,
+                            color: theme.primaryColor,
+                            size: 30,
+                          )),
+                    )
+                  : Container()
+            ],
+          ),
           context.read<OrderNewController>().showItemList == true
               ? Expanded(
                   child: ListView.builder(
@@ -1305,9 +1325,7 @@ if (iscomfromLead == false) {
                                           alignment: Alignment.centerRight,
                                           //width: Screens.width(context) * 0.2,
                                           child: Text(
-                                            "${context
-                                                .read<OrderNewController>()
-                                                .config.slpitCurrency22(context.read<OrderNewController>().getAllProductDetails[i].sp.toString())}",
+                                            "${context.read<OrderNewController>().config.slpitCurrency22(context.read<OrderNewController>().getAllProductDetails[i].sp.toString())}",
                                             style: theme.textTheme.bodyText1
                                                 ?.copyWith(
                                                     color: theme.primaryColor),
@@ -1325,341 +1343,377 @@ if (iscomfromLead == false) {
                     },
                   ),
                 )
-              : 
-                
-                
-                     Expanded(
-                //            height: Screens.padingHeight(context)*0.6,
-                // width: Screens.width(context),
-                // color:Colors.amber,
-                       child: 
-                         
-                           ListView.builder(
-                             itemCount:
-                                 context.read<OrderNewController>().getProduct.length,
-                             itemBuilder: (BuildContext context, int index) {
-                               return Column(
-                                
-                                 children: [
-                                   
-                                   Card(
-                                       shape: RoundedRectangleBorder(
-                                           borderRadius: BorderRadius.circular(10)),
-                                       child: Container(
-                                         padding: EdgeInsets.all(10),
-                                         child: Column(
-                                             crossAxisAlignment: CrossAxisAlignment.start,
-                                             children: [
-                                               Container(
-                                                 child: Text(
-                                                     "" +
-                                                         context
-                                                             .read<OrderNewController>()
-                                                             .getProduct[index]
-                                                             .ItemCode
-                                                             .toString(),
-                                                     style: TextStyle(
-                                                       color: theme.primaryColor,
-                                                       fontSize: 15.0,
-                                                     )),
-                                               ),
-                                               SizedBox(height: 10.0),
-                                               Row(
-                                                 children: [
-                                                   Text("Product",
-                                                       style: TextStyle(
-                                                         color: Colors.grey,
-                                                         fontSize: 15.0,
-                                                       )),
-                                                 ],
-                                               ),
-                                               SizedBox(height: 10.0),
-                                               Container(
-                                                 // width: Screens.width(context)*0.8,
-                                                 ///  color: Colors.red,
-                                                 child: Text(
-                                                     context
-                                                         .read<OrderNewController>()
-                                                         .getProduct[index]
-                                                         .ItemDescription!,
-                                                     style: TextStyle(
-                                                       color: Colors.black,
-                                                       fontSize: 15.0,
-                                                     )),
-                                               ),
-                                               SizedBox(height: 10.0),
-                                               Row(
-                                                 mainAxisAlignment:
-                                                     MainAxisAlignment.spaceBetween,
-                                                 children: [
-                                                   Text(
-                                                       "Qty: " +
-                                                           context
-                                                               .read<OrderNewController>()
-                                                               .getProduct[index]
-                                                               .Quantity
-                                                               .toString(),
-                                                       style: TextStyle(
-                                                         color: Colors.black,
-                                                         fontSize: 15.0,
-                                                       )),
-                                                   // SizedBox(
-                                                   //     width: Screens.bodyheight(context) /
-                                                   //         2.9),
-                                                   Text(
-                                                       "Price: " +
+              : Expanded(
+                  //            height: Screens.padingHeight(context)*0.6,
+                  // width: Screens.width(context),
+                  // color:Colors.amber,
+                  child: ListView.builder(
+                    itemCount:
+                        context.read<OrderNewController>().getProduct.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        children: [
+                          Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        child: Text(
+                                            "" +
+                                                context
+                                                    .read<OrderNewController>()
+                                                    .getProduct[index]
+                                                    .ItemCode
+                                                    .toString(),
+                                            style: TextStyle(
+                                              color: theme.primaryColor,
+                                              fontSize: 15.0,
+                                            )),
+                                      ),
+                                      SizedBox(height: 10.0),
+                                      Row(
+                                        children: [
+                                          Text("Product",
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 15.0,
+                                              )),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10.0),
+                                      Container(
+                                        // width: Screens.width(context)*0.8,
+                                        ///  color: Colors.red,
+                                        child: Text(
+                                            context
+                                                .read<OrderNewController>()
+                                                .getProduct[index]
+                                                .ItemDescription!,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15.0,
+                                            )),
+                                      ),
+                                      SizedBox(height: 10.0),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                              "Qty: " +
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .getProduct[index]
+                                                      .Quantity
+                                                      .toString(),
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15.0,
+                                              )),
+                                          // SizedBox(
+                                          //     width: Screens.bodyheight(context) /
+                                          //         2.9),
+                                          Text(
+                                              "Price: " +
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .config
+                                                      .slpitCurrency22(context
+                                                          .read<
+                                                              OrderNewController>()
+                                                          .getProduct[index]
+                                                          .Price
+                                                          .toString()),
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15.0,
+                                              )),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 40, right: 40),
+                                        child: Divider(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Text("Total: " +
+                                                      context
+                                                          .read<
+                                                              OrderNewController>()
+                                                          .config
+                                                          .slpitCurrency22(context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .getProduct[index]
+                                                              .LineTotal
+                                                              .toString()))
+                                                ]),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        print(index);
                                                         context
-                                                             .read<OrderNewController>()
-                                                             .config.slpitCurrency22(context
-                                                               .read<OrderNewController>()
-                                                               .getProduct[index]
-                                                               .Price
-                                                               .toString())   ,
-                                                       style: TextStyle(
-                                                         color: Colors.black,
-                                                         fontSize: 15.0,
-                                                       )),
-                                                 ],
-                                               ),
-                                               SizedBox(height: 10),
-                                               Padding(
-                                                 padding:
-                                                     EdgeInsets.only(left: 40, right: 40),
-                                                 child: Divider(
-                                                   color: Colors.grey,
-                                                 ),
-                                               ),
-                                               Row(
-                                                   mainAxisAlignment:
-                                                       MainAxisAlignment.spaceBetween,
-                                                   children: [
-                                                     Row(
-                                                         crossAxisAlignment:
-                                                             CrossAxisAlignment.start,
-                                                         mainAxisAlignment:
-                                                             MainAxisAlignment.start,
-                                                         children: [
-                                                           Text("Total: " +
-                                                            context
-                                                             .read<OrderNewController>()
-                                                             .config.slpitCurrency22(  context
-                                                                   .read<
-                                                                       OrderNewController>()
-                                                                   .getProduct[index]
-                                                                   .LineTotal
-                                                                   .toString()) )
-                                                         ]),
-                                                     Row(
-                                                       children: [
-                                                         GestureDetector(
-                                                             onTap: () {
-                                                               setState(() {
-                                                                 print(index);
-                                                                 context
-                                                                     .read<
-                                                                         OrderNewController>()
-                                                                     .getProduct
-                                                                     .removeAt(index);
-                                                                       if(context
-                                                                             .read<
-                                                                                 OrderNewController>()
-                                                                             .productDetails.isEmpty){
-                                                                         context
-                                                                             .read<
-                                                                                 OrderNewController>()
-                                                                             .      changeVisible();
-                                       
-                                                                     }
-                                       
-                                                                 for (int i = 0;
-                                                                     i <
-                                                                         context
-                                                                             .read<
-                                                                                 OrderNewController>()
-                                                                             .productDetails
-                                                                             .length;
-                                                                     i++) {
-                                                                   //  provi.productDetails[i].lineId =
-                                                                   //     (i + 1).toString();
-                                                                 }
-                                                               });
-                                                             },
-                                                             child: Icon(
-                                                               Icons.close,
-                                                               color: Colors.red,
-                                                             )),
-                                                         SizedBox(width: 10.0),
-                                                         GestureDetector(
-                                                             onTap: () {
-                                                               context
-                                                                       .read<
-                                                                           OrderNewController>()
-                                                                       .mycontroller[10]
-                                                                       .text =
-                                                                   context
-                                                                       .read<
-                                                                           OrderNewController>()
-                                                                       .getProduct[index]
-                                                                       .Price!
-                                                                       .toStringAsFixed(2);
-                                                               context
-                                                                       .read<
-                                                                           OrderNewController>()
-                                                                       .mycontroller[11]
-                                                                       .text =
-                                                                   context
-                                                                       .read<
-                                                                           OrderNewController>()
-                                                                       .getProduct[index]
-                                                                       .Quantity!
-                                                                       .toStringAsFixed(2);
-                                                               context
-                                                                       .read<
-                                                                           OrderNewController>()
-                                                                       .mycontroller[11]
-                                                                       .text =
-                                                                   context
-                                                                       .read<
-                                                                           OrderNewController>()
-                                                                       .getProduct[index]
-                                                                       .Quantity!
-                                                                       .toStringAsFixed(0);
-                                                               context
-                                                                       .read<
-                                                                           OrderNewController>()
-                                                                       .total =
-                                                                   context
-                                                                       .read<
-                                                                           OrderNewController>()
-                                                                       .getProduct[index]
-                                                                       .LineTotal!;
-                                                               context
-                                                                   .read<
-                                                                       OrderNewController>()
-                                                                   .isUpdateClicked = true;
-                                       
-                                                               context
-                                                                   .read<
-                                                                       OrderNewController>()
-                                                                   .showBottomSheetInsertforedit(
-                                                                       context, index);
-                                                             },
-                                                             child: Icon(
-                                                               Icons.edit,
-                                                               color: Colors.blue,
-                                                             )),
-                                                       ],
-                                                     ),
-                                                   ]),
-                                             ]),
-                                       )),
-                                
-                                
-                                 ],
-                               );
-                             },
-                           ),
-                        
-                     ),
-                  
-                 
-              
+                                                            .read<
+                                                                OrderNewController>()
+                                                            .getProduct
+                                                            .removeAt(index);
+                                                        if (context
+                                                            .read<
+                                                                OrderNewController>()
+                                                            .productDetails
+                                                            .isEmpty) {
+                                                          context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .changeVisible();
+                                                        }
+
+                                                        for (int i = 0;
+                                                            i <
+                                                                context
+                                                                    .read<
+                                                                        OrderNewController>()
+                                                                    .productDetails
+                                                                    .length;
+                                                            i++) {
+                                                          //  provi.productDetails[i].lineId =
+                                                          //     (i + 1).toString();
+                                                        }
+                                                      });
+                                                    },
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      color: Colors.red,
+                                                    )),
+                                                SizedBox(width: 10.0),
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .mycontroller[10]
+                                                              .text =
+                                                          context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .getProduct[index]
+                                                              .Price!
+                                                              .toStringAsFixed(
+                                                                  2);
+                                                      context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .mycontroller[11]
+                                                              .text =
+                                                          context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .getProduct[index]
+                                                              .Quantity!
+                                                              .toStringAsFixed(
+                                                                  2);
+                                                      context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .mycontroller[11]
+                                                              .text =
+                                                          context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .getProduct[index]
+                                                              .Quantity!
+                                                              .toStringAsFixed(
+                                                                  0);
+                                                      context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .total =
+                                                          context
+                                                              .read<
+                                                                  OrderNewController>()
+                                                              .getProduct[index]
+                                                              .LineTotal!;
+                                                      context
+                                                          .read<
+                                                              OrderNewController>()
+                                                          .isUpdateClicked = true;
+
+                                                      context
+                                                          .read<
+                                                              OrderNewController>()
+                                                          .showBottomSheetInsertforedit(
+                                                              context, index);
+                                                    },
+                                                    child: Icon(
+                                                      Icons.edit,
+                                                      color: Colors.blue,
+                                                    )),
+                                              ],
+                                            ),
+                                          ]),
+                                      // SizedBox(height: 10),
+                                      // Padding(
+                                      //   padding: EdgeInsets.only(
+                                      //       left: 40, right: 40),
+                                      //   child: Divider(
+                                      //     color: Colors.grey,
+                                      //   ),
+                                      // ),
+                                      // Column(
+                                      //   crossAxisAlignment:
+                                      //       CrossAxisAlignment.start,
+                                      //   children: [
+                                      //     // Text("Complementary items:",
+                                      //     //     style: TextStyle(
+                                      //     //       color: Colors.grey,
+                                      //     //       fontSize: 15.0,
+                                      //     //     )),
+                                      //     // SizedBox(height: 10),
+                                      //     Container(
+                                      //         child: context
+                                      //             .read<OrderNewController>()
+                                      //             .splitcomplement(context
+                                      //                 .read<
+                                      //                     OrderNewController>()
+                                      //                 .getProduct[index]
+                                      //                 .complementary
+                                      //                 .toString())),
+                                      //   ],
+                                      // )
+                                    ]),
+                              )),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+
           //
-context.read<OrderNewController>().showItemList == true?Container(): Container(
-                                //  color:Colors.amber,
-                                 width: Screens.width(context),
-                                 padding:EdgeInsets.all(8.0),
-                                 child:Column(
-                                 
-                                   children: [
-                                  Row(
-                                   mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        // color:Colors.amber,
+          context.read<OrderNewController>().showItemList == true
+              ? Container()
+              : Container(
+                  //  color:Colors.amber,
+                  width: Screens.width(context),
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            // color:Colors.amber,
 
-                                        width: Screens.width(context)*0.45,
-                                        alignment: Alignment.centerRight,
-                                        child: Text("Total Amount :",style: TextStyle(
-                                                           color: Colors.black,
-                                                           fontSize: 15.0,
-                                                         )),
-                                      ),
-                                      //  Text("",style: TextStyle(
-                                      //                    color: Colors.black,
-                                      //                    fontSize: 15.0,
-                                      //                  )),
-                                        Container(
-                                          // color:Colors.amber,
-                                          alignment: Alignment.centerRight,
-                                           width: Screens.width(context)*0.32,
-                                          child: Text("${context.read<OrderNewController>().getTotalOrderAmount()}",style: TextStyle(
-                                                           color: Colors.black,
-                                                           fontSize: 15.0,
-                                                         )),
-                                        ),
-                                    ],
-                                  ),  
-                                   Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        // color:Colors.red,
+                            width: Screens.width(context) * 0.45,
+                            alignment: Alignment.centerRight,
+                            child: Text("Total Amount :",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15.0,
+                                )),
+                          ),
+                          //  Text("",style: TextStyle(
+                          //                    color: Colors.black,
+                          //                    fontSize: 15.0,
+                          //                  )),
+                          Container(
+                            // color:Colors.amber,
+                            alignment: Alignment.centerRight,
+                            width: Screens.width(context) * 0.32,
+                            child: Text(
+                                "${context.read<OrderNewController>().getTotalOrderAmount()}",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15.0,
+                                )),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            // color:Colors.red,
 
-                                        width: Screens.width(context)*0.45,
-                                        alignment: Alignment.centerRight,
-                                        child: Text("Tax Amount  :",style: TextStyle(
-                                                           color: Colors.black,
-                                                           fontSize: 15.0,
-                                                         )),
-                                      ),
-                                      //  Text("",style: TextStyle(
-                                      //                    color: Colors.black,
-                                      //                    fontSize: 15.0,
-                                      //                  )),
-                                        Container(
-                                          alignment: Alignment.centerRight,
-                                           width: Screens.width(context)*0.32,
-                                          child: Text("${context.read<OrderNewController>().getTotalTaxAmount()}",style: TextStyle(
-                                                           color: Colors.black,
-                                                           fontSize: 15.0,
-                                                         )),
-                                        ),
-                                    ],
-                                  ), 
-                                   Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        // color:Colors.amber,
+                            width: Screens.width(context) * 0.45,
+                            alignment: Alignment.centerRight,
+                            child: Text("Tax Amount  :",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15.0,
+                                )),
+                          ),
+                          //  Text("",style: TextStyle(
+                          //                    color: Colors.black,
+                          //                    fontSize: 15.0,
+                          //                  )),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            width: Screens.width(context) * 0.32,
+                            child: Text(
+                                "${context.read<OrderNewController>().getTotalTaxAmount()}",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15.0,
+                                )),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            // color:Colors.amber,
 
-                                        width: Screens.width(context)*0.45,
-                                        alignment: Alignment.centerRight,
-                                        child: Text("Gross Total :",style: TextStyle(
-                                                           color: Colors.black,
-                                                           fontSize: 15.0,
-                                                         )),
-                                      ),
-                                      //  Text("",style: TextStyle(
-                                      //                    color: Colors.black,
-                                      //                    fontSize: 15.0,
-                                      //                  )),
-                                        Container(
-                                          
-                                          alignment: Alignment.centerRight,
-                                           width: Screens.width(context)*0.32,
-                                          child: Text("${context.read<OrderNewController>().getTotalGrossAmount()}",style: TextStyle(
-                                                           color: Colors.black,
-                                                           fontSize: 15.0,
-                                                         )),
-                                        ),
-                                    ],
-                                  ), 
-                                 ],)
-                                ),
-                                SizedBox(
-                                  height: Screens.padingHeight(context)*0.002,
-                                ),
+                            width: Screens.width(context) * 0.45,
+                            alignment: Alignment.centerRight,
+                            child: Text("Gross Total :",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15.0,
+                                )),
+                          ),
+                          //  Text("",style: TextStyle(
+                          //                    color: Colors.black,
+                          //                    fontSize: 15.0,
+                          //                  )),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            width: Screens.width(context) * 0.32,
+                            child: Text(
+                                "${context.read<OrderNewController>().getTotalGrossAmount()}",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15.0,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
+          SizedBox(
+            height: Screens.padingHeight(context) * 0.002,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -1755,7 +1809,7 @@ context.read<OrderNewController>().showItemList == true?Container(): Container(
                   ),
                 )
               : Container(
-                   color: Colors.white,
+                  color: Colors.white,
                   width: Screens.width(context),
                   height: Screens.bodyheight(context),
                   padding: EdgeInsets.symmetric(
@@ -1801,16 +1855,18 @@ context.read<OrderNewController>().showItemList == true?Container(): Container(
                                       }
                                       return null;
                                     },
-                                     onEditingComplete: (){
-                                          if(context
+                                    onEditingComplete: () {
+                                      if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[0]
+                                              .text
+                                              .length ==
+                                          10) {
+                                        context
                                             .read<OrderNewController>()
-                                            .mycontroller[0].text.length==10){
-                                                 context
-                                                .read<OrderNewController>()
-                                                .callApi(context);
-                                            }
-                                         
-                                        },
+                                            .callApi(context);
+                                      }
+                                    },
                                     onChanged: (v) {
                                       if (v.length == 10 &&
                                           context
@@ -1876,73 +1932,61 @@ context.read<OrderNewController>().showItemList == true?Container(): Container(
                                       }
                                       return null;
                                     },
-                                 onTap: () {
-                                                    if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool = false;
-                                                      });
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid2(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool2 = false;
-                                                      });
-                                                    }
-                                                  },
+                                    onTap: () {
+                                      if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[18]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode
+                                              .isEmpty) {
+                                        context
+                                            .read<OrderNewController>()
+                                            .ontapvalid(context);
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[18]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode
+                                              .isNotEmpty) {
+                                        setState(() {
+                                          context
+                                              .read<OrderNewController>()
+                                              .statebool = false;
+                                        });
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[24]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode2
+                                              .isEmpty) {
+                                        context
+                                            .read<OrderNewController>()
+                                            .ontapvalid2(context);
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[24]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode2
+                                              .isNotEmpty) {
+                                        setState(() {
+                                          context
+                                              .read<OrderNewController>()
+                                              .statebool2 = false;
+                                        });
+                                      }
+                                    },
                                     onChanged: (v) {
                                       // setState(() {
                                       //   context
@@ -2096,73 +2140,61 @@ context.read<OrderNewController>().showItemList == true?Container(): Container(
                                     controller: context
                                         .read<OrderNewController>()
                                         .mycontroller[1],
-                                        onTap: () {
-                                                    if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool = false;
-                                                      });
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid2(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool2 = false;
-                                                      });
-                                                    }
-                                                  },
+                                    onTap: () {
+                                      if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[18]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode
+                                              .isEmpty) {
+                                        context
+                                            .read<OrderNewController>()
+                                            .ontapvalid(context);
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[18]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode
+                                              .isNotEmpty) {
+                                        setState(() {
+                                          context
+                                              .read<OrderNewController>()
+                                              .statebool = false;
+                                        });
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[24]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode2
+                                              .isEmpty) {
+                                        context
+                                            .read<OrderNewController>()
+                                            .ontapvalid2(context);
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[24]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode2
+                                              .isNotEmpty) {
+                                        setState(() {
+                                          context
+                                              .read<OrderNewController>()
+                                              .statebool2 = false;
+                                        });
+                                      }
+                                    },
                                     // validator: (value) {
                                     //   if (value!.isEmpty) {
                                     //     return "Enter Contact Name";
@@ -2194,7 +2226,7 @@ context.read<OrderNewController>().showItemList == true?Container(): Container(
                                     controller: context
                                         .read<OrderNewController>()
                                         .mycontroller[6],
-                                        validator: (value) {
+                                    validator: (value) {
                                       if (value!.isNotEmpty) {
                                         if (value.length > 10 ||
                                             value.length < 10) {
@@ -2241,73 +2273,61 @@ context.read<OrderNewController>().showItemList == true?Container(): Container(
                                     controller: context
                                         .read<OrderNewController>()
                                         .mycontroller[7],
-                                        onTap: () {
-                                                    if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool = false;
-                                                      });
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid2(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool2 = false;
-                                                      });
-                                                    }
-                                                  },
+                                    onTap: () {
+                                      if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[18]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode
+                                              .isEmpty) {
+                                        context
+                                            .read<OrderNewController>()
+                                            .ontapvalid(context);
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[18]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode
+                                              .isNotEmpty) {
+                                        setState(() {
+                                          context
+                                              .read<OrderNewController>()
+                                              .statebool = false;
+                                        });
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[24]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode2
+                                              .isEmpty) {
+                                        context
+                                            .read<OrderNewController>()
+                                            .ontapvalid2(context);
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[24]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode2
+                                              .isNotEmpty) {
+                                        setState(() {
+                                          context
+                                              .read<OrderNewController>()
+                                              .statebool2 = false;
+                                        });
+                                      }
+                                    },
                                     validator: (value) {
                                       if (value!.isNotEmpty) {
                                         //   // context.read<SalesQuotationCon>().ffff =
@@ -2349,79 +2369,67 @@ context.read<OrderNewController>().showItemList == true?Container(): Container(
                                     controller: context
                                         .read<OrderNewController>()
                                         .mycontroller[25],
-                                          inputFormatters: [
+                                    inputFormatters: [
                                       // FilteringTextInputFormatter.digitsOnly,
                                       new LengthLimitingTextInputFormatter(15),
                                     ],
-                                        onTap: () {
-                                                    if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool = false;
-                                                      });
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid2(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool2 = false;
-                                                      });
-                                                    }
-                                                  },
-validator: (value) {
-                                       if (value!.isNotEmpty) {
+                                    onTap: () {
+                                      if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[18]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode
+                                              .isEmpty) {
+                                        context
+                                            .read<OrderNewController>()
+                                            .ontapvalid(context);
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[18]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode
+                                              .isNotEmpty) {
+                                        setState(() {
+                                          context
+                                              .read<OrderNewController>()
+                                              .statebool = false;
+                                        });
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[24]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode2
+                                              .isEmpty) {
+                                        context
+                                            .read<OrderNewController>()
+                                            .ontapvalid2(context);
+                                      } else if (context
+                                              .read<OrderNewController>()
+                                              .mycontroller[24]
+                                              .text
+                                              .isNotEmpty &&
+                                          context
+                                              .read<OrderNewController>()
+                                              .statecode2
+                                              .isNotEmpty) {
+                                        setState(() {
+                                          context
+                                              .read<OrderNewController>()
+                                              .statebool2 = false;
+                                        });
+                                      }
+                                    },
+                                    validator: (value) {
+                                      if (value!.isNotEmpty) {
                                         if (value.length != 15) {
                                           return 'Enter Valid GST';
                                         }
@@ -2517,65 +2525,64 @@ validator: (value) {
 //                                                                      }).toList(),
 //                                                                    ),
 //                                      ),
-                                     Container(
-                                      height: Screens.padingHeight(context)*0.1,
-                                       child: DropdownButtonFormField(
-                                         decoration: InputDecoration(
-                                                  // hintText: 'Email',
-                                                  labelText: 'Select Order Type',
-                                                  border: UnderlineInputBorder(),
-                                                  enabledBorder:
-                                                      UnderlineInputBorder(borderSide:
-                                            BorderSide(color: Colors.grey),),
-                                                  focusedBorder:
-                                                      UnderlineInputBorder(borderSide:
-                                            BorderSide(color: Colors.grey),),
-                                                  errorBorder:
-                                                      UnderlineInputBorder(),
-                                                  focusedErrorBorder:
-                                                      UnderlineInputBorder(),
-                                                ),
-                                                                     // hint: Text(
-                                                                     //   context
-                                                                     //       .watch<NewEnqController>()
-                                                                     //       .gethinttextforOpenLead!,
-                                                                     //   style: theme.textTheme.bodyText2?.copyWith(
-                                                                     //       color: context
-                                                                     //               .watch<NewEnqController>()
-                                                                     //               .gethinttextforOpenLead!
-                                                                     //               .contains(" *")
-                                                                     //           ? Colors.red
-                                                                     //           : Colors.black),
-                                                                     // ),
-                                                                     value: context
-                                                                         .read<OrderNewController>()
-                                                                         .valueChosedCusType,
-                                                                     //dropdownColor:Colors.green,
-                                                                     icon: Icon(Icons.arrow_drop_down),
-                                                                     iconSize: 30,
-                                                                     style: TextStyle(
-                                                                         color: Colors.black, fontSize: 16),
-                                                                     isExpanded: true,
-                                                                     onChanged: (val) {
-                                                                       setState(() {
-                                                                         context
-                                          .read<OrderNewController>()
-                                          .choosedType(val.toString());
-                                                                       });
-                                                                     },
-                                                                     items: context
-                                                                         .read<OrderNewController>()
-                                                                         .ordertypedata
-                                                                         .map((e) {
-                                                                       return DropdownMenuItem(
-                                        // ignore: unnecessary_brace_in_string_interps
-                                        value: "${e.Code}",
-                                        child: Container(
-                                            // height: Screens.bodyheight(context)*0.1,
-                                            child: Text("${e.Name}")));
-                                                                     }).toList(),
-                                                                   ),
-                                     ),
+                                Container(
+                                  height: Screens.padingHeight(context) * 0.1,
+                                  child: DropdownButtonFormField(
+                                    decoration: InputDecoration(
+                                      // hintText: 'Email',
+                                      labelText: 'Select Order Type',
+                                      border: UnderlineInputBorder(),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.grey),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.grey),
+                                      ),
+                                      errorBorder: UnderlineInputBorder(),
+                                      focusedErrorBorder:
+                                          UnderlineInputBorder(),
+                                    ),
+                                    // hint: Text(
+                                    //   context
+                                    //       .watch<NewEnqController>()
+                                    //       .gethinttextforOpenLead!,
+                                    //   style: theme.textTheme.bodyText2?.copyWith(
+                                    //       color: context
+                                    //               .watch<NewEnqController>()
+                                    //               .gethinttextforOpenLead!
+                                    //               .contains(" *")
+                                    //           ? Colors.red
+                                    //           : Colors.black),
+                                    // ),
+                                    value: context
+                                        .read<OrderNewController>()
+                                        .valueChosedCusType,
+                                    //dropdownColor:Colors.green,
+                                    icon: Icon(Icons.arrow_drop_down),
+                                    iconSize: 30,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 16),
+                                    isExpanded: true,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        context
+                                            .read<OrderNewController>()
+                                            .choosedType(val.toString());
+                                      });
+                                    },
+                                    items: context
+                                        .read<OrderNewController>()
+                                        .ordertypedata
+                                        .map((e) {
+                                      return DropdownMenuItem(
+                                          // ignore: unnecessary_brace_in_string_interps
+                                          value: "${e.Code}",
+                                          child: Text("${e.Name}"));
+                                    }).toList(),
+                                  ),
+                                ),
                                 SizedBox(
                                   height: Screens.bodyheight(context) * 0.01,
                                 ),
@@ -2615,73 +2622,71 @@ validator: (value) {
                                             controller: context
                                                 .read<OrderNewController>()
                                                 .mycontroller[2],
-                                                onTap: () {
-                                                    if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool = false;
-                                                      });
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid2(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool2 = false;
-                                                      });
-                                                    }
-                                                  },
+                                            onTap: () {
+                                              if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[18]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode
+                                                      .isEmpty) {
+                                                context
+                                                    .read<OrderNewController>()
+                                                    .ontapvalid(context);
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[18]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode
+                                                      .isNotEmpty) {
+                                                setState(() {
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statebool = false;
+                                                });
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[24]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode2
+                                                      .isEmpty) {
+                                                context
+                                                    .read<OrderNewController>()
+                                                    .ontapvalid2(context);
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[24]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode2
+                                                      .isNotEmpty) {
+                                                setState(() {
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statebool2 = false;
+                                                });
+                                              }
+                                            },
                                             validator: (value) {
                                               if (value!.isEmpty) {
                                                 return "Enter Address1";
@@ -2720,73 +2725,71 @@ validator: (value) {
                                             controller: context
                                                 .read<OrderNewController>()
                                                 .mycontroller[3],
-                                                onTap: () {
-                                                    if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool = false;
-                                                      });
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid2(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool2 = false;
-                                                      });
-                                                    }
-                                                  },
+                                            onTap: () {
+                                              if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[18]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode
+                                                      .isEmpty) {
+                                                context
+                                                    .read<OrderNewController>()
+                                                    .ontapvalid(context);
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[18]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode
+                                                      .isNotEmpty) {
+                                                setState(() {
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statebool = false;
+                                                });
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[24]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode2
+                                                      .isEmpty) {
+                                                context
+                                                    .read<OrderNewController>()
+                                                    .ontapvalid2(context);
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[24]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode2
+                                                      .isNotEmpty) {
+                                                setState(() {
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statebool2 = false;
+                                                });
+                                              }
+                                            },
                                             validator: (value) {
                                               if (value!.isEmpty) {
                                                 return "Enter Address2";
@@ -3324,7 +3327,8 @@ validator: (value) {
                                                   keyboardType:
                                                       TextInputType.number,
                                                   inputFormatters: [
-                                                    FilteringTextInputFormatter.digitsOnly,
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly,
                                                     new LengthLimitingTextInputFormatter(
                                                         6),
                                                   ],
@@ -3367,14 +3371,13 @@ validator: (value) {
                                                           OrderNewController>()
                                                       .focusNode1,
                                                   autovalidateMode:
-                                                      AutovalidateMode
-                                                          .always,
+                                                      AutovalidateMode.always,
                                                   onChanged: (v) {
                                                     setState(() {
-                                                       context
-                                                              .read<
-                                                                  OrderNewController>()
-                                                              .  isText1Correct = false;
+                                                      context
+                                                          .read<
+                                                              OrderNewController>()
+                                                          .isText1Correct = false;
                                                       context
                                                           .read<
                                                               OrderNewController>()
@@ -3396,12 +3399,14 @@ validator: (value) {
                                                         context
                                                             .read<
                                                                 OrderNewController>()
-                                                            .methidstate(context
-                                                                .read<
-                                                                    OrderNewController>()
-                                                                .mycontroller[
-                                                                    18]
-                                                                .text,context);
+                                                            .methidstate(
+                                                                context
+                                                                    .read<
+                                                                        OrderNewController>()
+                                                                    .mycontroller[
+                                                                        18]
+                                                                    .text,
+                                                                context);
                                                         context
                                                             .read<
                                                                 OrderNewController>()
@@ -3422,11 +3427,14 @@ validator: (value) {
                                                       context
                                                           .read<
                                                               OrderNewController>()
-                                                          .methidstate(context
-                                                              .read<
-                                                                  OrderNewController>()
-                                                              .mycontroller[18]
-                                                              .text,context);
+                                                          .methidstate(
+                                                              context
+                                                                  .read<
+                                                                      OrderNewController>()
+                                                                  .mycontroller[
+                                                                      18]
+                                                                  .text,
+                                                              context);
                                                       FocusScope.of(context)
                                                           .requestFocus(context
                                                               .read<
@@ -3457,11 +3465,14 @@ validator: (value) {
                                                       context
                                                           .read<
                                                               OrderNewController>()
-                                                          .methidstate(context
-                                                              .read<
-                                                                  OrderNewController>()
-                                                              .mycontroller[18]
-                                                              .text,context);
+                                                          .methidstate(
+                                                              context
+                                                                  .read<
+                                                                      OrderNewController>()
+                                                                  .mycontroller[
+                                                                      18]
+                                                                  .text,
+                                                              context);
 
                                                       // context
                                                       // .read<NewEnqController>()
@@ -3693,73 +3704,71 @@ validator: (value) {
                                             controller: context
                                                 .read<OrderNewController>()
                                                 .mycontroller[19],
-                                                onTap: () {
-                                                    if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool = false;
-                                                      });
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid2(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool2 = false;
-                                                      });
-                                                    }
-                                                  },
+                                            onTap: () {
+                                              if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[18]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode
+                                                      .isEmpty) {
+                                                context
+                                                    .read<OrderNewController>()
+                                                    .ontapvalid(context);
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[18]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode
+                                                      .isNotEmpty) {
+                                                setState(() {
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statebool = false;
+                                                });
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[24]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode2
+                                                      .isEmpty) {
+                                                context
+                                                    .read<OrderNewController>()
+                                                    .ontapvalid2(context);
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[24]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode2
+                                                      .isNotEmpty) {
+                                                setState(() {
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statebool2 = false;
+                                                });
+                                              }
+                                            },
                                             validator: (value) {
                                               if (value!.isEmpty) {
                                                 return "Enter Address1";
@@ -3797,73 +3806,71 @@ validator: (value) {
                                             controller: context
                                                 .read<OrderNewController>()
                                                 .mycontroller[20],
-                                                onTap: () {
-                                                    if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[18]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool = false;
-                                                      });
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isEmpty) {
-                                                      context
-                                                          .read<
-                                                              OrderNewController>()
-                                                          .ontapvalid2(context);
-                                                    } else if (context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .mycontroller[24]
-                                                            .text
-                                                            .isNotEmpty &&
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statecode2
-                                                            .isNotEmpty) {
-                                                      setState(() {
-                                                        context
-                                                            .read<
-                                                                OrderNewController>()
-                                                            .statebool2 = false;
-                                                      });
-                                                    }
-                                                  },
+                                            onTap: () {
+                                              if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[18]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode
+                                                      .isEmpty) {
+                                                context
+                                                    .read<OrderNewController>()
+                                                    .ontapvalid(context);
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[18]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode
+                                                      .isNotEmpty) {
+                                                setState(() {
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statebool = false;
+                                                });
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[24]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode2
+                                                      .isEmpty) {
+                                                context
+                                                    .read<OrderNewController>()
+                                                    .ontapvalid2(context);
+                                              } else if (context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .mycontroller[24]
+                                                      .text
+                                                      .isNotEmpty &&
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statecode2
+                                                      .isNotEmpty) {
+                                                setState(() {
+                                                  context
+                                                      .read<
+                                                          OrderNewController>()
+                                                      .statebool2 = false;
+                                                });
+                                              }
+                                            },
                                             validator: (value) {
                                               if (value!.isEmpty) {
                                                 return "Enter Address2";
@@ -3908,7 +3915,7 @@ validator: (value) {
                                                       .read<
                                                           OrderNewController>()
                                                       .mycontroller[21],
-                                                      onTap: () {
+                                                  onTap: () {
                                                     if (context
                                                             .read<
                                                                 OrderNewController>()
@@ -4048,7 +4055,7 @@ validator: (value) {
                                                     }
                                                     return null;
                                                   },
-                                                onTap: () {
+                                                  onTap: () {
                                                     if (context
                                                             .read<
                                                                 OrderNewController>()
@@ -4414,7 +4421,8 @@ validator: (value) {
                                                   keyboardType:
                                                       TextInputType.number,
                                                   inputFormatters: [
-                                                    FilteringTextInputFormatter.digitsOnly,
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly,
                                                     new LengthLimitingTextInputFormatter(
                                                         6),
                                                   ],
@@ -4457,13 +4465,13 @@ validator: (value) {
                                                           OrderNewController>()
                                                       .focusNode3,
                                                   autovalidateMode:
-                                                      AutovalidateMode
-                                                          .always,
+                                                      AutovalidateMode.always,
                                                   onChanged: (v) {
                                                     setState(() {
-                                                    context
+                                                      context
                                                           .read<
-                                                              OrderNewController>() . isText1Correct2=false;
+                                                              OrderNewController>()
+                                                          .isText1Correct2 = false;
                                                       context
                                                           .read<
                                                               OrderNewController>()
@@ -5503,14 +5511,8 @@ validator: (value) {
                   .paymode[index]
                   .description
                   .toString(),
-              context
-                  .read<OrderNewController>()
-                  .paymode[index]
-                  .description!,
-              context
-                  .read<OrderNewController>()
-                  .paymode[index]
-                  .CODE!);
+              context.read<OrderNewController>().paymode[index].description!,
+              context.read<OrderNewController>().paymode[index].CODE!);
         },
         child: Container(
           width: Screens.width(context) * 0.4,

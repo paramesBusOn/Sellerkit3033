@@ -228,7 +228,7 @@ String lottie='';
   }
 
   showDialogColllection(
-      BuildContext context, int j, CollectionDataIpayMaster? masterList) {
+      BuildContext context, int j, CollectionDataIpayMaster? masterList,String tabvalue) {
     canceldialogbool = false;
     detailsDialog = false;
     calldialog = true;
@@ -261,6 +261,7 @@ String lottie='';
             index: j,
             masterDetails: masterList,
             lineDetails: lineDetails,
+            tabvalue: tabvalue,
           );
         }).then((value) {
           

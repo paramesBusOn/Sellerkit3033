@@ -39,7 +39,6 @@ class _setupAlerboxState extends State<setupAlerbox> {
       super.setState(fn);
     }
   }
-  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
 
   Future getAddress() async {
     List<String>? wifiiInfo = await config.setNetwork();
@@ -47,14 +46,12 @@ class _setupAlerboxState extends State<setupAlerbox> {
     setState(() {
       Connectivity()
           .onConnectivityChanged
-          .listen((List<ConnectivityResult> result) async {
+          .listen((ConnectivityResult result) async {
         // Got a new connectivity status!
-              _connectionStatus = result;
-
-        if (_connectionStatus == 'none') {
+        if (result.name == 'none') {
           ConstantValues.ipaddress = '';
           ConstantValues.ipname = '';
-        } else if (_connectionStatus == 'mobile') {
+        } else if (result.name == 'mobile') {
           if (Platform.isAndroid) {
             final MobileNetworkInfo mobileNetworkInfo = MobileNetworkInfo();
             final String? name = await Config.getipaddress();
@@ -76,7 +73,7 @@ class _setupAlerboxState extends State<setupAlerbox> {
         //   ConstantValues.ipaddress = wifiiInfo[1] == null ? 'null' : wifiiInfo[1];
         //   ConstantValues.ipname = wifiiInfo[0] == null ? 'null' : wifiiInfo[0];
         // }
-        else if (_connectionStatus == 'wifi') {
+        else if (result.name == 'wifi') {
           List<String>? wifiiInfo = await config.setNetwork();
           ConstantValues.ipaddress = wifiiInfo[1];
           ConstantValues.ipname = wifiiInfo[0];

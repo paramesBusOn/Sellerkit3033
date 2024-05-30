@@ -351,13 +351,13 @@ class _WonOrderPageState extends State<WonOrderPage> {
                                     Container(
                                       width: Screens.width(context) * 0.4,
                                       child: Text(
-                                          widget.leadWonAllData[i].createdon!.isEmpty
+                                          widget.leadWonAllData[i].DocDate!.isEmpty
                                               ? ''
                                               : context
                                                   .read<OrderTabController>()
                                                   .config
                                                   .alignDate(
-                                                      "${widget.leadWonAllData[i].createdon}"), //  "Looking for ${context.watch<EnquiryUserContoller>().getopenEnqData[i].Lookingfor}",
+                                                      "${widget.leadWonAllData[i].DocDate}"), //  "Looking for ${context.watch<EnquiryUserContoller>().getopenEnqData[i].Lookingfor}",
                                           style:
                                               widget.theme.textTheme.bodyText2?.copyWith(
                                                   //color:theme.primaryColor,
@@ -446,14 +446,14 @@ class _WonOrderPageState extends State<WonOrderPage> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(4)),
                                     child: Text(
-                                        widget.leadWonAllData[i].LastUpdateTime!.isEmpty
+                                        widget.leadWonAllData[i].createdon!.isEmpty
                                             ? ''
-                                            : "Last Updated: " +
+                                            : "Created Date: " +
                                                 context
                                                     .watch<OrderTabController>()
                                                     .config
                                                     .subtractDateTime(
-                                                        "${widget.leadWonAllData[i].LastUpdateTime}"), //     "${context.watch<EnquiryUserContoller>().getopenEnqData[i].Status}",
+                                                        "${widget.leadWonAllData[i].createdon}"), //     "${context.watch<EnquiryUserContoller>().getopenEnqData[i].Status}",
                                         style:
                                             widget.theme.textTheme.bodyText2?.copyWith(
                                           color: Colors.grey,

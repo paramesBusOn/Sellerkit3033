@@ -15,10 +15,12 @@ class CollectionFollowDialog extends StatefulWidget {
     required this.index,
     required this.lineDetails,
     required this.masterDetails,
+    required this.tabvalue
   }) : super(key: key);
   final int index;
   List<CollectionDataIpayDocLine>? lineDetails;
   CollectionDataIpayMaster? masterDetails;
+  String? tabvalue;
 
   @override
   State<CollectionFollowDialog> createState() => _FollowDialogState();
@@ -164,6 +166,7 @@ class _FollowDialogState extends State<CollectionFollowDialog> {
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
                       height: Screens.padingHeight(context) * 0.01,
@@ -171,9 +174,12 @@ class _FollowDialogState extends State<CollectionFollowDialog> {
 
                     //secode Row
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment:widget.tabvalue =='1'?MainAxisAlignment.center: MainAxisAlignment.spaceAround,
+                      
+                     
                       children: [
                         Container(
+                          alignment: Alignment.center,
                           // width: Screens.width(context) * 0.35,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -208,9 +214,10 @@ class _FollowDialogState extends State<CollectionFollowDialog> {
                         ),
 
                         //invoice
-                        Container(
+                     widget.tabvalue =='1'?Container():    Container(
                           width: Screens.width(context) * 0.35,
                           child: ElevatedButton(
+                            
                               onPressed: () {
                                 setState(() {
                                   context
@@ -223,11 +230,12 @@ class _FollowDialogState extends State<CollectionFollowDialog> {
                                       .read<ColletionContoller>()
                                       .calldialog = false;
                                 });
+                                
                                 // context.read<ColletionContoller>().cancelApi(
                                 //     context,
                                 //     widget.masterDetails!.docentry.toString());
                               },
-                              child: Text('Cancel')),
+                              child: Text('Cancel',)),
                         ),
                       ],
                     )
@@ -415,13 +423,13 @@ class _FollowDialogState extends State<CollectionFollowDialog> {
             height: Screens.bodyheight(context) * 0.06,
             child: ElevatedButton(
                 onPressed: () {
-                  // setState(() {
+                  setState(() {
                   //   context.read<ColletionContoller>().calldialog = false;
                   //   context.read<ColletionContoller>().canceldialogbool = false;
                   //   context.read<ColletionContoller>().detailsDialog = false;
                   //   context.read<ColletionContoller>().refreshindicator();
-                  //   Navigator.pop(context);
-                  // });
+                    Navigator.pop(context);
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   textStyle: TextStyle(
@@ -480,7 +488,10 @@ class _FollowDialogState extends State<CollectionFollowDialog> {
                   ),
                   InkWell(
                     onTap: () {
-                      // Navigator.pop(context);
+                      setState(() {
+                        Navigator.pop(context); 
+                      });
+                     
                     },
                     child: Container(
                         alignment: Alignment.centerRight,
@@ -705,7 +716,9 @@ class _FollowDialogState extends State<CollectionFollowDialog> {
             height: Screens.bodyheight(context) * 0.06,
             child: ElevatedButton(
                 onPressed: () {
-                  // Navigator.pop(context);
+                setState(() {
+                        Navigator.pop(context); 
+                      });
                   // context.read<ColletionContoller>().viweDetailsClicked();
                 },
                 style: ElevatedButton.styleFrom(

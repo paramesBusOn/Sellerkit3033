@@ -85,7 +85,62 @@ List<Levelofinterest> levelofinterest=[
     statebool = false;
     notifyListeners();
   }
+scannerreset(){
+itemAlreadyscanned = false;
+  indexscanning=null;
+  notifyListeners();
+  }
+  int? indexscanning;
+  bool itemAlreadyscanned = false;
+  String? Scancode;
+  scanneddataget(BuildContext context){
+  // log("code:::::"+code.toString());
 
+  
+
+
+   
+   notifyListeners();
+  
+  // Get.back();
+// Navigator.pop(context);
+notifyListeners();
+   for (int ij=0;ij<allProductDetails.length;ij++){
+    if(allProductDetails[ij].itemCode ==Scancode){
+      itemAlreadyscanned=true;
+      indexscanning =ij;
+        notifyListeners();
+      break;
+    
+    }
+   
+   }
+    if(itemAlreadyscanned ==true){
+      resetItems(indexscanning!);
+showBottomSheetInsert(context, indexscanning!);
+ notifyListeners();
+   }else{
+    showtoastforscanning();
+     notifyListeners();
+   }
+   
+ 
+
+
+//  checkscannedcode(code);
+ notifyListeners();
+
+  }
+  void showtoastforscanning() {
+    Fluttertoast.showToast(
+        msg: "No Data Found..!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 14.0);
+  }
   FocusNode focusNode1 = FocusNode();
   bool timebool = false;
   bool Datebool = false;
@@ -285,16 +340,17 @@ notifyListeners();
         Navigator.pop(context);
         isUpdateClicked = false;
         notifyListeners();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Item Already Added..!!'),
-            backgroundColor: Colors.red,
-            elevation: 10,
-            behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.all(5),
-            dismissDirection: DismissDirection.up,
-          ),
-        );
+         showtoastforall();
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text('Item Already Added..!!'),
+        //     backgroundColor: Colors.red,
+        //     elevation: 10,
+        //     behavior: SnackBarBehavior.floating,
+        //     margin: EdgeInsets.all(5),
+        //     dismissDirection: DismissDirection.up,
+        //   ),
+        // );
       } else {
         productDetails.add(
           DocumentLines(
@@ -339,7 +395,16 @@ notifyListeners();
       // notifyListeners();
     }
   }
-
+void showtoastforall() {
+    Fluttertoast.showToast(
+        msg: "Item Already Added..!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 14.0);
+  }
   updateProductDetails(BuildContext context, int i) {
     if (formkey[1].currentState!.validate()) {
       productDetails[i].Quantity = quantity;
@@ -1980,6 +2045,7 @@ addgoogle(String? title){
       
     
       if  (passed == 0) {
+        FocusScope.of(context).unfocus();
         pageController.animateToPage(++pageChanged,
             duration: Duration(milliseconds: 250), curve: Curves.bounceIn);
         resetValidate();
@@ -2226,7 +2292,7 @@ showBottomSheetInsertedit(BuildContext context, int i) {
                           //     ? true
                           //     : false,
                           keyboardType: TextInputType.number,
-                          //inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -2258,7 +2324,7 @@ showBottomSheetInsertedit(BuildContext context, int i) {
                           isUpdateClicked == false
                               ? ElevatedButton(
                                   onPressed: () {
-                                     if(mycontroller[11].text != "0"){
+                                     if(int.parse(mycontroller[11].text) > 0){
  mycontroller[12].clear();
                                     addProductDetails(context);
                                      }else{
@@ -2272,7 +2338,7 @@ showBottomSheetInsertedit(BuildContext context, int i) {
                                   child: Text("ok"))
                               : ElevatedButton(
                                   onPressed: () {
-                                    if(mycontroller[11].text != "0"){
+                                    if(int.parse(mycontroller[11].text) > 0){
   updateProductDetails(context, i);
                                     }else{
                                        showtoastproduct();
@@ -2408,7 +2474,7 @@ bool? isfixedpriceorder=false;
                           //     ? true
                           //     : false,
                           keyboardType: TextInputType.number,
-                          //inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly,],
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -2440,7 +2506,7 @@ bool? isfixedpriceorder=false;
                           isUpdateClicked == false
                               ? ElevatedButton(
                                   onPressed: () {
-                                     if(mycontroller[11].text != "0"){
+                                     if(int.parse(mycontroller[11].text)>0){
  mycontroller[12].clear();
                                     addProductDetails(context);
                                      }else{
@@ -2454,7 +2520,7 @@ bool? isfixedpriceorder=false;
                                   child: Text("ok"))
                               : ElevatedButton(
                                   onPressed: () {
-                                    if(mycontroller[11].text != "0"){
+                                    if(int.parse(mycontroller[11].text)>0){
   updateProductDetails(context, i);
                                     }else{
                                        showtoastproduct();

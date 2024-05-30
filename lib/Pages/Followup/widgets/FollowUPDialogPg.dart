@@ -1491,7 +1491,7 @@ class _FollowUPDialogPGState extends State<FollowUPDialogPG> {
                           //   height: Screens.bodyheight(context) * 0.06,
                           //   child: ElevatedButton(
                           //       style: ElevatedButton.styleFrom(
-                          //         backgroundColor:
+                          //         primary:
                           //             fUPCon.getcaseStatusSelected == 'Open'
                           //                 ? Color(0xffFCF752)
                           //                 : theme.primaryColor,
@@ -1524,7 +1524,7 @@ class _FollowUPDialogPGState extends State<FollowUPDialogPG> {
                           //   height: Screens.bodyheight(context) * 0.06,
                           //   child: ElevatedButton(
                           //       style: ElevatedButton.styleFrom(
-                          //         backgroundColor: fUPCon.getcaseStatusSelected == 'Won'
+                          //         primary: fUPCon.getcaseStatusSelected == 'Won'
                           //             ? Color(0xffFCF752)
                           //             : theme.primaryColor,
                           //         textStyle: TextStyle(
@@ -1554,7 +1554,7 @@ class _FollowUPDialogPGState extends State<FollowUPDialogPG> {
                           //   height: Screens.bodyheight(context) * 0.06,
                           //   child: ElevatedButton(
                           //       style: ElevatedButton.styleFrom(
-                          //         backgroundColor:
+                          //         primary:
                           //             fUPCon.getcaseStatusSelected == 'Lost'
                           //                 ? Color(0xffFCF752)
                           //                 : theme.primaryColor,

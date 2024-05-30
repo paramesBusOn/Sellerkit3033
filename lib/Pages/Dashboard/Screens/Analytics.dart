@@ -32,6 +32,33 @@ class AnalyticsPage extends StatelessWidget {
             children: [
               Card(
                 child: Container(
+                    padding: EdgeInsets.all(8),
+                    width: Screens.width(context),
+                           child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                // SizedBox(
+              
+                // ),
+                SizedBox(
+                  width: Screens.width(context)*0.2,
+                  child: ElevatedButton(onPressed: (){}, child: Text("TODAY"))),
+                SizedBox(
+                   width: Screens.width(context)*0.2,
+                  child: ElevatedButton(onPressed: (){}, child: Text("MTD"))),
+                SizedBox(
+                   width: Screens.width(context)*0.2,
+                  child: ElevatedButton(onPressed: (){}, child: Text("OTD"))),
+                SizedBox(
+                   width: Screens.width(context)*0.2,
+                  child: ElevatedButton(onPressed: (){}, child: Text("YTD")))
+              
+              
+                           ],),
+                ),
+              ),
+              Card(
+                child: Container(
                   padding: EdgeInsets.all(8),
                   width: Screens.width(context),
                   child: Column(

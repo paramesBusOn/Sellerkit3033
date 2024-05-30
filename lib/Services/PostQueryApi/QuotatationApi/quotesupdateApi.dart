@@ -29,7 +29,7 @@ class QuotesupdateApi {
              "docentry":  patch.docent,
              "ordertype": patch.ordertype==null?null: "${patch.ordertype}",
   "ordernumber": patch.ordernum,
-  "docdate":"${config.currentDate()}",
+  "docdate":"${postLead.DocDateold}",
   // "purchasePlan": "${postLead.purchaseDate}",
   "deliveryduedate": "${postLead.deliveryDate}",
   "paymentduedate": "${postLead.paymentDate}",

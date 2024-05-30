@@ -12,6 +12,7 @@ import 'package:sellerkit/Constant/ConstantRoutes.dart';
 import 'package:sellerkit/Constant/ConstantSapValues.dart';
 import 'package:sellerkit/Constant/Screen.dart';
 import 'package:sellerkit/Controller/QuotationController/newquotecontroller.dart';
+import 'package:sellerkit/Widgets/qrpage.dart';
 
 import '../../Widgets/Appbar.dart';
 import '../../Widgets/Navi3.dart';
@@ -1157,41 +1158,68 @@ setState(() {
           top: Screens.bodyheight(context) * 0.02),
       child: Column(
         children: [
-          Container(
-            height: Screens.bodyheight(context) * 0.06,
-            decoration: BoxDecoration(
-              color: theme.primaryColor.withOpacity(0.1), //Colors.grey[200],
-              borderRadius:
-                  BorderRadius.circular(Screens.width(context) * 0.02),
-            ),
-            child: TextField(
-              autocorrect: false,
-              onChanged: (val) {
-                context.read<NewquoteController>().filterList(val);
-              },
-              controller: context.read<NewquoteController>().mycontroller[12],
-              decoration: InputDecoration(
-                filled: false,
-                hintText: 'Search Here!!..',
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    FocusScopeNode focus = FocusScope.of(context);
-                    if (!focus.hasPrimaryFocus) {
-                      focus.unfocus();
-                    }
-                    context.read<NewquoteController>().changeVisible();
-                  }, //
-                  color: theme.primaryColor,
+          Row(
+             mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                  width:context.read<NewquoteController>().showItemList == true? Screens.width(context)*0.80:Screens.width(context)*0.95,
+                
+                height: Screens.bodyheight(context) * 0.06,
+                decoration: BoxDecoration(
+                  color: theme.primaryColor.withOpacity(0.1), //Colors.grey[200],
+                  borderRadius:
+                      BorderRadius.circular(Screens.width(context) * 0.02),
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 11,
-                  horizontal: 10,
+                child: TextField(
+                  autocorrect: false,
+                  onChanged: (val) {
+                    context.read<NewquoteController>().filterList(val);
+                  },
+                  controller: context.read<NewquoteController>().mycontroller[12],
+                  decoration: InputDecoration(
+                    filled: false,
+                    hintText: 'Search Here!!..',
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        FocusScopeNode focus = FocusScope.of(context);
+                        if (!focus.hasPrimaryFocus) {
+                          focus.unfocus();
+                        }
+                        context.read<NewquoteController>().changeVisible();
+                      }, //
+                      color: theme.primaryColor,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 11,
+                      horizontal: 10,
+                    ),
+                  ),
                 ),
               ),
-            ),
+          
+           context.read<NewquoteController>().showItemList == true?   Container(
+            // alignment: Alignment.center,
+            child: IconButton(
+              onPressed: (){
+                setState(() {
+                   context.read<NewquoteController>().     scannerreset();
+                   qrscannerState.quotescan=true;
+                Navigator.push(context,MaterialPageRoute(builder: (_) => qrscanner()))
+//                 .then((value){
+// return context.read<NewquoteController>().scanneddataget(context);
+//                 } 
+//                  )
+                 ;
+                });
+           
+              },
+              icon: Icon(Icons.qr_code_scanner_outlined,color: theme.primaryColor,size: 30,)),
+          ):Container()
+          
+            ],
           ),
           context.read<NewquoteController>().showItemList == true
               ? Expanded(

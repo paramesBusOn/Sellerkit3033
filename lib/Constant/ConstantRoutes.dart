@@ -2,9 +2,13 @@ class ConstantRoutes {
   static String dashboard = "/Dashboard";
   static String splash = "/splash";
   static String login = "/login";
+  static String specialpricereq = "/specialpricereq";
+  static String newpriceReq = "/newpriceReq";
+  
   static String forgotregister = "/register";
   static String onBoard = "/onBoard";
   static String download = "/download";
+  static String qrscanner = "/qrscanner";
   static String stock = "/stock";
   static String successorder = "/successorder";
   static String stockListOfDetails = "/StockListOfDetails";

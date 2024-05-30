@@ -17,6 +17,9 @@ import 'package:sellerkit/Pages/LeaveRequest/Screen/LeaveReqTab.dart';
 import 'package:sellerkit/Pages/Login/Screen/LoginScreen.dart';
 import 'package:sellerkit/Pages/OnBoarding/OnBoardingScreen.dart';
 import 'package:sellerkit/Pages/OpenLead/Screen/FilterOpenLeadPage.dart';
+import 'package:sellerkit/Pages/SpecialPriceReq/Screens/TabScreen.dart';
+import 'package:sellerkit/Pages/SpecialPriceReq/newpricereq.dart';
+import 'package:sellerkit/Widgets/qrpage.dart';
 import 'package:sellerkit/Pages/Outstanding/Screens/OutstandingScreen.dart';
 import 'package:sellerkit/Pages/PriceAvailability/Screen/PriceDetailsPage.dart';
 import 'package:sellerkit/Pages/Quoatation/Succcesspage.dart';
@@ -78,6 +81,16 @@ class Routes {
         page: () => Dashboard(),
         transition: Transition.fade,
         transitionDuration: Duration(seconds: 1)),
+         GetPage<dynamic>(
+        name: ConstantRoutes.specialpricereq,
+        page: () => SpecialPriceReq(),
+        transition: Transition.fade,
+        transitionDuration: Duration(seconds: 1)),
+        GetPage<dynamic>(
+        name: ConstantRoutes.newpriceReq,
+        page: () => NewpriceReq(),
+        transition: Transition.fade,
+        transitionDuration: Duration(seconds: 1)),
 
     GetPage<dynamic>(
         name: ConstantRoutes.login,
@@ -100,6 +113,12 @@ class Routes {
     GetPage<dynamic>(
         name: ConstantRoutes.download,
         page: () => DownloadPage(),
+        transition: Transition.fade,
+        transitionDuration: Duration(seconds: 1)),
+
+        GetPage<dynamic>(
+        name: ConstantRoutes.qrscanner,
+        page: () => qrscanner(),
         transition: Transition.fade,
         transitionDuration: Duration(seconds: 1)),
 
@@ -319,11 +338,11 @@ class Routes {
         transition: Transition.fade,
         transitionDuration: Duration(seconds: 1)),
 
-    // GetPage<dynamic>(
-    //     name: ConstantRoutes.scanQrcode,
-    //     page: () => ScanningPage(),
-    //     transition: Transition.fade,
-    //     transitionDuration: Duration(seconds: 1)),
+    GetPage<dynamic>(
+        name: ConstantRoutes.scanQrcode,
+        page: () => ScanningPage(),
+        transition: Transition.fade,
+        transitionDuration: Duration(seconds: 1)),
 
     GetPage<dynamic>(
         name: ConstantRoutes.screenshot,

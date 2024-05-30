@@ -32,7 +32,7 @@ class OrderupdateApi {
             "docentry": patch.docent,
              "ordernumber": patch.ordernum,
               "ordertype":patch.ordertype==null?null: "${patch.ordertype}",
-            "docdate": "${config.currentDate()}",
+            "docdate": "${postLead.DocDateold}",
             "deliveryduedate": "${postLead.deliveryDate}",
             "paymentduedate": "${postLead.paymentDate}",
             "customercode": "${patch.CardCode}",

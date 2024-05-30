@@ -3,11 +3,13 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:sellerkit/Constant/Configuration.dart';
 import 'package:sellerkit/Constant/ConstantRoutes.dart';
 import 'package:sellerkit/Constant/ConstantSapValues.dart';
 import 'package:sellerkit/Constant/Helper.dart';
@@ -15,6 +17,7 @@ import 'package:sellerkit/Constant/LocationTrack.dart';
 import 'package:sellerkit/Constant/LocationTrackIos.dart';
 import 'package:sellerkit/Constant/Screen.dart';
 import 'package:sellerkit/Controller/NotificationController/NotificationController.dart';
+import 'package:sellerkit/Models/PostQueryModel/EnquiriesModel/GetCustomerDetailsModel.dart';
 import 'package:sellerkit/main.dart';
 import '../../../Constant/padings.dart';
 import '../../../Controller/DashBoardController/DashBoardController.dart';
@@ -46,7 +49,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     setState(() {
-      DashBoardController.mycontroller[0].text ='';
+      context.read<DashBoardController>().mycontroller[0].clear();
       locationCheck();
     });
      controller = new TabController(vsync: this, length: 3, initialIndex: 0);
@@ -68,7 +71,7 @@ class DashboardState extends State<Dashboard> with TickerProviderStateMixin {
   }
 void _handleTabChange() {
     setState(() {
-     DashBoardController.mycontroller[0].text ='';
+     context.read<DashBoardController>().mycontroller[0].text ='';
     });
   }
   // periodicTask() {
@@ -225,22 +228,46 @@ void _handleTabChange() {
                                   ),
                                 ]),
                             child: TextField(
-                              controller: DashBoardController.mycontroller[0],
+                              controller: context.read<DashBoardController>().mycontroller[0],
                               onTap: () {
                                 // Get.toNamed(ConstantRoutes.screenshot);
                               },
                               autocorrect: false,
                               onChanged: (v) {
-                                pvdDSBD.SearchFilter(v);
+                                if (v.length == 10) {
+                                    // context.read<DashBoardController>().     showdialog(context,context.read<DashBoardController>().customerdetails!,context.read<DashBoardController>().customerDatalist);
+                     
+  context.read<DashBoardController>().getAllOutstandingscall();
+                             context.read<DashBoardController>().callApi(context, context.read<DashBoardController>().mycontroller[0].text);
+                                }
+                                // pvdDSBD.SearchFilter(v);
+
+                              
                               },
+                              inputFormatters: [
+                                            FilteringTextInputFormatter
+                                                .digitsOnly,
+                                            new LengthLimitingTextInputFormatter(
+                                                10),
+                                          ],
+                                          keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 filled: false,
                                 hintText: 'Search',
                                 enabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
-                                suffixIcon: Icon(
-                                  Icons.search,
-                                  color: theme.primaryColor,
+                                suffixIcon: InkWell(
+                                  onTap: (){
+                              //         context.read<DashBoardController>().showdialog(
+                              // context,
+                              // );
+                                      
+                        
+                                  },
+                                  child: Icon(
+                                    Icons.search,
+                                    color: theme.primaryColor,
+                                  ),
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
                                   vertical: 12,
@@ -627,3 +654,758 @@ void _handleTabChange() {
         false;
   }
 }
+class NewWidget extends StatefulWidget {
+   NewWidget({Key? key,required this.customerdata,required this.customerDatalist}): super(key: key);
+
+
+  @override
+  List<GetCustomerData>? customerdata;
+  List<GetenquiryData>? customerDatalist;
+  State<NewWidget> createState() => _NewWidgetState();
+}
+
+class _NewWidgetState extends State<NewWidget> {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return 
+    
+                 context.watch<DashBoardController>(). customerapicLoading==true
+                 
+                 ?
+                 LoadingPage(context)
+                :  
+              //   context.watch<DashBoardController>(). customerapicLoading==false &&
+              //  widget.customerdata!.isEmpty 
+              //   ?
+                
+              //   NodataPage(context):
+                viewDefault(context, theme,widget.customerdata!,widget.customerDatalist);
+  }
+
+Container LoadingPage(BuildContext context) {
+    return Container(
+        width: Screens.width(context) * 0.9,
+        height: Screens.bodyheight(context) * 0.3,
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+            ],
+          ),
+        ));
+  }
+  
+Container NodataPage(BuildContext context) {
+    return Container(
+        width: Screens.width(context) * 0.9,
+        height: Screens.bodyheight(context) * 0.3,
+        child: Center(
+          child: Text("No data..!!")
+        ));
+  }
+
+  SizedBox viewDefault(BuildContext context, ThemeData theme,List<GetCustomerData> customerdata,List<GetenquiryData>? customerDatalist) {
+    Config config = Config();
+    // context.read<DashBoardController>().refershAfterClosedialog();
+    return SizedBox(
+      width: Screens.width(context),
+      // height: Screens.bodyheight(context),
+
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+                width: Screens.width(context),
+                height: Screens.padingHeight(context) * 0.06,
+                decoration: BoxDecoration(
+                    color: theme.primaryColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text("View Details",
+                          style: theme.textTheme.bodyMedium
+                              ?.copyWith(color: Colors.white)),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.close),
+                      iconSize: 18,
+                    )
+                  ],
+                )),
+            SizedBox(
+              height: Screens.padingHeight(context) * 0.01,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: Screens.width(context) * 0.02),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                 customerdata!.isEmpty
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : 
+                      Container(
+                          width: Screens.width(context),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Screens.width(context) * 0.01,
+                              vertical: Screens.bodyheight(context) * 0.008),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.black26)),
+                          child: IntrinsicHeight(
+                            child: Row(
+                              // crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: Screens.width(context) * 0.45,
+                                  // height:Screens.padingHeight(context)*0.2 ,
+                                  // color: Colors.amber,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: Screens.padingHeight(context) *
+                                            0.03,
+                                        child: const Text("Customer Info"),
+                                      ),
+                                      const Divider(
+                                        color: Colors.black26,
+                                      ),
+                                      Text(
+                                        "Name ",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        '${customerdata![0].customerName}',
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(
+                                                color: theme.primaryColor),
+                                      ),
+                                      Text(
+                                        "Phone ",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        "${customerdata[0].customerCode}",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(
+                                                color: theme.primaryColor),
+                                      ),
+                                      Text(
+                                        "City/State ",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        "${customerdata[0].City},${customerdata[0].State == null || customerdata[0].State == "null" ? "" : customerdata[0].State}",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(
+                                                color: theme.primaryColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // VerticalDivider(
+                                //     width: Screens.width(context) * 0.001,
+                                //     color: Colors.red,
+                                //     thickness: 10.0),
+                                SizedBox(
+                                  width: Screens.width(context) * 0.40,
+                                  // height:Screens.padingHeight(context)*0.2 ,
+                                  // color: Colors.red,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: Screens.padingHeight(context) *
+                                            0.03,
+                                        child: const Text(""),
+                                      ),
+                                      const Divider(
+                                        color: Colors.black26,
+                                      ),
+                                      Text(
+                                        "Status",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        "${customerdata![0].status}",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(
+                                                color: theme.primaryColor),
+                                      ),
+                                      Text(
+                                        "Potential Value",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        "${customerdata[0].PotentialValue}",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(
+                                                color: theme.primaryColor),
+                                      ),
+                                      Text(
+                                        "Email",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        "${customerdata[0].email}",
+                                        style: theme.textTheme.bodyMedium!
+                                            .copyWith(
+                                                color: theme.primaryColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                  SizedBox(
+                    height: Screens.padingHeight(context) * 0.002,
+                  ),
+                  const Divider(
+                    color: Colors.black26,
+                  ),
+                  SizedBox(
+                    height: Screens.padingHeight(context) * 0.002,
+                  ),
+                  SizedBox(
+                    height: Screens.padingHeight(context) * 0.45,
+                    child: customerDatalist!
+                            .isEmpty
+                        ? Container()
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: customerDatalist!
+                                .length,
+                            itemBuilder: (BuildContext context, int i) {
+                              // final customerDatalist = customerDatalist![i];
+                              return InkWell(
+                                onDoubleTap: () async {
+                                  // await context
+                                  //     .read<DashBoardController>()
+                                  //     .viewDetailsMethod(
+                                  //         context
+                                  //             .read<DashBoardController>()
+                                  //             .customerdetails![0]
+                                  //             .customerCode
+                                  //             .toString(),
+                                  //         customerDatalist.DocNum.toString(),
+                                  //         customerDatalist.DocType!,
+                                  //         context);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: Screens.width(context) * 0.01,
+                                      vertical: Screens.padingHeight(context) *
+                                          0.002),
+                                  child: Container(
+                                    width: Screens.width(context),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            Screens.width(context) * 0.02,
+                                        vertical:
+                                            Screens.padingHeight(context) *
+                                                0.01),
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(5),
+                                        border:
+                                            Border.all(color: Colors.black26)),
+                                    child: Column(children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Doc Number",
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(color: Colors.grey),
+                                          ),
+                                          Text(
+                                            "Doc Date",
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "${customerDatalist[i].DocNum}",
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    color: theme.primaryColor),
+                                          ),
+                                          Text(
+                                            customerDatalist[i].DocDate!.isEmpty
+                                                ? '-'
+                                                : config.alignDate(
+                                                    customerDatalist[i].DocDate
+                                                        .toString()),
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    color: theme.primaryColor),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: Screens.padingHeight(context) *
+                                            0.002,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Doc Type",
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(color: Colors.grey),
+                                          ),
+                                          Text(
+                                            "Status",
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "${customerDatalist[i].DocType}",
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    color: theme.primaryColor),
+                                          ),
+                                          Text(
+                                            "${customerDatalist[i].Status}",
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    color: theme.primaryColor),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: Screens.padingHeight(context) *
+                                            0.002,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Assigned To",
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(color: Colors.grey),
+                                          ),
+                                          Text(
+                                            "Business Value",
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(color: Colors.grey),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            customerDatalist[i].AssignedTo
+                                                .toString(),
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    color: theme.primaryColor),
+                                          ),
+                                          Text(
+                                            config.slpitCurrency22(
+                                                customerDatalist[i].BusinessValue
+                                                    .toString()),
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(
+                                                    color: theme.primaryColor),
+                                          ),
+                                        ],
+                                      ),
+                                    ]),
+                                  ),
+                                ),
+                              );
+                            }),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Widget createOrderTable(ThemeData theme, BuildContext context) {
+  SizedBox viewOutstandingdetails(BuildContext context, ThemeData theme) {
+    return SizedBox(
+      width: Screens.width(context),
+      // height: Screens.bodyheight(context),
+
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+              width: Screens.width(context),
+              height: Screens.padingHeight(context) * 0.06,
+              child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    )),
+                  ),
+                  child: const Text("View Details"))),
+          SizedBox(
+            height: Screens.padingHeight(context) * 0.01,
+          ),
+          Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: Screens.width(context) * 0.02),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                context.watch<DashBoardController>().outstandingkpi.isEmpty
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(
+                        width: Screens.width(context),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Screens.width(context) * 0.01,
+                            vertical: Screens.bodyheight(context) * 0.008),
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.black26)),
+                        child: Row(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: Screens.width(context) * 0.45,
+                              // height:Screens.padingHeight(context)*0.2 ,
+                              // color: Colors.amber,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height:
+                                        Screens.padingHeight(context) * 0.03,
+                                    child: const Text("Customer Info"),
+                                  ),
+                                  const Divider(
+                                    color: Colors.black26,
+                                  ),
+                                  Text(
+                                    "Name ",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    "${context.watch<DashBoardController>().ontapKpi2[0].CustomerName}",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                  Text(
+                                    "Phone ",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    "${context.watch<DashBoardController>().ontapKpi2[0].CustomerCode}",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                  Text(
+                                    "City/State ",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    "${context.watch<DashBoardController>().ontapKpi2[0].Bil_City},${context.read<DashBoardController>().ontapKpi2[0].Bil_State == null || context.read<DashBoardController>().ontapKpi2[0].Bil_State == "null" ? "" : context.read<DashBoardController>().ontapKpi2[0].Bil_State}",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            VerticalDivider(
+                                width: Screens.width(context) * 0.001,
+                                color: Colors.red,
+                                thickness: 10.0),
+                            SizedBox(
+                              width: Screens.width(context) * 0.40,
+                              // height:Screens.padingHeight(context)*0.2 ,
+                              // color: Colors.red,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height:
+                                        Screens.padingHeight(context) * 0.03,
+                                    child: const Text("Outstanding"),
+                                  ),
+                                  const Divider(
+                                    color: Colors.black26,
+                                  ),
+                                  Text(
+                                    "TotalOutStanding",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    context
+                                        .read<DashBoardController>()
+                                        .config
+                                        .slpitCurrency22(context
+                                            .watch<DashBoardController>()
+                                            .totaloutstanding
+                                            .toString()),
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                  Text(
+                                    "Overdue",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    context
+                                        .read<DashBoardController>()
+                                        .config
+                                        .slpitCurrency22(context
+                                            .watch<DashBoardController>()
+                                            .overdue
+                                            .toString()),
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                  Text(
+                                    "Upcoming",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    context
+                                        .read<DashBoardController>()
+                                        .config
+                                        .slpitCurrency22(context
+                                            .watch<DashBoardController>()
+                                            .upcoming
+                                            .toString()),
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                SizedBox(
+                  height: Screens.padingHeight(context) * 0.002,
+                ),
+                const Divider(
+                  color: Colors.black26,
+                ),
+                SizedBox(
+                  height: Screens.padingHeight(context) * 0.002,
+                ),
+                SizedBox(
+                  height: Screens.padingHeight(context) * 0.45,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: context
+                          .read<DashBoardController>()
+                          .outstandingkpi
+                          .length,
+                      itemBuilder: (BuildContext context, int i) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Screens.width(context) * 0.01,
+                              vertical: Screens.padingHeight(context) * 0.002),
+                          child: Container(
+                            width: Screens.width(context),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Screens.width(context) * 0.02,
+                                vertical: Screens.padingHeight(context) * 0.01),
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.black26)),
+                            child: Column(children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Trans Number",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    "Date",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "${context.read<DashBoardController>().outstandingkpi[i].TransNum}",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                  Text(
+                                    context
+                                        .read<DashBoardController>()
+                                        .config
+                                        .alignDate(context
+                                            .read<DashBoardController>()
+                                            .outstandingkpi[i]
+                                            .TransDate
+                                            .toString()),
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: Screens.padingHeight(context) * 0.002,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Trans Ref Number",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    "Age",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "${context.read<DashBoardController>().outstandingkpi[i].TransRef1}",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                  Text(
+                                    "${context.read<DashBoardController>().outstandingkpi[i].age!.toInt()}",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: Screens.padingHeight(context) * 0.002,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Trans Total",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    "Balance to Pay",
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    context
+                                        .read<DashBoardController>()
+                                        .config
+                                        .slpitCurrency22(context
+                                            .read<DashBoardController>()
+                                            .outstandingkpi[i]
+                                            .TransAmount!
+                                            .toString()),
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                  Text(
+                                    context
+                                        .read<DashBoardController>()
+                                        .config
+                                        .slpitCurrency22(context
+                                            .read<DashBoardController>()
+                                            .outstandingkpi[i]
+                                            .BalanceToPay!
+                                            .toString()),
+                                    style: theme.textTheme.bodyMedium!
+                                        .copyWith(color: theme.primaryColor),
+                                  ),
+                                ],
+                              ),
+                            ]),
+                          ),
+                        );
+                      }),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+}
+

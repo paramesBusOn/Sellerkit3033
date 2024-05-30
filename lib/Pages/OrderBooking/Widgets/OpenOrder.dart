@@ -365,13 +365,13 @@ class _OpenOrderPageState extends State<OpenOrderPage> {
                                       Container(
                                         width: Screens.width(context) * 0.4,
                                         child: Text(
-                                            widget.leadOpenAllData[i].LastUpdateTime!.isEmpty
+                                            widget.leadOpenAllData[i].DocDate!.isEmpty
                                                 ? ''
                                                 : context
                                                     .read<OrderTabController>()
                                                     .config
                                                     .alignDate(
-                                                        "${widget.leadOpenAllData[i].LastUpdateTime}"), //  "Looking for ${context.watch<EnquiryUserContoller>().getopenEnqData[i].Lookingfor}",
+                                                        "${widget.leadOpenAllData[i].DocDate}"), //  "Looking for ${context.watch<EnquiryUserContoller>().getopenEnqData[i].Lookingfor}",
                                             style:
                                                 widget.theme.textTheme.bodyText2?.copyWith(
                                                     //color:theme.primaryColor,

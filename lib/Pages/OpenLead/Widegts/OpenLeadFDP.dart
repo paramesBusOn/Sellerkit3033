@@ -6,6 +6,8 @@ import 'package:sellerkit/Constant/Screen.dart';
 import 'package:sellerkit/Models/PostQueryModel/LeadsCheckListModel/GetAllLeadModel.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import '../../../Controller/OpenLeadController/OpenLeadController.dart';
+import '../../../Models/OpenLeadModel.dart/OpenLeadModel.dart';
+import 'CustomRBOPFP.dart';
 
 class OpenLeadFDP extends StatefulWidget {
    OpenLeadFDP({Key? key,required this.index, required this.followUPListData}) :super(key: key) ;
@@ -1704,7 +1706,7 @@ List<Widget> listContainersCustomerTag(
                           //   height: Screens.bodyheight(context) * 0.06,
                           //   child: ElevatedButton(
                           //       style: ElevatedButton.styleFrom(
-                          //         backgroundColor:context.read<OpenLeadController>()
+                          //         primary:context.read<OpenLeadController>()
                           //                     .getcaseStatusSelected ==
                           //                 'Open'
                           //             ? Color(0xffFCF752)
@@ -1742,7 +1744,7 @@ List<Widget> listContainersCustomerTag(
                           //   height: Screens.bodyheight(context) * 0.06,
                           //   child: ElevatedButton(
                           //       style: ElevatedButton.styleFrom(
-                          //         backgroundColor:context.read<OpenLeadController>()
+                          //         primary:context.read<OpenLeadController>()
                           //                     .getcaseStatusSelected ==
                           //                 'Won'
                           //             ? Color(0xffFCF752)
@@ -1776,7 +1778,7 @@ List<Widget> listContainersCustomerTag(
                           //   height: Screens.bodyheight(context) * 0.06,
                           //   child: ElevatedButton(
                           //       style: ElevatedButton.styleFrom(
-                          //         backgroundColor: context.read<OpenLeadController>()
+                          //         primary: context.read<OpenLeadController>()
                           //                     .getcaseStatusSelected ==
                           //                 'Lost'
                           //             ? Color(0xffFCF752)

@@ -1,3 +1,4 @@
+// ignore_for_file: unnecessary_new, prefer_const_constructors, use_build_context_synchronously, unused_field, prefer_final_fields, prefer_const_declarations, unnecessary_brace_in_string_interps, prefer_is_empty, prefer_interpolation_to_compose_strings
 
 import 'dart:async';
 import 'dart:convert';
@@ -185,7 +186,7 @@ class FeedCreationProv extends ChangeNotifier {
         builder: (context) {
           return Wrap(
             children: [
-              SizedBox(
+              Container(
                   height: Screens.padingHeight(context) * 0.13,
                   width: Screens.width(context) * 0.35,
                   child: IconButton(
@@ -204,7 +205,7 @@ class FeedCreationProv extends ChangeNotifier {
                       size: 60,
                     ),
                   )),
-              SizedBox(
+              Container(
                   height: Screens.padingHeight(context) * 0.13,
                   width: Screens.width(context) * 0.4,
                   child: IconButton(

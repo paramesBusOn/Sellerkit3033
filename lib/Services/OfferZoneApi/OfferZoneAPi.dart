@@ -32,7 +32,7 @@ class OfferZoneApi1 {
 
       resCode = response.statusCode;
       // print(response.statusCode.toString());
-      log("offerZone:" +response.body.toString());
+      // log("offerZone:" +response.body.toString());
       if (response.statusCode == 200) {
       //    ReceivePort port  = new ReceivePort();
       //  final islol =await Isolate.spawn<List<dynamic>>(deserialize, [port.sendPort,response.body,response.statusCode]);
