@@ -6,16 +6,15 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+// import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:get/get.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sellerkit/Constant/Configuration.dart';
 import 'package:sellerkit/Constant/ConstantRoutes.dart';
@@ -55,15 +54,12 @@ import 'package:sellerkit/Controller/StockAvailabilityController/StockListContro
 import 'package:sellerkit/Controller/VisitplanController/NewVisitController.dart';
 import 'package:sellerkit/Controller/VisitplanController/VisitPlanController.dart';
 import 'package:sellerkit/Controller/WalkinController/WalkinController.dart';
-import 'package:sellerkit/Controller/callNotificationController/callNotificationController.dart';
 import 'package:sellerkit/Controller/specialpricecontroller/newpagecontroller.dart';
 import 'package:sellerkit/Controller/specialpricecontroller/tabcontroller.dart';
 import 'package:sellerkit/DBHelper/DBHelper.dart';
 import 'package:sellerkit/DBModel/ItemMasertDBModel.dart';
 import 'package:sellerkit/Models/LoginModel/LoginModel.dart';
 import 'package:sellerkit/Models/PostQueryModel/ItemMasterModelNew.dart/ItemMasterNewModel.dart';
-import 'package:sellerkit/Pages/callerNotification/custom_overlayNew.dart';
-import 'package:sellerkit/Pages/callerNotification/widgets/keyboard_container.dart';
 import 'package:sellerkit/Services/CustomerMasterApi/CustomerMasterApi.dart';
 import 'package:sellerkit/Services/LoginApi/LoginApi.dart';
 import 'package:sellerkit/Services/PostQueryApi/ItemMasterApi/ItemMasterApiNew.dart';
@@ -71,7 +67,6 @@ import 'package:sellerkit/Services/URL/LocalUrl.dart';
 import 'package:sellerkit/Themes/themes_const.dart';
 import 'package:provider/provider.dart';
 import 'package:sellerkit/Widgets/RestrictedPage.dart';
-import 'package:sellerkit/provider/locale_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'Constant/AllRoutes.dart';
@@ -628,7 +623,7 @@ onStart() async {
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
 
-  await startMonitoringService();
+  // await startMonitoringService();
 }
 // void onStart(ServiceInstance service) async {
 //   // Only available for flutter 3.0.0 and later
@@ -861,17 +856,17 @@ postLoginData. devicename='${brand} ${model}';
     ),
   );
 }
-getOverlayPermission() async {
-    bool status = await FlutterOverlayWindow.isPermissionGranted();
-    if (!status) {
-      // Navigator.pop(context);
-       openAppSettings();
-      // status = await FlutterOverlayWindow.isPermissionGranted();
-      if (!status){
-        print("hi this is Anbu");
-      }
-    }
-  }
+// getOverlayPermission() async {
+//     bool status = await FlutterOverlayWindow.isPermissionGranted();
+//     if (!status) {
+//       // Navigator.pop(context);
+//        openAppSettings();
+//       // status = await FlutterOverlayWindow.isPermissionGranted();
+//       if (!status){
+//         print("hi this is Anbu");
+//       }
+//     }
+//   }
 Future getPermissionUser() async {
   //  bool status = await FlutterOverlayWindow.isPermissionGranted();
   //   if (!status) {
@@ -1333,11 +1328,33 @@ void dispose(){
   super.dispose();
   WidgetsBinding.instance.removeObserver(this);
 }
- void restartApp() {
+void restartApp() async{
     _timer?.cancel(); 
-    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      print("Appp restarted");
+
+    if(Platform.isAndroid){
+await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    print("Appp restarted::Android");
+    }else{
+
+Restart.restartApp();
+    print("Appp restarted::ios");
+    }
+   // Navigator.of(context).pushReplacement(
+    //   MaterialPageRoute(builder: (context) => SplashPage()),
+    // );
+    // exit(0);
+    
+    // Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      // Navigator.pushNamedAndRemoveUntil(context,'/',(_) => false);
+// Get.offAllNamed(ConstantRoutes.splash);
+      
+
   }
+//  void restartApp() {
+//     _timer?.cancel(); 
+//     SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+//       print("Appp restarted");
+//   }
 @override
 void didChangeAppLifecycleState(AppLifecycleState state){
   super.didChangeAppLifecycleState(state);
@@ -1360,7 +1377,7 @@ void didChangeAppLifecycleState(AppLifecycleState state){
     return MultiProvider(
       key: navigatorKey,
       providers: [
-        ChangeNotifierProvider(create: (_) => DashBoardController(context)),
+        ChangeNotifierProvider(create: (_) => DashBoardController()),
         ChangeNotifierProvider(create: (_) => ThemeManager()),
         ChangeNotifierProvider(create: (_) => ConfigurationContoller()),
         ChangeNotifierProvider(create: (_) => DownLoadController()),

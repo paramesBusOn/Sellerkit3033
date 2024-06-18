@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new, prefer_const_literals_to_create_immutables, prefer_const_constructors, unnecessary_brace_in_string_interps, unnecessary_string_interpolations
 
 import 'dart:developer';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sellerkit/Models/getuserbyidModel/getuserbyidmodel.dart';
@@ -330,13 +331,14 @@ class EnquiryUserContoller extends ChangeNotifier {
     callusermobileApi();
     notifyListeners();
   }
-List<storesListDtos> storelistdata=[];
+
+  List<storesListDtos> storelistdata = [];
   callusermobileApi() async {
     storelistdata.clear();
     await userbyidApi.getData(ConstantValues.UserId).then((value) {
       if (value.stcode! >= 200 && value.stcode! <= 210) {
         ConstantValues.userbyidmobile = value.ageLtData!.mobile!;
-        storelistdata=value.ageLtData!.storelistdata!;
+        storelistdata = value.ageLtData!.storelistdata!;
         log("ConstantValues. userbyidmobile:::" +
             ConstantValues.userbyidmobile.toString());
         getfirebase();
@@ -349,7 +351,7 @@ List<storesListDtos> storelistdata=[];
     notifyListeners();
     final FirebaseProduct = FirebaseFirestore.instance.collection("myoperator");
 
-   await FirebaseProduct.get().then((value) {
+    await FirebaseProduct.get().then((value) {
       value.docs.forEach((element) {
         usernumber = element['mobile'].toString();
 
@@ -358,13 +360,13 @@ List<storesListDtos> storelistdata=[];
           log("fsdfdf::user number match");
           userid = element['id'].toString();
           notifyListeners();
-//  UserdialApi.getdata(userid!, number!).then((value) {
+          //  UserdialApi.getdata(userid!, number!).then((value) {
 
-//     });
+        //     });
         }
-//   else{
-// log("fsdfdf::no user number not match");
-//   }
+        //   else{
+        // log("fsdfdf::no user number not match");
+        //   }
       });
     });
   }

@@ -117,6 +117,7 @@ dependencies:
   call_log: ^4.0.0
   external_app_launcher: ^4.0.0
   flutter_overlay_window: ^0.4.4
+  restart_app: ^1.2.1
   
 
 
