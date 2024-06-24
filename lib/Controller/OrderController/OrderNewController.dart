@@ -3052,6 +3052,7 @@ notifyListeners();
     mycontroller[28].clear();
     mycontroller[29].clear();
     mycontroller[30].clear();
+    mycontroller[41].clear();
  customermodeldata=null;
 DocDateold='';
     paymode.clear();
@@ -4031,7 +4032,9 @@ paymentTerm=true;
     mycontroller[30].text = allProductDetails[i].whsStock == null
         ? "0"
         : allProductDetails[i].whsStock.toString();
-
+mycontroller[41].text= allProductDetails[i].mgrPrice == null
+        ? "0"
+        : allProductDetails[i].mgrPrice.toString();
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -4065,6 +4068,7 @@ paymentTerm=true;
                         height: 10,
                       ),
                       SizedBox(
+                         height:Screens.padingHeight(context)*0.06,
                         child: TextFormField(
                           enabled: true,
                           controller: mycontroller[27],
@@ -4098,21 +4102,140 @@ paymentTerm=true;
                       SizedBox(
                         height: 10,
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: Screens.width(context)*0.44,
+                            height:Screens.padingHeight(context)*0.06,
+                            child: TextFormField(
+                              // enabled: tr,
+                              controller: mycontroller[28],
+                              readOnly: true,
+                              style: TextStyle(fontSize: 15),
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1, color: theme.primaryColor),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                alignLabelWithHint: true,
+                                hintText: "",
+                                labelText: "Cost",
+                                labelStyle: theme.textTheme.bodyText1
+                                    ?.copyWith(color: theme.primaryColor),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                           SizedBox(
+                             width: Screens.width(context)*0.44,
+                              height:Screens.padingHeight(context)*0.06,
+                            child: TextFormField(
+                              // enabled: tr,
+                              controller: mycontroller[41],
+                              readOnly: true,
+                              style: TextStyle(fontSize: 15),
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1, color: theme.primaryColor),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                alignLabelWithHint: true,
+                                hintText: "",
+                                labelText: "MRP",
+                                labelStyle: theme.textTheme.bodyText1
+                                    ?.copyWith(color: theme.primaryColor),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(
+                        height: 10,
+                      ),
+                     
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+                      //  SizedBox(
+                      //       width: 15,
+                      //     ),
+                         createTable(theme,i),
+                      SizedBox(
+                        height: 5,
+                      ),
+                       createTable2(theme,i),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Divider(
+                        color: theme.primaryColor,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      SizedBox(
+                         height:Screens.padingHeight(context)*0.06,
                         child: TextFormField(
-                          // enabled: tr,
-                          controller: mycontroller[28],
+                          // enabled: isTextFieldEnabled,
+                          controller: mycontroller[29],
                           readOnly: true,
                           style: TextStyle(fontSize: 15),
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                   width: 1, color: theme.primaryColor),
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             alignLabelWithHint: true,
                             hintText: "",
-                            labelText: "Cost",
+                            labelText: "Store Stock",
+                            labelStyle: theme.textTheme.bodyText1
+                                ?.copyWith(color: theme.primaryColor),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                         height:Screens.padingHeight(context)*0.06,
+                        child: TextFormField(
+                          enabled: true,
+                          controller: mycontroller[30],
+                          readOnly: true,
+                          style: TextStyle(fontSize: 15),
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1, color: theme.primaryColor),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            alignLabelWithHint: true,
+                            hintText: "",
+                            labelText: "Whs Stock",
                             labelStyle: theme.textTheme.bodyText1
                                 ?.copyWith(color: theme.primaryColor),
                             contentPadding: EdgeInsets.symmetric(
@@ -4128,7 +4251,7 @@ paymentTerm=true;
                       SizedBox(
                         height: 10,
                       ),
-                      Row(
+                       Row(
                         children: [
                           Container(
                             child: Text(
@@ -4163,10 +4286,10 @@ paymentTerm=true;
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
+                       SizedBox(
+                            width: 10,
+                          ),
+                        Row(
                         children: [
                           Container(
                             child: Text(
@@ -4176,7 +4299,7 @@ paymentTerm=true;
                             ),
                           ),
                           SizedBox(
-                            width: 5,
+                            width: 10,
                           ),
                           Container(
                             child: Text(
@@ -4184,7 +4307,8 @@ paymentTerm=true;
                               style: theme.textTheme.bodyText1?.copyWith(),
                             ),
                           ),
-                          SizedBox(
+                         
+                           SizedBox(
                             width: 5,
                           ),
                           Container(
@@ -4201,74 +4325,8 @@ paymentTerm=true;
                           ),
                         ],
                       ),
-                      SizedBox(
+                    SizedBox(
                         height: 5,
-                      ),
-                      Divider(
-                        color: theme.primaryColor,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      SizedBox(
-                        child: TextFormField(
-                          // enabled: isTextFieldEnabled,
-                          controller: mycontroller[29],
-                          readOnly: true,
-                          style: TextStyle(fontSize: 15),
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1, color: theme.primaryColor),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            alignLabelWithHint: true,
-                            hintText: "",
-                            labelText: "Store Stock",
-                            labelStyle: theme.textTheme.bodyText1
-                                ?.copyWith(color: theme.primaryColor),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        child: TextFormField(
-                          enabled: true,
-                          controller: mycontroller[30],
-                          readOnly: true,
-                          style: TextStyle(fontSize: 15),
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1, color: theme.primaryColor),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            alignLabelWithHint: true,
-                            hintText: "",
-                            labelText: "Whs Stock",
-                            labelStyle: theme.textTheme.bodyText1
-                                ?.copyWith(color: theme.primaryColor),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
                       ),
                       Row(
                         children: [
@@ -4322,7 +4380,245 @@ paymentTerm=true;
               ),
             ));
   }
+Widget createTable(ThemeData theme,int ij) {
+    List<TableRow> rows = [];
+    rows.add(TableRow(children: [
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "SSP1",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.left,
+        ),
+      ),
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "SSP2",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "SSP3",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "SSP4",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "SSP5",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ]));
+    // for (int i = 0;
+    //     i < allProductDetails.length;
+    //     ++i) {
+      rows.add(TableRow(children: [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+            config.slpitCurrency22(allProductDetails[ij].ssp1.toString()),
+            textAlign: TextAlign.left,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+           config.slpitCurrency22(allProductDetails[ij].ssp2.toString()),
+            // '${context.watch<OrderTabController>().getleadDeatilsQTLData[i].Price!.toStringAsFixed(2)}',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+            config.slpitCurrency22(allProductDetails[ij].ssp3.toString()),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+           config.slpitCurrency22(allProductDetails[ij].ssp4.toString()),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+            config.slpitCurrency22(allProductDetails[ij].ssp5.toString()),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+      ]));
+    // }
+    return Table(columnWidths: {
+      0: FlexColumnWidth(1.0),
+      1: FlexColumnWidth(1.0),
+      2: FlexColumnWidth(1.0),
+      3:FlexColumnWidth(1.0),
+      4:FlexColumnWidth(1.0),
+    }, children: rows);
+  }
 
+  Widget createTable2(ThemeData theme,int ij) {
+    List<TableRow> rows = [];
+    rows.add(TableRow(children: [
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "ssp1_Inc",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.left,
+        ),
+      ),
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "ssp2_Inc",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "ssp3_Inc",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "ssp4_Inc",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      Container(
+        color: theme.primaryColor,
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Text(
+          "ssp5_Inc",
+          style: theme.textTheme.bodyText1
+              ?.copyWith(fontWeight: FontWeight.normal, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ]));
+    // for (int i = 0;
+    //     i < allProductDetails.length;
+    //     ++i) {
+      rows.add(TableRow(children: [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+            config.slpitCurrency22(allProductDetails[ij].ssp1Inc.toString()),
+            textAlign: TextAlign.left,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+           config.slpitCurrency22(allProductDetails[ij].ssp2Inc.toString()),
+            // '${context.watch<OrderTabController>().getleadDeatilsQTLData[i].Price!.toStringAsFixed(2)}',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+            config.slpitCurrency22(allProductDetails[ij].ssp3Inc.toString()),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+           config.slpitCurrency22(allProductDetails[ij].ssp4Inc.toString()),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          child: Text(
+            config.slpitCurrency22(allProductDetails[ij].ssp5Inc.toString()),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyText1?.copyWith(
+              color: theme.primaryColor,
+            ),
+          ),
+        ),
+      ]));
+    // }
+    return Table(columnWidths: {
+      0: FlexColumnWidth(1.0),
+      1: FlexColumnWidth(1.0),
+      2: FlexColumnWidth(1.0),
+      3:FlexColumnWidth(1.0),
+      4:FlexColumnWidth(1.0),
+    }, children: rows);
+  }
    showBottomSheetInsert2forEdit(BuildContext context, int i) {
     final theme = Theme.of(context);
     selectedItemName = productDetails[i].ItemDescription.toString();
@@ -4742,6 +5038,7 @@ paymentTerm=true;
                               mycontroller[28].clear();
                               mycontroller[29].clear();
                               mycontroller[30].clear();
+                              mycontroller[41].clear();
 
                               showBottomSheetInsert2(context, i);
                               notifyListeners();
@@ -5261,6 +5558,7 @@ notifyListeners();
                               mycontroller[28].clear();
                               mycontroller[29].clear();
                               mycontroller[30].clear();
+                              mycontroller[41].clear();
 
                               showBottomSheetInsert2forEdit(context, i);
                               notifyListeners();
