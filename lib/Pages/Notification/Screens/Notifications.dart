@@ -85,11 +85,11 @@ class _TestingState extends State<Testing> {
                                         context
                                             .read<NotificationContoller>()
                                             .updateApi(
-                                                docEntry: context
+                                                docEntry: int.parse(context
                                                     .read<
                                                         NotificationContoller>()
                                                     .getnotify[index]
-                                                    .jobid,
+                                                    .jobid.toString()),
                                                 seenTime: context
                                                     .read<
                                                         NotificationContoller>()
