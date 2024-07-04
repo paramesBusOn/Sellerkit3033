@@ -6264,7 +6264,7 @@ class OrderBookNewState extends State<OrderBookNew> {
                   borderRadius: BorderRadius.circular(10)),
                   alignment: Alignment.center,
               child: context.read<OrderNewController>().paymode[index].amount !=null && context.read<OrderNewController>().paymode[index].amount !=""? 
-              Text("Rs.${context.read<OrderNewController>().paymode[index].amount}",style: theme.textTheme.bodyText1?.copyWith(
+              Text("Rs.${context.read<OrderNewController>().config.slpitCurrency22(context.read<OrderNewController>().paymode[index].amount.toString())}",style: theme.textTheme.bodyText1?.copyWith(
                        color: context
                              .read<OrderNewController>()
                              .paymode[index]

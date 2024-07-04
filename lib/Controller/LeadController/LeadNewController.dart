@@ -2285,13 +2285,13 @@ break;
                     children: [
                       SizedBox(height: 10),
                       Container(
-                        // width: Screens.width(context)*0.8,
+                        width: Screens.width(context)*0.8,
                         child: Text(productDetails[i].ItemCode.toString(),
                             style: theme.textTheme.bodyText1
                                 ?.copyWith(color: theme.primaryColor)),
                       ),
                       Container(
-                        // width: Screens.width(context)*0.7,
+                        width: Screens.width(context)*0.7,
                         // color: Colors.red,
                         child: Text(
                             productDetails[i].ItemDescription.toString(),
@@ -2672,14 +2672,14 @@ showBottomSheetInsertedit(BuildContext context, int i) {
                              crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                // width: Screens.width(context)*0.8,
+                                width: Screens.width(context)*0.8,
                                 child: Text(productDetails[i].ItemCode.toString(),
                                     style: theme.textTheme.bodyText1
                                         ?.copyWith(color: theme.primaryColor)),
                               ),
                           
                           Container(
-                        // width: Screens.width(context)*0.7,
+                        width: Screens.width(context)*0.7,
                         // color: Colors.red,
                         child: Text(productDetails[i].ItemDescription.toString(),
                             style: theme.textTheme.bodyText1

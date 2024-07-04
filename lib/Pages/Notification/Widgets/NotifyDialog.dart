@@ -7,11 +7,13 @@ import '../../../Constant/Screen.dart';
 import '../../../Controller/NotificationController/NotificationController.dart';
 
 class NotifyDialog extends StatefulWidget {
-  NotifyDialog({Key? key, required this.title, required this.descp,required this.imgUrl,required this.page}) : super(key: key);
+  NotifyDialog({Key? key, required this.title, required this.descp,required this.imgUrl,
+  // required this.page
+  }) : super(key: key);
   String title;
   String descp;
   String imgUrl;
-  String page;
+  // String page;
   @override
   State<NotifyDialog> createState() => _FollowDialogState();
 }

@@ -229,14 +229,47 @@ class OrderNewController extends ChangeNotifier {
   List<CustomerData> filterCustomerList = [];
   List<CustomerData> get getfilterCustomerList => filterCustomerList;
 //
-updatepayterm(int index,PaymodeModalData paymode,BuildContext context)async{
-  log("payindhhh::"+postpaymentdata.length.toString());
-  log("payindex::"+payindex.toString());
-  postpaymentdata.removeAt(index);
-  getTotalaoyAmount();
+getpaymenttot2(int index){
+  double amount=0.0;
+  double? pendingamount;
+  // double payTermTotal = double.parse(paytermtotal!
+  //                                 .toStringAsFixed(2));
+                                   double fullpayment2 = double.parse(fullpayment!
+                                  .toStringAsFixed(2));
+                                 
+ for(int i=0;i<postpaymentdata.length;i++){
+ amount = amount + postpaymentdata[i].amount! ;
+log("paytermtotal:::"+paytermtotal.toString());
+    }
+      pendingamount= amount -postpaymentdata[index].amount!;
+      log("pendingamount::"+pendingamount.toString());
+      final pendingfullcash=fullpayment2-pendingamount;
+      log("pendingfullcash::"+pendingfullcash.toString());
+    return pendingfullcash;
+}
+validateupdate(int index,PaymodeModalData paymode,BuildContext context){
    if (formkey[5].currentState!.validate()) {
      payloading=true;
      notifyListeners();
+     updatepayterm(index,paymode,context);
+     notifyListeners();
+}
+}
+updatepayterm(int index,PaymodeModalData paymode,BuildContext context)async{
+  log("payindhhh::"+postpaymentdata.length.toString());
+  log("payindex::"+payindex.toString());
+   double parsedValue = double.parse(mycontroller[46].text.toString());
+                              double fullpayment2  = double.parse(fullpayment!
+                                  .toStringAsFixed(2));
+//  if(parsedValue <= fullpayment2){
+ postpaymentdata.removeAt(index);
+   
+//  }
+  getTotalaoyAmount();
+  
+    
+     
+    
      List<String> filename2 = [];
       List<String>? fileError2 = [];
       String? attachment;
@@ -332,7 +365,7 @@ updatepayterm(int index,PaymodeModalData paymode,BuildContext context)async{
      
      notifyListeners();
 Navigator.pop(context);
-   }
+   
 }
 bool? payloading=false;
   validatepayterm(PaymodeModalData paymode,BuildContext context) async {
@@ -628,7 +661,7 @@ bool? payupdate=false;
           //   mycontroller[45].text=postpaymentdata[i].dateref ==null||postpaymentdata[i].dateref!.isEmpty?
           // '':postpaymentdata[i].dateref.toString();
              mycontroller[46].text=postpaymentdata[i].amount==null?
-          '':postpaymentdata[i].amount.toString();
+          '':postpaymentdata[i].amount!.toStringAsFixed(2);
           selecteditem=postpaymentdata[i].listtype==null||postpaymentdata[i].listtype!.isEmpty?
           '':postpaymentdata[i].listtype.toString();
           payindex=i;
@@ -5290,23 +5323,23 @@ files2.clear();
     int? indexshow;
     selectedItemName = productDetails[i].ItemDescription.toString();
     selectedItemCode = productDetails[i].ItemCode.toString();
-    for( int ij=0 ;i<allProductDetails.length;i++){
+    for( int ij=0 ;ij<allProductDetails.length;ij++){
       if(allProductDetails[ij].itemCode ==selectedItemCode){
 indexshow=ij;
 break;
       }
     }
-    mycontroller[27].text =
-        productDetails[i].sp == null ? "0" : productDetails[i].sp.toString();
-    mycontroller[28].text = productDetails[i].slpprice == null
-        ? "0"
-        : productDetails[i].slpprice.toString();
-    mycontroller[29].text = productDetails[i].storestock == null
-        ? "0"
-        : productDetails[i].storestock.toString();
-    mycontroller[30].text = productDetails[i].whsestock == null
-        ? "0"
-        : productDetails[i].whsestock.toString();
+    // mycontroller[27].text =
+    //     productDetails[i].sp == null ? "0" : productDetails[i].sp.toString();
+    // mycontroller[28].text = productDetails[i].slpprice == null
+    //     ? "0"
+    //     : productDetails[i].slpprice.toString();
+    // mycontroller[29].text = productDetails[i].storestock == null
+    //     ? "0"
+    //     : productDetails[i].storestock.toString();
+    // mycontroller[30].text = productDetails[i].whsestock == null
+    //     ? "0"
+    //     : productDetails[i].whsestock.toString();
 
     showModalBottomSheet(
         isScrollControlled: true,
@@ -5324,13 +5357,13 @@ break;
                     children: [
                       SizedBox(height: 10),
                       Container(
-                        // width: Screens.width(context)*0.8,
+                        width: Screens.width(context)*0.8,
                         child: Text(productDetails[i].ItemCode.toString(),
                             style: theme.textTheme.bodyText1
                                 ?.copyWith(color: theme.primaryColor)),
                       ),
                       Container(
-                        // width: Screens.width(context)*0.7,
+                        width: Screens.width(context)*0.7,
                         // color: Colors.red,
                         child: Text(
                             productDetails[i].ItemDescription.toString(),
@@ -7308,6 +7341,7 @@ void showtoastpayattach() {
   }
 
   double? paytermtotal = 0.0;
+   double? fullpayment = 0.0;
   String? payamounterror = '';
   clearpaydata(){
     mycontroller[43].clear();
@@ -7339,8 +7373,10 @@ void showtoastpayattach() {
   oncopy() {
     mycontroller[46].text = paytermtotal!.toStringAsFixed(2);
   }
+  
 getTotalaoyAmount() {
     paytermtotal = 0.0;
+    fullpayment=0.0;
     
     double? LineTotal =
         double.parse(getTotalOrderAmount().toString().replaceAll(",", ""));
@@ -7349,6 +7385,7 @@ getTotalaoyAmount() {
     // for (int i = 0; i < productDetails.length; i++) {
     LineTotal = LineTotal! + taxTotal;
      paytermtotal = paytermtotal! + LineTotal;
+     fullpayment=fullpayment! + LineTotal;
      log("paytermtotal2222:::"+paytermtotal.toString());
      if(postpaymentdata.isNotEmpty){
  for(int i=0;i<postpaymentdata.length;i++){

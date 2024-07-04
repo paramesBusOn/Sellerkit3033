@@ -259,12 +259,34 @@ class _paytermdialogState extends State<paytermdialog> {
                                   .read<OrderNewController>()
                                   .paytermtotal!
                                   .toStringAsFixed(2));
-                                  if(payTermTotal <=0.0){
+                                   double fullpayment2 = double.parse(context
+                                  .read<OrderNewController>()
+                                  .fullpayment!
+                                  .toStringAsFixed(2));
+                                  if(context
+                                                .read<OrderNewController>()
+                                                .payupdate==true){
+                                 double fullupdatepay =  context
+                                  .read<OrderNewController>()
+                                  . getpaymenttot2(context
+                                                .read<OrderNewController>()
+                                                .payindex!);
+                                  if(fullupdatepay <=0.0){
  return "No Payment amount pending";
                                   }
-                              if (parsedValue > payTermTotal) {
+                              if (parsedValue>fullupdatepay   ) {
+                                return "Amount Should be less than or equal to ${fullupdatepay.toStringAsFixed(2)}";
+                              }
+                                  }else{
+ if(payTermTotal <=0.0){
+ return "No Payment amount pending";
+                                  }
+                              if (parsedValue>payTermTotal   ) {
                                 return "Amount Should be less than or equal to ${context.read<OrderNewController>().paytermtotal!.toStringAsFixed(2)}";
                               }
+                                  }
+                                 
+                             
                               // double.parse(value) > context
                               // .read<OrderNewController>()
                               // .paytermtotal!.toStringAsFixed(2)
@@ -342,7 +364,7 @@ class _paytermdialogState extends State<paytermdialog> {
                                   setState(() {
                                     context
                                         .read<OrderNewController>()
-                                        .updatepayterm(
+                                        .validateupdate(
                                             context
                                                 .read<OrderNewController>()
                                                 .payindex!,
