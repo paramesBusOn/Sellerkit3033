@@ -197,6 +197,241 @@ String alignDate1(String date) {
     return result.toString();
   }
 
+
+//Report config
+String alignTodayDate2(String date) {
+    var dates = DateTime.parse(date);
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = dates.toUtc().add(timeZoneOffset);
+    return dateTimeWithOffset.toIso8601String();
+    // "${dateTimeWithOffset.day.toString().padLeft(2, '0')}-${dateTimeWithOffset.month.toString().padLeft(2, '0')}-${dateTimeWithOffset.year}";
+  }
+
+findFirstDateOfTheWeek2(DateTime dateTime) {
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = dateTime.toUtc().add(timeZoneOffset);
+    // log('dateTimeWithOffset::' + dateTimeWithOffset.toString());
+
+    return dateTimeWithOffset
+        .subtract(Duration(
+          days: dateTime.weekday - 0,
+        ))
+        .toIso8601String();
+  }
+
+  findLastDateOfTheWeek2(DateTime dateTime) {
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = dateTime.toUtc().add(timeZoneOffset);
+    // log('dateTimeWithOffset::' + dateTimeWithOffset.toString());
+
+    return dateTimeWithOffset
+        .add(Duration(
+          days: DateTime.daysPerWeek - dateTimeWithOffset.weekday - 1,
+        ))
+        .toIso8601String();
+  }
+
+  DateTime findFirstDateOfTheWeek(DateTime dateTime) {
+    return dateTime.subtract(Duration(
+      days: dateTime.weekday - 0,
+    ));
+  }
+
+  DateTime findLastDateOfTheWeek(DateTime dateTime) {
+    return dateTime.add(Duration(
+      days: DateTime.daysPerWeek - dateTime.weekday - 1,
+    ));
+  }
+DateTime findFirstDateOfYesterDay(DateTime dateTime) {
+    return dateTime.subtract(const Duration(days: 1));
+  }
+
+  String findFirstDateOfYesterDay2(DateTime dateTime) {
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = dateTime.toUtc();
+    return dateTimeWithOffset
+        .subtract(const Duration(days: 1))
+        .toIso8601String();
+  }
+findLastDateOfTheMonth2(DateTime dateTime) {
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = dateTime.toUtc().add(timeZoneOffset);
+    // log('dateTimeWithOffset::' + dateTimeWithOffset.toString());
+
+    return DateTime(dateTimeWithOffset.year, dateTimeWithOffset.month + 1, 0)
+        .toIso8601String();
+  }
+
+  findFirstDateOfTheMonth2(DateTime dateTime) {
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = dateTime.toUtc().add(timeZoneOffset);
+
+    // log('dateTimeWithOffset::' + dateTimeWithOffset.toString());
+
+    return DateTime(dateTimeWithOffset.year, dateTimeWithOffset.month, 1)
+        .toIso8601String();
+  }
+
+  DateTime findLastDateOfTheMonth(DateTime dateTime) {
+    return DateTime(dateTime.year, dateTime.month + 1, 0);
+  }
+
+  DateTime findFirstDateOfTheMonth(DateTime dateTime) {
+    return DateTime(dateTime.year, dateTime.month, 1);
+  }
+
+  findLastDateOfTheYear2(DateTime dateTime) {
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = dateTime.toUtc().add(timeZoneOffset);
+
+    log('dateTimeWithOffsetlastyear::' + dateTimeWithOffset.toString());
+    return DateTime(dateTimeWithOffset.year, 12, 31).toIso8601String();
+  }
+
+  findFirstDateOfTheYear2(DateTime dateTime) {
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = dateTime.toUtc().add(timeZoneOffset);
+
+    log('dateTimeWithOffset Firstyear::' + dateTimeWithOffset.toString());
+    return DateTime(dateTimeWithOffset.year, 1, 1).toIso8601String();
+  }
+
+  DateTime findLastDateOfTheYear(DateTime dateTime) {
+    return DateTime(dateTime.year, 12, 31);
+  }
+
+  DateTime findFirstDateOfTheYear(DateTime dateTime) {
+    return DateTime(dateTime.year, 1, 1);
+  }
+
+  DateTime getStartOfQuarter(DateTime date) {
+    int currentMonth = date.month;
+    int startMonth;
+
+    // Determine the start month of the quarter
+    if (currentMonth >= 1 && currentMonth <= 3) {
+      startMonth = 1;
+    } else if (currentMonth >= 4 && currentMonth <= 6) {
+      startMonth = 4;
+    } else if (currentMonth >= 7 && currentMonth <= 9) {
+      startMonth = 7;
+    } else {
+      startMonth = 10;
+    }
+
+    // Calculate and return the start date of the quarter
+    return DateTime(date.year, startMonth, 1);
+  }
+
+  getStartOfQuarterd2(DateTime date) {
+    int currentMonth = date.month;
+    int startMonth;
+    if (currentMonth >= 1 && currentMonth <= 3) {
+      startMonth = 1;
+    } else if (currentMonth >= 4 && currentMonth <= 6) {
+      startMonth = 4;
+    } else if (currentMonth >= 7 && currentMonth <= 9) {
+      startMonth = 7;
+    } else {
+      startMonth = 10;
+    }
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = date.toUtc().add(timeZoneOffset);
+
+    // log('dateTimeWithOffset::' + dateTimeWithOffset.toString());
+    return DateTime(dateTimeWithOffset.year, startMonth, 1).toIso8601String();
+  }
+
+  getEndOfQuarter2(DateTime date) {
+    int currentMonth = date.month;
+    int endMonth;
+
+    // Determine the end month of the quarter
+    if (currentMonth >= 1 && currentMonth <= 3) {
+      endMonth = 3;
+    } else if (currentMonth >= 4 && currentMonth <= 6) {
+      endMonth = 6;
+    } else if (currentMonth >= 7 && currentMonth <= 9) {
+      endMonth = 9;
+    } else {
+      endMonth = 12;
+    }
+    Duration timeZoneOffset = Duration(hours: 5, minutes: 30);
+
+    DateTime dateTimeWithOffset = date.toUtc().add(timeZoneOffset);
+
+    int daysInMonth = DateTime(dateTimeWithOffset.year, endMonth + 1, 0).day;
+
+    // log('dateTimeWithOffset::' + dateTimeWithOffset.toString());
+    return DateTime(dateTimeWithOffset.year, endMonth, daysInMonth)
+        .toIso8601String();
+  }
+
+  DateTime getEndOfQuarter(DateTime date) {
+    int currentMonth = date.month;
+    int endMonth;
+
+    // Determine the end month of the quarter
+    if (currentMonth >= 1 && currentMonth <= 3) {
+      endMonth = 3;
+    } else if (currentMonth >= 4 && currentMonth <= 6) {
+      endMonth = 6;
+    } else if (currentMonth >= 7 && currentMonth <= 9) {
+      endMonth = 9;
+    } else {
+      endMonth = 12;
+    }
+
+    // Get the number of days in the end month of the quarter
+    int daysInMonth = DateTime(date.year, endMonth + 1, 0).day;
+
+    // Calculate and return the end date of the quarter
+    return DateTime(date.year, endMonth, daysInMonth);
+  }
+
+  // String subtractDateTime4(String datetime) {
+  //   final parsedDate = DateFormat("dd-MM-yyyy").parse(datetime);
+
+  //   final outputFormat = DateFormat("yyyy-MM-dd");
+  //   String test = outputFormat.format(parsedDate);
+
+  //   final birthday = DateTime.parse(test);
+  //   final date2 = DateTime.now();
+  //   final difference = date2.difference(birthday).inDays;
+  //   log(difference.toString());
+  //   String result = '';
+  //   if (difference == 0) {
+  //     result = 'Today';
+  //   } else {
+  //     result = '$difference days';
+  //   }
+
+  //   return result.toString();
+  // }
+ String currentQueryDateOnly(String date) {
+    DateTime now = DateTime.now();
+    DateTime inputDate = DateTime.parse(date);
+    String currentDateTime =
+        "${inputDate.year.toString()}-${inputDate.month.toString().padLeft(2, '0')}-${inputDate.day.toString().padLeft(2, '0')}";
+    log('Query currentDateTimecurrentDateTime::${currentDateTime}');
+
+    return currentDateTime;
+  }
+
+
+
+
+
+
   getSetup() async {
     // String? lati = await Config.getLatitude();
     // String? lang = await Config.getLangtitute();
@@ -830,9 +1065,7 @@ log("formattedDate:::"+formattedDate.toString());
     print('Formatted Date: $formattedDate');
     return formattedDate;
   }
-DateTime findFirstDateOfTheMonth(DateTime dateTime) {
-    return DateTime(dateTime.year, dateTime.month, 1);
-  }
+
   String alignDate(String date) {
     if (date != null) {
       String dateT = date.replaceAll("T", "");
@@ -1100,7 +1333,6 @@ class NumberFormatter {
     return currentBalance;
   }
 }
-
 // void showDialogBox(String title, String msg, BuildContext context) {
 //   showDialog<dynamic>(
 //     context: context,

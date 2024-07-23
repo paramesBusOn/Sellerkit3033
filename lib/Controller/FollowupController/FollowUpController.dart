@@ -232,9 +232,21 @@ class FollowupController extends ChangeNotifier {
           excepMsg = 'Check your Internet Connection...!!';
           notifyListeners();
         } else {
-          isLoading = false;
+           if(value.exception!.contains("Network is unreachable")){
+  isLoading = false;
           lottie = 'Assets/NetworkAnimation.json';
           excepMsg = '${value.stcode!}..!!Network Issue..\nTry again Later..!!';
+        notifyListeners();
+        }else{
+          isLoading = false;
+         
+       
+         lottie = 'Assets/warning.png';
+         excepMsg = '${value.stcode}..!!Something went wrong..!!\nTry again Later..!!';
+        }
+          // isLoading = false;
+          // lottie = 'Assets/NetworkAnimation.json';
+          // excepMsg = '${value.stcode!}..!!Network Issue..\nTry again Later..!!';
           notifyListeners();
         }
       }
@@ -312,9 +324,21 @@ class FollowupController extends ChangeNotifier {
 
         notifyListeners();
       } else if (value.stcode == 500) {
-        isLoading = false;
-        lottie = 'Assets/NetworkAnimation.json';
-        excepMsg = '${value.stcode!}..!!Network Issue..\nTry again Later..!!';
+         if(value.exception!.contains("Network is unreachable")){
+  isLoading = false;
+          lottie = 'Assets/NetworkAnimation.json';
+          excepMsg = '${value.stcode!}..!!Network Issue..\nTry again Later..!!';
+        notifyListeners();
+        }else{
+          isLoading = false;
+         
+       
+         lottie = 'Assets/warning.png';
+         excepMsg = '${value.stcode}..!!Something went wrong..!!\nTry again Later..!!';
+        }
+        // isLoading = false;
+        // lottie = 'Assets/NetworkAnimation.json';
+        // excepMsg = '${value.stcode!}..!!Network Issue..\nTry again Later..!!';
         notifyListeners();
       }
       notifyListeners();

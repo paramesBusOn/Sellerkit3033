@@ -85,7 +85,7 @@ class ConfigurationContoller extends ChangeNotifier {
       Document? result2 =
           await playStoreSearchAPI.lookupById(myAppBundleId, country: 'IN');
       if (result2 != null) storeVersion = playStoreSearchAPI.version(result2);
-      // log('PlayStore version: $storeVersion}');
+      print('PlayStore version: $storeVersion}');
       // } else if (Platform.isIOS) {
      
       // log('AppStore version: $storeVersion}');
@@ -104,7 +104,7 @@ class ConfigurationContoller extends ChangeNotifier {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     // log("packageInfo.version::" + packageInfo.version.toString());
     ConstantValues.appversion = packageInfo.version;
-    // log("packageInfo.versionConstant::" + ConstantValues.appversion.toString());
+    print("packageInfo.versionConstant::" + ConstantValues.appversion.toString());
     notifyListeners();
   }
 
@@ -314,7 +314,7 @@ String brandview='';
     // log("getUrl $getUrl");
     // log("userNamePM ${ConstantValues.userNamePM}");
 // Url.queryApi = 'http://91.203.133.224:81/api/';
-    Url.queryApi = 'http://${getUrl.toString()}/api/';
+    Url.queryApi = '${getUrl.toString()}/api/';
     geturlview=getUrl.toString();
     String? deviceID = await HelperFunctions.getDeviceIDSharedPreference();
     deviceIDview=deviceID.toString();

@@ -16,6 +16,7 @@ import 'package:sellerkit/Constant/Screen.dart';
 import 'package:sellerkit/Controller/ConfigurationController/ConfigurationController.dart';
 import 'package:sellerkit/Controller/DashBoardController/DashBoardController.dart';
 import 'package:sellerkit/Models/LoginModel/LoginModel.dart';
+import 'package:sellerkit/Pages/Configuration/updatedialogbox.dart';
 import 'package:sellerkit/Services/LoginApi/LoginApi.dart';
 import 'package:sellerkit/Services/URL/LocalUrl.dart';
 import 'package:upgrader/upgrader.dart';
@@ -53,30 +54,38 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
       context.read<ConfigurationContoller>().showVersion();
       String? storeversion = await context
           .read<ConfigurationContoller>()
-          .getStoreVersion('com.busondigitalservice.sellerkit');
+          .getStoreVersion('com.busondigitalservice.sellerkit3033');
       print("store version::" + storeversion.toString());
-      // if (storeversion != null) {
-      //   if (ConstantValues.appversion != storeversion) {
-      //     await showDialog(
-      //         context: context,
-      //         builder: ((context) => Scaffold(
-      //             backgroundColor: Colors.transparent,
-      //             body: Center(child: UpgradeCard(
-      //               upgrader: Upgrader(durationUntilAlertAgain: Duration(seconds: 1)),
-      //               showIgnore: false,
-      //               showLater: false,
-      //               showReleaseNotes: false,
-      //               margin: EdgeInsets.only(left: Screens.width(context)*0.03,right: Screens.width(context)*0.03),
-      //             ))))).then((value) {
-      //               exit(0);
-      //             });
+      if (storeversion != null) {
+        if (ConstantValues.appversion != storeversion) {
+            await showDialog(
+               context: context,
+               builder: ((context) => Upgraderdialogbox(
+                     storeversion: storeversion,
+                   ))).then((value) {
+             exit(0);
+           });
+
+          // await showDialog(
+          //     context: context,
+          //     builder: ((context) => Scaffold(
+          //         backgroundColor: Colors.transparent,
+          //         body: Center(child: UpgradeCard(
+          //           upgrader: Upgrader(durationUntilAlertAgain: Duration(seconds: 1)),
+          //           showIgnore: false,
+          //           showLater: false,
+          //           showReleaseNotes: false,
+          //           margin: EdgeInsets.only(left: Screens.width(context)*0.03,right: Screens.width(context)*0.03),
+          //         ))))).then((value) {
+          //           exit(0);
+          //         });
           
-        // } else {
+        } else {
           context
               .read<ConfigurationContoller>()
               .checkStartingPage(pagename, docEntry);
-        // }
-      // }
+        }
+      }
     });
   //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
   //  context.read<ConfigurationContoller>().  showVersion();
@@ -93,7 +102,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
     log("getUrl $getUrl");
     // log("userNamePM ${ConstantValues.userNamePM}");
 
-    Url.queryApi = 'http://${getUrl.toString()}/api/';
+    Url.queryApi = '${getUrl.toString()}/api/';
     String? deviceID = await HelperFunctions.getDeviceIDSharedPreference();
     String? licenseKey = await HelperFunctions.getLicenseKeySharedPreference();
     String? userCode =

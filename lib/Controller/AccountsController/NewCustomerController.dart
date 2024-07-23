@@ -3205,7 +3205,9 @@ callAlertDialog(BuildContext context, String mesg) {
       mycontroller[21].text = mycontroller[17].text.toString();
       mycontroller[22].text = mycontroller[5].text.toString();
       mycontroller[23].text = mycontroller[4].text.toString();
+      methidstate2(mycontroller[18].text.toString());
       mycontroller[24].text = mycontroller[18].text.toString();
+      methidstate2(mycontroller[24].text);
       notifyListeners();
     } else {
       mycontroller[19].text = "";

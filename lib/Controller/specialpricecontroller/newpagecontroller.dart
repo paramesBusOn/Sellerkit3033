@@ -286,6 +286,7 @@ break;
     mycontroller[4].text = filterdataprice[i].itemName.toString();
     mycontroller[6].text = filterdataprice[i].sp!.toStringAsFixed(2);
     mycontroller[7].clear();
+    mycontroller[11].clear();
     mycontroller[9].clear();
     //  itemvisible();
     // isitemcode =false;
@@ -371,9 +372,33 @@ String Apitodate='';
     notifyListeners();
   }
    List<GetApproverheader> getApproverheader=[];
+   percentagecalculation(String? Spvalue,String? reqprice,String? ReqPercent)async{
+    log("reqprice::"+reqprice.toString());
+    log("ReqPercent::"+ReqPercent.toString());
+    double? price=double.parse(Spvalue.toString());
+    if(reqprice !=null && reqprice!.isNotEmpty ){
+      double? reqprice2=double.parse(reqprice.toString());
+      
+final percentage2=price-reqprice2;
+      final percentage=(percentage2/price)*100;
+      log("percentage::"+percentage.toString());
+      mycontroller[7].text=percentage.toStringAsFixed(2);
+    } 
+    else if(ReqPercent !=null && ReqPercent!.isNotEmpty){
+      double? ReqPercent2=double.parse(ReqPercent.toString());
+final discount=price*(ReqPercent2/100);
+
+final value=price-discount;
+log("value::"+value.toString());
+mycontroller[11].text=value.toStringAsFixed(2);
+    }
+    // value=price*(percentage/100);
+    // percentage=(newprice/original price)*100;
+
+   }
 Approvergetcall(){
 mycontroller[9].clear();
-  ApprovergetApi.getdata(mycontroller[3].text, mycontroller[7].text).then((value) {
+  ApprovergetApi.getdata(mycontroller[3].text, mycontroller[11].text).then((value) {
     if(value.stcode! >= 200 && value.stcode! <= 210){
       getApproverheader=value.getApproverheader!;
       mycontroller[9].text="Authoriser_Code : ${getApproverheader[0].Authoriser_Code}\nAuthoriser_Name : ${getApproverheader[0].Authoriser_Name}\n ${getApproverheader[0].Slab!.isEmpty ?'':"Slab : ${getApproverheader[0].Slab}"  } ";
@@ -421,9 +446,9 @@ bool customerapicalled = false;
               ? 0.0
               :double.parse(mycontroller[5].text) ;
               specialpricedoc.rp =
-          mycontroller[7].text == null || mycontroller[7].text.isEmpty
+          mycontroller[11].text == null || mycontroller[11].text.isEmpty
               ? 0.0
-              :double.parse( mycontroller[7].text);
+              :double.parse( mycontroller[11].text);
             
              if(isimmediate ==true){
                specialpricedoc.fromDate =config.currentDate();
@@ -766,6 +791,7 @@ callApi(BuildContext context) {
     mycontroller[7].clear();
      mycontroller[8].clear();
       mycontroller[9].clear();
+      mycontroller[11].clear();
     customerapicalled = false;
     
     notifyListeners();
@@ -813,6 +839,7 @@ callApi(BuildContext context) {
     mycontroller[7].clear();
      mycontroller[8].clear();
       mycontroller[9].clear();
+      mycontroller[11].clear();
     listPriceAvail.clear();
     filterdataprice.clear();
     notifyListeners();

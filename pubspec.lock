@@ -766,6 +766,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.2.0"
+  flutter_overlay_window:
+    dependency: "direct main"
+    description:
+      name: flutter_overlay_window
+      sha256: af871da9270bf5d67e5a657d2e286dfafa43f3417e98fa9e3c06da3f9d0f340e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.4"
   flutter_pdfview:
     dependency: transitive
     description:
@@ -1520,6 +1528,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
+  phone_state:
+    dependency: "direct main"
+    description:
+      name: phone_state
+      sha256: b68ddbde95915400808b14d680d20439a4320212ad13ea9a0962fe833c5b0079
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   photo_view:
     dependency: transitive
     description:
@@ -1797,6 +1813,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.8.7"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
+      sha256: bdb7cc5814ceb187793cea587f4a5946afcffd96726b219cee79df8460f44b7b
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.2.4"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: "8db8f55c77f56968681447d3837c10f27a9e861e238a898fda116c7531def979"
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.2.10"
+  syncfusion_flutter_datepicker:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_datepicker
+      sha256: cdc7f12804d609935400262f8d05d9eda8a1f3dbdfef363fb837f09b1f35023d
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.2.3"
+  syncfusion_flutter_pdf:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_pdf
+      sha256: a42186922a416c2c9634a8f221aee261101babc2d30b1a1e908a7f034e743046
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.2.4"
   synchronized:
     dependency: transitive
     description:
@@ -1805,6 +1853,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0+1"
+  system_alert_window:
+    dependency: "direct main"
+    description:
+      name: system_alert_window
+      sha256: d1d0e4f9f4a67e85f616c75dfb6d1003fe551d0da0de4aa3d81d5844082c5995
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   term_glyph:
     dependency: transitive
     description:

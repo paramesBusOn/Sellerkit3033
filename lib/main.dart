@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 // import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:get/get.dart';
 import 'package:restart_app/restart_app.dart';
@@ -54,12 +55,15 @@ import 'package:sellerkit/Controller/StockAvailabilityController/StockListContro
 import 'package:sellerkit/Controller/VisitplanController/NewVisitController.dart';
 import 'package:sellerkit/Controller/VisitplanController/VisitPlanController.dart';
 import 'package:sellerkit/Controller/WalkinController/WalkinController.dart';
+import 'package:sellerkit/Controller/callNotificationController/callNotificationController.dart';
 import 'package:sellerkit/Controller/specialpricecontroller/newpagecontroller.dart';
 import 'package:sellerkit/Controller/specialpricecontroller/tabcontroller.dart';
 import 'package:sellerkit/DBHelper/DBHelper.dart';
 import 'package:sellerkit/DBModel/ItemMasertDBModel.dart';
 import 'package:sellerkit/Models/LoginModel/LoginModel.dart';
 import 'package:sellerkit/Models/PostQueryModel/ItemMasterModelNew.dart/ItemMasterNewModel.dart';
+import 'package:sellerkit/Pages/callerNotification/custom_overlayNew.dart';
+import 'package:sellerkit/Pages/callerNotification/widgets/keyboard_container.dart';
 import 'package:sellerkit/Services/CustomerMasterApi/CustomerMasterApi.dart';
 import 'package:sellerkit/Services/LoginApi/LoginApi.dart';
 import 'package:sellerkit/Services/PostQueryApi/ItemMasterApi/ItemMasterApiNew.dart';
@@ -75,6 +79,7 @@ import 'Controller/LeadController/TabLeadController.dart';
 import 'Controller/OrderController/OrderNewController.dart';
 import 'Controller/OrderController/TabOrderController.dart';
 import 'Controller/PriceListController/PriceListController.dart';
+import 'Controller/ReportsController/ReportsController.dart';
 import 'Controller/SiteInController/newcreatesitein.dart';
 import 'Controller/TargetController/TargetController.dart';
 import 'DBHelper/DBOperation.dart';
@@ -82,8 +87,8 @@ import 'DBModel/NotificationModel.dart';
 import 'Pages/Configuration/ConfigurationPage.dart';
 import 'Services/LocalNotification/LocalNotification.dart';
 import 'Themes/theme_manager.dart';
-
 import 'package:timezone/data/latest.dart' as tzdata;
+import 'Constant/flutter_background_service_utils.dart';
 
 // Database? db;
 @pragma('vm:entry-point')
@@ -866,17 +871,17 @@ postLoginData. devicename='${brand} ${model}';
     ),
   );
 }
-// getOverlayPermission() async {
-//     bool status = await FlutterOverlayWindow.isPermissionGranted();
-//     if (!status) {
-//       // Navigator.pop(context);
-//        openAppSettings();
-//       // status = await FlutterOverlayWindow.isPermissionGranted();
-//       if (!status){
-//         print("hi this is Anbu");
-//       }
-//     }
-//   }
+getOverlayPermission() async {
+    bool status = await FlutterOverlayWindow.isPermissionGranted();
+    if (!status) {
+      // Navigator.pop(context);
+       openAppSettings();
+      // status = await FlutterOverlayWindow.isPermissionGranted();
+      if (!status){
+        print("hi this is Anbu");
+      }
+    }
+  }
 Future getPermissionUser() async {
   //  bool status = await FlutterOverlayWindow.isPermissionGranted();
   //   if (!status) {
@@ -973,7 +978,7 @@ switch (notificationResponse.notificationResponseType) {
   await checkLocation();
   // await getOverlayPermission();
   // await initializeService();
-   await checkLoginVerification();
+  //  await checkLoginVerification();
 
   runApp(const MyApp2());
 }
@@ -1432,6 +1437,7 @@ void didChangeAppLifecycleState(AppLifecycleState state){
         ChangeNotifierProvider(create: (_) => NewpriceController()),
         ChangeNotifierProvider(create: (_) => tabpriceController()),
         ChangeNotifierProvider(create: (_) => EarningController ()),
+        ChangeNotifierProvider(create: (_) => ReportsController()),
   ],
       child: Consumer<ThemeManager>(builder: (context, themes, Widget? child) {
         return GetMaterialApp(
@@ -1507,7 +1513,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => Outstandingcontroller()),
         ChangeNotifierProvider(create: (_) => ChangePasswordController()),
         ChangeNotifierProvider(create: (_) => TargetTabController()),
-
+ChangeNotifierProvider(create: (_) => ReportsController()),
 
 
       ],

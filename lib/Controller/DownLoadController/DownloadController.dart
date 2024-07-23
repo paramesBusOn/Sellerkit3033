@@ -78,7 +78,7 @@ class DownLoadController extends ChangeNotifier {
     String? getUrl = await HelperFunctions.getHostDSP();
     // log("getUrl $getUrl");
     ConstantValues.userNamePM = await HelperFunctions.getUserName();
-    Url.queryApi = 'http://${getUrl.toString()}/api/';
+    Url.queryApi = '${getUrl.toString()}/api/';
   }
 
   ItemMasterApiNew itemMasterApiNew = ItemMasterApiNew();
@@ -199,6 +199,7 @@ ConstantValues.ageslab2='';
 ConstantValues.ageslab3='';
 ConstantValues.ageslab4='';
 ConstantValues.ageslab5='';
+ConstantValues.splpricelogic='';
     for(int i=0;i<configData.length;i++){
 
       if(configData[i].config_Code =='ssp1'){
@@ -268,6 +269,11 @@ ConstantValues.ageslab5='';
       }
       if(configData[i].config_Code =='age-slab5'){
          ConstantValues.ageslab5=configData[i].config_value;
+
+
+      }
+      if(configData[i].config_Code =='spl-price-logic'){
+         ConstantValues.splpricelogic=configData[i].config_value;
 
 
       }
@@ -995,9 +1001,13 @@ ItemMasterNewModal itemMasterData = await itemMasterApiNew.getData();
   storelistdata.clear();
 await userbyidApi.getData(ConstantValues.UserId).then((value) {
       if (value.stcode! >= 200 && value.stcode! <= 210) {
-        ConstantValues.userbyidmobile = value.ageLtData!.mobile!;
-        storelistdata=value.ageLtData!.storelistdata!;
         
+        ConstantValues.userbyidmobile = value.ageLtData!.mobile!;
+        if(value.ageLtData!.storelistdata !=null){
+           storelistdata=value.ageLtData!.storelistdata!;
+        
+        }
+       
       
       }
     });
@@ -1034,13 +1044,19 @@ await userbyidApi.getData(ConstantValues.UserId).then((value) {
   // });
 //  log("itemviewdata:::"+storelistdata.toString());
         log("itemviewdata:::"+storelistdata.length.toString());
-        if(storelistdata.length>1){
+         if(storelistdata !=null && storelistdata.isNotEmpty){
+if(storelistdata.length>1){
         ConstantValues.  multistoreuser =1;
         notifyListeners();
         }else{
           ConstantValues.  multistoreuser =0;
           notifyListeners();
         }
+         }else{
+            ConstantValues.  multistoreuser =0;
+          notifyListeners();
+         }
+        
         log("ConstantValues.  multistoreuserL::"+ConstantValues.  multistoreuser.toString());
      stopwatch.stop();
             // log('API Defaultinitila api ${stopwatch.elapsedMilliseconds} milliseconds');

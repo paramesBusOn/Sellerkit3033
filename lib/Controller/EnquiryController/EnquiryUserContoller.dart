@@ -1140,11 +1140,19 @@ class EnquiryUserContoller extends ChangeNotifier {
             '${value.stcode}..!!${value.message}..! \n${value.exception}..!!';
         notifyListeners();
       } else if (value.stcode == 500) {
-        datagotByApi = true;
+        if(value.exception!.contains("Network is unreachable")){
+ datagotByApi = true;
         exception = true;
         lottie = 'Assets/NetworkAnimation.json';
-        errorMsg = '${value.stcode}..!!Network Issue\nTry again Later..!!';
+        errorMsg = '${value.stcode}..!!Network is unreachable\nTry again Later..!!';
         notifyListeners();
+        }else{
+        datagotByApi = true;
+        exception = true;  
+         lottie = 'Assets/warning.png';
+         errorMsg = '${value.stcode}..!!Something went wrong..!!\nTry again Later..!!';
+        }
+       
       }
     });
 
